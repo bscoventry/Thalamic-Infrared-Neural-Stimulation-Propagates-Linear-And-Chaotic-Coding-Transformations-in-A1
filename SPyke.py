@@ -13,13 +13,17 @@ import matplotlib.pyplot as plt
 import dask
 import os
 import glob
+import sys
 #Custom imports
-from .base.ts_data import _TsData
-from .base.utils.base import _is_iterable
+from base.ts_data import _TsData              #Note this will change when packaged to .base, .io, etc.
+from base.utils.base import _is_iterable
 
 # pyeCAP io class imports
-from .io.ripple_io import RippleIO, RippleArray
-from .io.tdt_io import TdtIO, TdtArray, gather_sample_delay
+#from io.ripple_io import RippleIO, RippleArray
+#from io.tdt_io import TdtIO, TdtArray, gather_sample_delay
+import sys
+sys.path.append('io')
+from tdt_io import TdtIO, TdtArray, gather_sample_delay
 
 # We will define the main class here.
 class Spike(_TsData):
@@ -36,7 +40,7 @@ class Spike(_TsData):
                     si_sample_rate : int sample rate of SI processor in TDT chain
         loadData: This loads data into memory. 
     """
-    def __init__(self, data, *args, stores=None, order=True, rz_sample_rate=None, si_sample_rate=None, 
+    def __init__(self, data, *args, stores=None, order=True, rz_sample_rate=None, si_sample_rate=None, sample_delay=None,
                  **kwargs):
         self.exp_path = data
         # Work with file path

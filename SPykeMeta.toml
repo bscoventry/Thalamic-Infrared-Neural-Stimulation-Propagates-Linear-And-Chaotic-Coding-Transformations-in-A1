@@ -1,0 +1,18 @@
+[project]
+name = "SPyke: Python Spike Analysis Toolkit"
+version = "0.0.1"
+authors = [
+  { name="Brandon S Coventry", email="coventry@wisc.edu" },
+]
+description = "Python Spike Analysis Toolkit"
+readme = "README.md"
+requires-python = ">=3.7"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+"Homepage" = "https://github.com/ludwig-lab/SPyke"
+"Bug Tracker" = "https://github.com/ludwig-lab/SPyke/issues"
