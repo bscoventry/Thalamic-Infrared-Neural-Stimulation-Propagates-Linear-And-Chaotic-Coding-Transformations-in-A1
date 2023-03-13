@@ -11,10 +11,14 @@ import numpy as np
 import tdt              #For reading in tdt files
 import matplotlib.pyplot as plt
 import dask
-import os
-import glob
-import sys
 from SPyke import Spike
+import pdb
 dataPath = 'C://Users//coventry//DataRepos//R144-220829-160841'
-SpikeClass = Spike(dataPath)
-        
+stores = None             #Load all stores
+streamStore = 'streams'
+rawDataStore = 'TDT2'
+SpikeClass = Spike(dataPath,stores,streamStore,rawDataStore)
+Type = 'Spike'
+pdb.set_trace()
+filterData = Spike.filterData(Type)
+
