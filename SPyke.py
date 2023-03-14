@@ -53,6 +53,9 @@ class Spike(object):
             #self.rawData = dask.delayed(self.raw['data'])          #Get this into a dask array for quick processing.
         self.rawData = self.raw['data']
         self.channel = self.raw['channel']
+        self.totSamp = len(self.rawData[0,:])
+        pdb.set_trace()
+        self.ts = np.arange(0,self.totSamp/self.fs,1/self.fs)
         
     
     def gpu2cpu(self,data2transfer):
@@ -108,6 +111,7 @@ class Spike(object):
             stimWhere.append(idxStore)
             #stimWhere[ck,:] = np.where(self.stimEvents==curStim)
         self.stimWhere = stimWhere
+
 
 
 
