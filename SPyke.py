@@ -41,8 +41,8 @@ class Spike(object):
             self.data = tdt.read_block(data,'store',self.stores)
         print(self.data)
         self.GPU = GPU
-        storage = getattr(self.data,streamStore)
-        self.raw = getattr(storage,rawDataStore)
+        self.storage = getattr(self.data,streamStore)
+        self.raw = getattr(self.storage,rawDataStore)
         self.rz_sample_rate = rz_sample_rate
         self.si_sample_rate = si_sample_rate
         self.sample_delay = sample_delay
@@ -72,12 +72,12 @@ class Spike(object):
         """
         if Type == 'Spike':
             SOSSpike = loadmat('SOS_Spike')
-            SOS = SOSSpike['SOS_Spike']
+            SOS = np.ascontiguousarray(SOSSpike['SOS_Spike'])   #For reasons unknown to me, matlab saves SOS coeffs as non C-contiguous arrays. Fixed here
             filteredData = sosfiltfilt(SOS,self.rawData)
             self.SpikeFilterData = filteredData
         elif Type == 'LFP':
             SOSLFP = loadmat('SOS_LFP')
-            SOS = SOSLFP['SOS_LFP']
+            SOS = np.ascontiguousarray(SOSLFP['SOS_LFP'])
             filteredData = sosfiltfilt(SOS,self.rawData)
             self.LFPFilterData = filteredData
         else:
@@ -89,6 +89,21 @@ class Spike(object):
         This function reads in stimulation times, calculates the number of unique events, and extracts signals around those times with a window specified by window
         Inputs - Window - Times around which to grab data. Negative values indicate times 
         """
+        self.stimTimes = self.data.scalars.semp.ts
+        self.stimEvents = self.data.scalars.semp.data[0:3,:]
+        [stimClasses,uWhere] = np.unique(self.stimEvents,return_index=True,axis=1)
+        self.stimClass = np.sort(stimClasses,axis=0)
+        nrowcol = np.shape(self.stimClass)
+        self.numStims = nrowcol[1]
+        #numRowsCols = np.shape(self.StimEvents)
+        #self.numStims = numRowsCols[1]
+        stimWhere = np.zeros(self.numStims,)
+        for ck in range(self.numStims):
+            curStim = self.StimClass[:,ck]
+            stimWhere[ck,:] = np.where(self.stimEvents==curStim)
+        self.stimWhere = stimWhere
+
+
 
 
 

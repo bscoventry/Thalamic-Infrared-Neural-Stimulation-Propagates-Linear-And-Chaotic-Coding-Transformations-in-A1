@@ -20,5 +20,5 @@ rawDataStore = 'TDT2'
 SpikeClass = Spike(dataPath,stores,streamStore,rawDataStore)
 Type = 'Spike'
 pdb.set_trace()
-filterData = Spike.filterData(Type)
+#filterData = SpikeClass.filterData(Type)
 
