@@ -21,4 +21,4 @@ SpikeClass = Spike(dataPath,stores,streamStore,rawDataStore)
 Type = 'Spike'
 pdb.set_trace()
 #filterData = SpikeClass.filterData(Type)
-
+SpikeClass.extractStimEvents()

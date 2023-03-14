@@ -97,10 +97,16 @@ class Spike(object):
         self.numStims = nrowcol[1]
         #numRowsCols = np.shape(self.StimEvents)
         #self.numStims = numRowsCols[1]
-        stimWhere = np.zeros(self.numStims,)
+        stimWhere = []
         for ck in range(self.numStims):
-            curStim = self.StimClass[:,ck]
-            stimWhere[ck,:] = np.where(self.stimEvents==curStim)
+            curStim = self.stimClass[:,ck]
+            curStimRe = np.asarray([curStim[1],curStim[2],curStim[0]])
+            idxStore = []
+            for bc in range(len(self.stimTimes)):
+                if np.array_equal(curStimRe,self.stimEvents[:,bc]):
+                    idxStore.append(bc)
+            stimWhere.append(idxStore)
+            #stimWhere[ck,:] = np.where(self.stimEvents==curStim)
         self.stimWhere = stimWhere
 
 
