@@ -18,6 +18,7 @@ import pdb
 import cupy as cp
 from scipy.io import loadmat
 from scipy.signal import sosfiltfilt
+import pickle as pkl
 class Spike(object):
     """
     Purpose: This is the main spike analysis method. Within will hold analysis operations, data loaders, and plotters.
@@ -32,7 +33,7 @@ class Spike(object):
         loadData: This loads data into memory. 
         TODO: Check if GPU flag is needed with cp.get_array_module
     """
-    def __init__(self, data, stores=None, streamStore = None, rawDataStore=None, rz_sample_rate=None, si_sample_rate=None, sample_delay=None,GPU=True,stimulation=True,**kwargs):
+    def __init__(self, data, stores=None, streamStore = None, rawDataStore=None,debug=0, rz_sample_rate=None, si_sample_rate=None, sample_delay=None,GPU=True,stimulation=True,SpksOrLFPs=['Spike','LFP'],**kwargs):
         super().__init__()
         self.stores = stores
         if stores==None:
@@ -53,9 +54,29 @@ class Spike(object):
             #self.rawData = dask.delayed(self.raw['data'])          #Get this into a dask array for quick processing.
         self.rawData = self.raw['data']
         self.channel = self.raw['channel']
+        self.numChannel = len(self.channel)
         self.totSamp = len(self.rawData[0,:])
-        pdb.set_trace()
         self.ts = np.arange(0,self.totSamp/self.fs,1/self.fs)
+        if debug == 0:
+            if len(SpksOrLFPs) > 1:
+                self.filterData('Spike')
+                self.filterData('LFP')
+            elif SpksOrLFPs == 'Spike':
+                self.filterData('Spike')
+            elif SpksOrLFPs == 'LFP':
+                self.filterData('LFP')
+            else:
+                raise TypeError('SpkOrLFP flag must be "Spike","LFP", or ["Spike","LFP"]')
+        elif debug == 1:
+            print('Time to Debug!')
+            with open('Spike.pkl','rb') as f:
+                self.Spikes = pkl.load(f)
+            f.close()
+            with open('LFP.pkl','rb') as f:
+                self.LFP = pkl.load(f)
+            f.close()
+        self.extractStimEvents()
+        
         
     
     def gpu2cpu(self,data2transfer):
@@ -77,31 +98,35 @@ class Spike(object):
             SOSSpike = loadmat('SOS_Spike')
             SOS = np.ascontiguousarray(SOSSpike['SOS_Spike'])   #For reasons unknown to me, matlab saves SOS coeffs as non C-contiguous arrays. Fixed here
             filteredData = sosfiltfilt(SOS,self.rawData)
-            self.SpikeFilterData = filteredData
+            self.Spikes = filteredData
         elif Type == 'LFP':
             SOSLFP = loadmat('SOS_LFP')
             SOS = np.ascontiguousarray(SOSLFP['SOS_LFP'])
             filteredData = sosfiltfilt(SOS,self.rawData)
-            self.LFPFilterData = filteredData
+            self.LFP = filteredData
         else:
             raise TypeError('Type must be "Spike" or "LFP"')
         return filteredData
+        
+    def lineHarmonicFilter(self):
+        pass
     
     def extractStimEvents(self,window = [-10,20]):
         """
         This function reads in stimulation times, calculates the number of unique events, and extracts signals around those times with a window specified by window
         Inputs - Window - Times around which to grab data. Negative values indicate times 
+        TODO - Vectorize finding where each stim class falls during the recording period
         """
-        self.stimTimes = self.data.scalars.semp.ts
-        self.stimEvents = self.data.scalars.semp.data[0:3,:]
-        [stimClasses,uWhere] = np.unique(self.stimEvents,return_index=True,axis=1)
-        self.stimClass = np.sort(stimClasses,axis=0)
-        nrowcol = np.shape(self.stimClass)
+        self.stimTimes = self.data.scalars.semp.ts              #Get stim times from stores
+        self.stimEvents = self.data.scalars.semp.data[0:3,:]    #We only need first 3 rows which carries stim period, num pulses, and pulse amplitude
+        [stimClasses,uWhere] = np.unique(self.stimEvents,return_index=True,axis=1)        #Get the unique stim events. This might be 130Hz, -50ma, 30Hz, -70mA, etc.
+        self.stimClass = np.sort(stimClasses,axis=0)                          #Order them just to make next data processing steps easier.
+        nrowcol = np.shape(self.stimClass)                      #Helper variable to get the total number of stim classes
         self.numStims = nrowcol[1]
         #numRowsCols = np.shape(self.StimEvents)
         #self.numStims = numRowsCols[1]
         stimWhere = []
-        for ck in range(self.numStims):
+        for ck in range(self.numStims):                         #Hugely inefficient. Will vectorize. Till then, loop through the stim times and find where each stim class is.
             curStim = self.stimClass[:,ck]
             curStimRe = np.asarray([curStim[1],curStim[2],curStim[0]])
             idxStore = []
@@ -111,6 +136,78 @@ class Spike(object):
             stimWhere.append(idxStore)
             #stimWhere[ck,:] = np.where(self.stimEvents==curStim)
         self.stimWhere = stimWhere
+        #Now get loop through and grab stim windows around the applied window
+        try:
+            windowSize = np.abs(window[0])+np.abs(window[1])
+        except:
+            raise ValueError('window should be a list or array of two values. window[0] = low time around which to grab data. window[1] = high time around which to grab data')
+        windowSamples = len(np.arange(0,windowSize,1/self.fs))         #Again potentially silly way to do this, but works for now. Get the total number of samples needed per win
+        [numStimClasses,self.numTrials] = np.shape(stimWhere)
+        self.SpikeStore = dict()     #Convinient Storage! Yay!
+        self.LFPStore = dict()
+        for ck in range(numStimClasses):
+            trialStoreArraySpikes = np.empty((self.numTrials,self.numChannel,windowSamples))
+            trialStoreArrayLFPs = np.empty((self.numTrials,self.numChannel,windowSamples))
+            trialStoreArraySpikes[:] = np.nan                               #Do Nans because we have to account for first stimulus that may be less than window size.
+            trialStoreArrayLFPs[:] = np.nan
+            storeKey = str(self.stimClass[0,ck])+'_'+str(self.stimClass[1,ck])+'_'+str(self.stimClass[2,ck])
+            for bc in range(self.numTrials):
+                curTimeIDX = self.stimWhere[ck][bc]
+                curTime = self.stimTimes[curTimeIDX]
+                if curTime+window[0] < 0:                  #Since this is shorter than winlow, we will add Nans to beginning of store file so that we are aligned with other trials
+                    winLow = 0
+                    winHighIDX = window[1]*self.fs
+                    stimOn = np.where(self.ts == curTime)
+                    if np.any(stimOn) == False:
+                        diffTs = np.abs(self.ts-curTime)
+                        whIDX = np.where(diffTs == min(diffTs))
+                        stimOn = whIDX[0][0]
+                    winHigh = round(np.asscalar(stimOn + winHighIDX))
+                    shortDataSpikes = self.Spikes[:,winLow:winHigh]
+                    shortDataLFP = self.LFP[:,winLow:winHigh]
+                    [_,totSam] = np.shape(shortDataSpikes) 
+                    numSamplesMissing = windowSamples-totSam
+                    nanArraySpike = np.empty((self.numChannel,numSamplesMissing))
+                    nanArraySpike[:] = np.nan
+                    nanArrayLFP = np.empty((self.numChannel,numSamplesMissing))
+                    nanArrayLFP[:] = np.nan
+                    catArraySpike = np.empty((self.numChannel,windowSamples))
+                    catArraySpike[:,0:numSamplesMissing] = nanArraySpike
+                    catArraySpike[:,numSamplesMissing:numSamplesMissing+totSam] = shortDataSpikes
+                    trialStoreArraySpikes[bc,:,:] = catArraySpike
+                    catArrayLFP = np.empty((self.numChannel,windowSamples))
+                    catArrayLFP[:,0:numSamplesMissing] = nanArrayLFP
+                    catArrayLFP[:,numSamplesMissing:numSamplesMissing+totSam] = shortDataLFP
+                    trialStoreArrayLFPs[bc,:,:] = catArrayLFP
+                else:
+                    stimOn = np.where(self.ts == curTime)
+                    if np.any(stimOn) == False:         #Sometimes precision is off. Use this to find correct stim index if stimOn is empty
+                        diffTs = np.abs(self.ts-curTime)
+                        whIDX = np.where(diffTs == min(diffTs))
+                        stimOn = whIDX[0][0]
+                    winLowIDX = np.abs(window[0])*self.fs
+                    winHighIDX = window[1]*self.fs
+                    try:
+                        winLow = round(np.asscalar(stimOn - winLowIDX))
+                        winHigh = round(np.asscalar(stimOn + winHighIDX))
+                    except:
+                        print('well that was weird')
+                        pdb.set_trace()
+                    winHighDiff = windowSamples - len(range(winLow,winHigh))
+                    
+                    winHigh = winHigh + winHighDiff           #Make sure arrays are same shape
+                    trialStoreArraySpikes[bc,:,:] = self.Spikes[:,winLow:winHigh]          #Store all trials, all electrodes, windows into arrays that will be loaded into a dictionary
+                    trialStoreArrayLFPs[bc,:,:] = self.Spikes[:,winLow:winHigh]
+            self.SpikeStore[storeKey] = trialStoreArraySpikes
+            self.LFPStore[storeKey] = trialStoreArrayLFPs
+        
+
+
+                    
+
+                
+
+
 
 
 
