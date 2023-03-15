@@ -58,6 +58,7 @@ class Spike(object):
         self.totSamp = len(self.rawData[0,:])
         self.ts = np.arange(0,self.totSamp/self.fs,1/self.fs)
         if debug == 0:
+            self.lineHarmonicFilter()
             if len(SpksOrLFPs) > 1:
                 self.filterData('Spike')
                 self.filterData('LFP')
@@ -97,19 +98,31 @@ class Spike(object):
         if Type == 'Spike':
             SOSSpike = loadmat('SOS_Spike')
             SOS = np.ascontiguousarray(SOSSpike['SOS_Spike'])   #For reasons unknown to me, matlab saves SOS coeffs as non C-contiguous arrays. Fixed here
-            filteredData = sosfiltfilt(SOS,self.rawData)
+            filteredData = sosfiltfilt(SOS,self.lineFilterRawData)
             self.Spikes = filteredData
         elif Type == 'LFP':
             SOSLFP = loadmat('SOS_LFP')
             SOS = np.ascontiguousarray(SOSLFP['SOS_LFP'])
-            filteredData = sosfiltfilt(SOS,self.rawData)
+            filteredData = sosfiltfilt(SOS,self.lineFilterRawData)
             self.LFP = filteredData
         else:
             raise TypeError('Type must be "Spike" or "LFP"')
         return filteredData
         
     def lineHarmonicFilter(self):
-        pass
+       
+        SOS60 = loadmat('SOS_60')
+        SOS120 = loadmat('SOS_120')
+        SOS240 = loadmat('SOS_240')
+        SOS = np.ascontiguousarray(SOS60['SOS_60'])   #For reasons unknown to me, matlab saves SOS coeffs as non C-contiguous arrays. Fixed here
+        filteredData1 = sosfiltfilt(SOS,self.rawData)
+        SOS = np.ascontiguousarray(SOS120['SOS_120'])
+        filteredData2 = sosfiltfilt(SOS,filteredData1)
+        SOS = np.ascontiguousarray(SOS240['SOS_240'])
+        filteredData3 = sosfiltfilt(SOS,filteredData2)
+        self.lineFilterRawData = filteredData3
+        
+        return filteredData3
     
     def extractStimEvents(self,window = [-10,20]):
         """
