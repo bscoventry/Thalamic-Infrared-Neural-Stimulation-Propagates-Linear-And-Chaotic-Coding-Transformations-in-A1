@@ -210,7 +210,7 @@ class Spike(object):
                     
                     winHigh = winHigh + winHighDiff           #Make sure arrays are same shape
                     trialStoreArraySpikes[bc,:,:] = self.Spikes[:,winLow:winHigh]          #Store all trials, all electrodes, windows into arrays that will be loaded into a dictionary
-                    trialStoreArrayLFPs[bc,:,:] = self.Spikes[:,winLow:winHigh]
+                    trialStoreArrayLFPs[bc,:,:] = self.LFP[:,winLow:winHigh]
             self.SpikeStore[storeKey] = trialStoreArraySpikes
             self.LFPStore[storeKey] = trialStoreArrayLFPs
         
