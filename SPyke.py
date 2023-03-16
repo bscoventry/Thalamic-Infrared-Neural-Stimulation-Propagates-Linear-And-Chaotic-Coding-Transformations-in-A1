@@ -223,10 +223,14 @@ class Spike(object):
         """
         import matlab.engine               #Get a hold of matlab
         eng = matlab.engine.start_matlab() #Start Matlab
-        eng.cd(r'C://Users//coventry//CodeRepos//Kilosort-main//Kilosort-main', nargout=0)    #Need to tell python where kilosort is
-        eng.main_kilosort3()                  #Run kilosort
+        ksortPath = eng.genpath(r'C://Users//coventry//CodeRepos//Kilosort-main//Kilosort-main')    #Need to tell python where kilosort is
+        eng.addpath(ksortPath,nargout=0)
+        eng.kilosort()                  #Run kilosort
     
     def convertSpikes2Bin(self):
+        """
+        Holder incase this is needed. But if running kilosort gui, shouldn't be needed
+        """
         pass
         
 
