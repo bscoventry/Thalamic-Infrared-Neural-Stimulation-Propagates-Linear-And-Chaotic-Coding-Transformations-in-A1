@@ -76,6 +76,9 @@ class Spike(object):
             with open('LFP.pkl','rb') as f:
                 self.LFP = pkl.load(f)
             f.close()
+        pdb.set_trace()
+        if 'Spike' in SpksOrLFPs:
+            self.sortSpikesKilosort()
         self.extractStimEvents()
         
         
@@ -213,6 +216,18 @@ class Spike(object):
                     trialStoreArrayLFPs[bc,:,:] = self.LFP[:,winLow:winHigh]
             self.SpikeStore[storeKey] = trialStoreArraySpikes
             self.LFPStore[storeKey] = trialStoreArrayLFPs
+    
+    def sortSpikesKilosort(self,matlabKilosortPath = 'C://Users//coventry//CodeRepos//Kilosort-main//Kilosort-main'):
+        """
+        This function will create a call to matlab to run units for spike sorting. Note requires matlab python plugin to run.
+        """
+        import matlab.engine               #Get a hold of matlab
+        eng = matlab.engine.start_matlab() #Start Matlab
+        eng.cd(r'C://Users//coventry//CodeRepos//Kilosort-main//Kilosort-main', nargout=0)    #Need to tell python where kilosort is
+        eng.main_kilosort3()                  #Run kilosort
+    
+    def convertSpikes2Bin(self):
+        pass
         
 
 

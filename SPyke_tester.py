@@ -17,7 +17,7 @@ dataPath = 'C://Users//coventry//DataRepos//R144-220829-160841'
 stores = None             #Load all stores
 streamStore = 'streams'
 rawDataStore = 'TDT2'
-debug = 0
+debug = 1
 SpikeClass = Spike(dataPath,stores,streamStore,rawDataStore,debug)
 Type = 'Spike'
 pdb.set_trace()
