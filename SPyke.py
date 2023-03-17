@@ -76,10 +76,10 @@ class Spike(object):
             with open('LFP.pkl','rb') as f:
                 self.LFP = pkl.load(f)
             f.close()
-        pdb.set_trace()
         if 'Spike' in SpksOrLFPs:
+            self.convertSpikes2Bin()
             self.sortSpikesKilosort()
-        self.extractStimEvents()
+        #self.extractStimEvents()
         
         
     
@@ -220,6 +220,7 @@ class Spike(object):
     def sortSpikesKilosort(self,matlabKilosortPath = 'C://Users//coventry//CodeRepos//Kilosort-main//Kilosort-main'):
         """
         This function will create a call to matlab to run units for spike sorting. Note requires matlab python plugin to run.
+        Reguires a compiled version of kilosort to work. Operates by opening gui for visualization of traces
         """
         import matlab.engine               #Get a hold of matlab
         eng = matlab.engine.start_matlab() #Start Matlab
@@ -227,11 +228,33 @@ class Spike(object):
         eng.addpath(ksortPath,nargout=0)
         eng.kilosort()                  #Run kilosort
     
-    def convertSpikes2Bin(self):
+    def convertSpikes2Bin(self,scaleFactor=1e6,binName = 'SpikeKilosort.bin'):
         """
-        Holder incase this is needed. But if running kilosort gui, shouldn't be needed
+        This function converts Spike data into a .bin file for kilosort
+        Inputs - scaleFactor: Data is typically float like, but kilosort needs int16. To get the resolution needed for uV, 
+        need to scale data by this factor so that every data point is not immediately cast to 0 from conversion from float to int 16.
+        This varies based on recording setup, electrodes. For example, TDT recommends 1e6 conversion for their systems and converts to
+        microvolts.
+        Bin file is a matrix of shape [nelectrodes x ntimepoints]. Our class varialbe Spike is already in this form.
         """
-        pass
+        try:
+            data = (self.Spikes)*scaleFactor
+        except:
+            raise RuntimeError('Spikes not found in class. Can only run this conversion if Spikes are available')
+        with open(binName, 'wb') as fh:
+            pkl.dump(data, fh)
+    
+    def plotSampleWaveform(self,data,channel,time2Plot=[]):
+        """
+        This is a sample helper function just to plot some data.
+        """
+        for ck in range(len(channel)):
+            plt.figure(ck)
+            if bool(time2Plot)==False:
+                plt.plot(self.ts,data[channel[ck],:])
+            else:
+                plt.plot(self.ts[time2Plot],data[channel[ck],time2Plot])
+        
         
 
 
