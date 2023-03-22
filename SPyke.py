@@ -76,6 +76,7 @@ class Spike(object):
             with open('LFP.pkl','rb') as f:
                 self.LFP = pkl.load(f)
             f.close()
+        pdb.set_trace()
         if 'Spike' in SpksOrLFPs:
             self.convertSpikes2Bin()
             self.sortSpikesKilosort()
@@ -161,11 +162,14 @@ class Spike(object):
         [numStimClasses,self.numTrials] = np.shape(stimWhere)
         self.SpikeStore = dict()     #Convinient Storage! Yay!
         self.LFPStore = dict()
+        self.RawStore = dict()
         for ck in range(numStimClasses):
             trialStoreArraySpikes = np.empty((self.numTrials,self.numChannel,windowSamples))
             trialStoreArrayLFPs = np.empty((self.numTrials,self.numChannel,windowSamples))
+            trialStoreArrayRaw = np.empty((self.numTrials,self.numChannel,windowSamples))
             trialStoreArraySpikes[:] = np.nan                               #Do Nans because we have to account for first stimulus that may be less than window size.
             trialStoreArrayLFPs[:] = np.nan
+            trialStoreArrayRaw[:] = np.nan
             storeKey = str(self.stimClass[0,ck])+'_'+str(self.stimClass[1,ck])+'_'+str(self.stimClass[2,ck])
             for bc in range(self.numTrials):
                 curTimeIDX = self.stimWhere[ck][bc]
@@ -181,12 +185,15 @@ class Spike(object):
                     winHigh = round(np.asscalar(stimOn + winHighIDX))
                     shortDataSpikes = self.Spikes[:,winLow:winHigh]
                     shortDataLFP = self.LFP[:,winLow:winHigh]
+                    shortDataRaw = self.rawData[:,winLow:winHigh]
                     [_,totSam] = np.shape(shortDataSpikes) 
                     numSamplesMissing = windowSamples-totSam
                     nanArraySpike = np.empty((self.numChannel,numSamplesMissing))
                     nanArraySpike[:] = np.nan
                     nanArrayLFP = np.empty((self.numChannel,numSamplesMissing))
                     nanArrayLFP[:] = np.nan
+                    nanArrayRaw = np.empty((self.numChannel,numSamplesMissing))
+                    nanArrayRaw[:] = np.nan
                     catArraySpike = np.empty((self.numChannel,windowSamples))
                     catArraySpike[:,0:numSamplesMissing] = nanArraySpike
                     catArraySpike[:,numSamplesMissing:numSamplesMissing+totSam] = shortDataSpikes
@@ -195,6 +202,11 @@ class Spike(object):
                     catArrayLFP[:,0:numSamplesMissing] = nanArrayLFP
                     catArrayLFP[:,numSamplesMissing:numSamplesMissing+totSam] = shortDataLFP
                     trialStoreArrayLFPs[bc,:,:] = catArrayLFP
+
+                    catArrayRaw = np.empty((self.numChannel,windowSamples))
+                    catArrayRaw[:,0:numSamplesMissing] = nanArrayRaw
+                    catArrayRaw[:,numSamplesMissing:numSamplesMissing+totSam] = shortDataRaw
+                    trialStoreArrayRaw[bc,:,:] = catArrayRaw
                 else:
                     stimOn = np.where(self.ts == curTime)
                     if np.any(stimOn) == False:         #Sometimes precision is off. Use this to find correct stim index if stimOn is empty
@@ -214,8 +226,10 @@ class Spike(object):
                     winHigh = winHigh + winHighDiff           #Make sure arrays are same shape
                     trialStoreArraySpikes[bc,:,:] = self.Spikes[:,winLow:winHigh]          #Store all trials, all electrodes, windows into arrays that will be loaded into a dictionary
                     trialStoreArrayLFPs[bc,:,:] = self.LFP[:,winLow:winHigh]
+                    trialStoreArrayRaw[bc,:,:] = self.rawData[:,winLow:winHigh]
             self.SpikeStore[storeKey] = trialStoreArraySpikes
             self.LFPStore[storeKey] = trialStoreArrayLFPs
+            self.RawStore[storeKey] = trialStoreArrayRaw
     
     def sortSpikesKilosort(self,matlabKilosortPath = 'C://Users//coventry//CodeRepos//Kilosort-main//Kilosort-main'):
         """
@@ -254,6 +268,15 @@ class Spike(object):
                 plt.plot(self.ts,data[channel[ck],:])
             else:
                 plt.plot(self.ts[time2Plot],data[channel[ck],time2Plot])
+    
+    def stimArtifactRemoval(self,algo='ERAASER'):
+        """
+        Call matlab to run the Eraaser algorithm (https://iopscience.iop.org/article/10.1088/1741-2552/aaa365) on raw traces. Requires 
+        That input data be on stimulus aligned trial data (that we can get from the extractStimEvents class function)
+        Inputs: - algo - Only ERAASER is available at the moment. Add more as I find them
+        """
+
+
         
         
 
