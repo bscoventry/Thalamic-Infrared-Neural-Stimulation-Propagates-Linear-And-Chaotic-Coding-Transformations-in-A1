@@ -81,7 +81,8 @@ class Spike(object):
         # if 'Spike' in SpksOrLFPs:
         #     self.convertSpikes2Bin()
         #     self.sortSpikesKilosort()
-        self.extractStimEvents()
+        if hasStim == 1:
+            self.extractStimEvents()
         pdb.set_trace()
         
         
