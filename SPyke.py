@@ -30,10 +30,11 @@ class Spike(object):
                     rawDataStore - Names of raw data variable. Should point to 
                     rz_sample_rate : int sample rate of RZ processor in TDT chain
                     si_sample_rate : int sample rate of SI processor in TDT chain
+                    hasStim: Set to 0 if no stim present, set to 1 if stim is present
         loadData: This loads data into memory. 
         TODO: Check if GPU flag is needed with cp.get_array_module
     """
-    def __init__(self, data, stores=None, streamStore = None, rawDataStore=None,debug=0, rz_sample_rate=None, si_sample_rate=None, sample_delay=None,GPU=True,stimulation=True,SpksOrLFPs=['Spike','LFP'],**kwargs):
+    def __init__(self, data, stores=None, streamStore = None, rawDataStore=None,debug=0, hasStim=0, rz_sample_rate=None, si_sample_rate=None, sample_delay=None,GPU=True,stimulation=True,SpksOrLFPs=['Spike','LFP'],**kwargs):
         super().__init__()
         self.stores = stores
         if stores==None:

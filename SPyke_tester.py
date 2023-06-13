@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 import dask
 from SPyke import Spike
 import pdb
-dataPath = 'C://Users//coventry//DataRepos//R144-220829-160841'
+dataPath = 'C://Users//coventry//Desktop//ViantP121//P121-230613-105919' #'C://Users//coventry//Desktop//P119-230317-165356'
 stores = None             #Load all stores
 streamStore = 'streams'
 rawDataStore = 'TDT2'
