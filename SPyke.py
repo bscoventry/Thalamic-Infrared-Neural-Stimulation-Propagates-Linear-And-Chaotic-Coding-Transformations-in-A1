@@ -303,15 +303,15 @@ class Spike(object):
         return np.transpose(data,[0,2,1])
 
     def getLFPSpectrogram(self,channels,plotFlag=True):
-        [numChannels,Siglen] = np.size(self.LFP)
-        Sxx = np.zeros((len(channels),Siglen))
-        t = np.zeros((len(channels),Siglen))
-        f = np.zeros((len(channels),Siglen))
+        [numChannels,Siglen] = np.shape(self.LFP)
+        Sxx = []
+        t = []
+        f = []
         for ck in range(len(channels)):
             curF,curT,curSxx = spectrogram(self.LFP[ck,:],self.fs)
-            Sxx[ck,:] = curSxx
-            t[ck,:] = curT
-            f[ck,:] = curF
+            Sxx.append(curSxx)
+            t.append(curT)
+            f.append(curF)
             if plotFlag == True:
                 plt.pcolormesh(curT, curF, curSxx, shading='gouraud')
                 plt.ylabel('Frequency [Hz]')
