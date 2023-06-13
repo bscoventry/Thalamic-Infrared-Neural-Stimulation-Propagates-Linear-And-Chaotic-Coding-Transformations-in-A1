@@ -18,6 +18,7 @@ import pdb
 import cupy as cp
 from scipy.io import loadmat
 from scipy.signal import sosfiltfilt
+from scipy.signal import spectrogram
 import pickle as pkl
 class Spike(object):
     """
@@ -83,7 +84,7 @@ class Spike(object):
         #     self.sortSpikesKilosort()
         if hasStim == 1:
             self.extractStimEvents()
-        pdb.set_trace()
+        #pdb.set_trace()
         
         
     
@@ -300,6 +301,24 @@ class Spike(object):
         This helper function converts data dictionary to a data tensor suitable for ERAASER. 
         """
         return np.transpose(data,[0,2,1])
+
+    def getLFPSpectrogram(self,channels,plotFlag=True):
+        [numChannels,Siglen] = np.size(self.LFP)
+        Sxx = np.zeros((len(channels),Siglen))
+        t = np.zeros((len(channels),Siglen))
+        f = np.zeros((len(channels),Siglen))
+        for ck in range(len(channels)):
+            curF,curT,curSxx = spectrogram(self.LFP[ck,:],self.fs)
+            Sxx[ck,:] = curSxx
+            t[ck,:] = curT
+            f[ck,:] = curF
+            if plotFlag == True:
+                plt.pcolormesh(curT, curF, curSxx, shading='gouraud')
+                plt.ylabel('Frequency [Hz]')
+                plt.xlabel('Time [sec]')
+                plt.show()
+        return Sxx,t,f
+
     
 
 
