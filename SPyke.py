@@ -271,6 +271,7 @@ class Spike(object):
                 plt.plot(self.ts,data[channel[ck],:])
             else:
                 plt.plot(self.ts[time2Plot],data[channel[ck],time2Plot])
+            plt.show()
     
     def stimArtifactRemoval(self,algo='ERAASER'):
         """

@@ -17,9 +17,12 @@ dataPath = 'C://Users//coventry//Desktop//ViantP121//P121-230613-105919' #'C://U
 stores = None             #Load all stores
 streamStore = 'streams'
 rawDataStore = 'TDT2'
-debug = 1
-SpikeClass = Spike(dataPath,stores,streamStore,rawDataStore,debug)
+debug = 0
+stim = 0
+SpikeClass = Spike(dataPath,stores,streamStore,rawDataStore,debug,stim)
 Type = 'Spike'
+Spike = SpikeClass.Spikes
+LFPs = SpikeClass.LFP
 pdb.set_trace()
 #filterData = SpikeClass.filterData(Type)
 #SpikeClass.extractStimEvents()
