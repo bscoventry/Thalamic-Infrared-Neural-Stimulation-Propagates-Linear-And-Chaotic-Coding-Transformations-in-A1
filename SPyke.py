@@ -118,7 +118,6 @@ class Spike(object):
         elif Type == 'Raw':
             if self.fs < 25000:
                 SOSRaw = loadmat('SOS_Raw')
-                
                 SOS = np.ascontiguousarray(SOSRaw['SOS'])
             elif self.fs > 25000:
                 SOSRaw = loadmat('SOS_Raw_50')
@@ -314,6 +313,7 @@ class Spike(object):
             self.pulseTime = 0.000001             #Pulse time in seconds
             self.pulseFreq = 130                  #Pulse Frequnecy in Hz
             import pywt
+            self.dwt = pywt.dwt(self.filteredRaw, 'haar', mode='symmetric', axis=-1)
 
 
 
