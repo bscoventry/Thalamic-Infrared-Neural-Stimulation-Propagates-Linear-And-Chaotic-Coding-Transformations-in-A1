@@ -28,5 +28,5 @@ SpikeClass.plotSampleWaveform(LFPs,[0])
 Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
 pdb.set_trace()
 #filterData = SpikeClass.filterData(Type)
-SpikeClass.extractStimEvents(algo='Template')
+SpikeClass.stimArtifactRemoval(algo='Template')
 
