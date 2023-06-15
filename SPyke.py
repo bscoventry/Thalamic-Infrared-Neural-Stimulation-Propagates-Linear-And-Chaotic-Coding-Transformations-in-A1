@@ -118,10 +118,11 @@ class Spike(object):
         elif Type == 'Raw':
             if self.fs < 25000:
                 SOSRaw = loadmat('SOS_Raw')
-                SOS = np.ascontiguousarray(SOSRaw['SOS_Raw'])
+                
+                SOS = np.ascontiguousarray(SOSRaw['SOS'])
             elif self.fs > 25000:
                 SOSRaw = loadmat('SOS_Raw_50')
-                SOS = np.ascontiguousarray(SOSRaw['SOS_Raw_50'])
+                SOS = np.ascontiguousarray(SOSRaw['SOS'])
             filteredData = sosfiltfilt(SOS,self.lineFilterRawData)
             self.filteredRaw = filteredData
             "This filter is for removing DC offset in the raw signal"
