@@ -280,18 +280,25 @@ class Spike(object):
         That input data be on stimulus aligned trial data (that we can get from the extractStimEvents class function)
         Inputs: - algo - Only ERAASER is available at the moment. Add more as I find them
         """
-        import matlab.engine               #Get a hold of matlab
-        self.cleanData = dict()
-        eng = matlab.engine.start_matlab() #Start Matlab
-        keyList = self.RawStore.keys()
-        keyListLen = len(keyList)
-        ksortPath = eng.genpath(r'C://Users//coventry//CodeRepos//eraaser-master')    #Need to tell python where kilosort is
-        eng.addpath(ksortPath,nargout=0)
-        for key in self.RawStore:
-            curData = self.RawStore[key]
-            curDataErase = np.ndarray.tolist(self.getTensor(curData))
-            self.cleanData[key] = eng.SPykeEraaser(curDataErase)
-            pdb.set_trace()
+        if algo == 'ERAASER':
+            import matlab.engine               #Get a hold of matlab
+            self.cleanData = dict()
+            eng = matlab.engine.start_matlab() #Start Matlab
+            keyList = self.RawStore.keys()
+            keyListLen = len(keyList)
+            ksortPath = eng.genpath(r'C://Users//coventry//CodeRepos//eraaser-master')    #Need to tell python where kilosort is
+            eng.addpath(ksortPath,nargout=0)
+            for key in self.RawStore:
+                curData = self.RawStore[key]
+                curDataErase = np.ndarray.tolist(self.getTensor(curData))
+                self.cleanData[key] = eng.SPykeEraaser(curDataErase)
+                pdb.set_trace()
+        if algo == 'Template':
+            """
+            The Template command looks for pattern-like activity and compares to stimulation atributes.
+            """
+            self.pulseTime = 0.000001             #Pulse time in seconds
+            self.pulseFreq = 130                  #Pulse Frequnecy in Hz
 
 
 
