@@ -64,6 +64,7 @@ class Spike(object):
             if len(SpksOrLFPs) > 1:
                 self.filterData('Spike')
                 self.filterData('LFP')
+                self.filterData('Raw')
             elif SpksOrLFPs == 'Spike':
                 self.filterData('Spike')
             elif SpksOrLFPs == 'LFP':
@@ -102,6 +103,7 @@ class Spike(object):
              - 'LFP' Will load a Chebychev type II filter with passband low = 3 and passband high = 500
         Channels - List of channels to filter. If empty, do all
         TODO - Independent channel filtering
+             - Add filter coefficients and if statements for sampling rates at 50kHz. Right now filters are for 24415 Hz.
         """
         if Type == 'Spike':
             SOSSpike = loadmat('SOS_Spike')
@@ -113,6 +115,17 @@ class Spike(object):
             SOS = np.ascontiguousarray(SOSLFP['SOS_LFP'])
             filteredData = sosfiltfilt(SOS,self.lineFilterRawData)
             self.LFP = filteredData
+        elif Type == 'Raw':
+            if self.fs < 25000:
+                SOSRaw = loadmat('SOS_Raw')
+                SOS = np.ascontiguousarray(SOSRaw['SOS_Raw'])
+            elif self.fs > 25000:
+                SOSRaw = loadmat('SOS_Raw_50')
+                SOS = np.ascontiguousarray(SOSRaw['SOS_Raw_50'])
+            filteredData = sosfiltfilt(SOS,self.lineFilterRawData)
+            self.filteredRaw = filteredData
+            "This filter is for removing DC offset in the raw signal"
+
         else:
             raise TypeError('Type must be "Spike" or "LFP"')
         return filteredData
@@ -299,6 +312,8 @@ class Spike(object):
             """
             self.pulseTime = 0.000001             #Pulse time in seconds
             self.pulseFreq = 130                  #Pulse Frequnecy in Hz
+            import pywt
+
 
 
 
