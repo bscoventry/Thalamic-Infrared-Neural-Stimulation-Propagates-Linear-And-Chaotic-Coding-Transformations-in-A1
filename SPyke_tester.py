@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 import dask
 from SPyke import Spike
 import pdb
-dataPath = 'L://Ludwig Lab//Data//Rat//ViantRodent//P121//P121-230613-105919' #'C://Users//coventry//Desktop//P119-230317-165356'
+dataPath = 'C://Users//coventry//Desktop//ViantP121//P121-230722-184248' #'C://Users//coventry//Desktop//P119-230317-165356'
 stores = None             #Load all stores
 streamStore = 'streams'
 rawDataStore = 'TDT2'
@@ -23,10 +23,10 @@ SpikeClass = Spike(dataPath,stores,streamStore,rawDataStore,debug,stim)
 Type = 'Spike'
 Spikes = SpikeClass.Spikes
 LFPs = SpikeClass.LFP
-SpikeClass.plotSampleWaveform(Spikes,[0])
-SpikeClass.plotSampleWaveform(LFPs,[0])
-Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+SpikeClass.plotSampleWaveform(Spikes,[1])
+SpikeClass.plotSampleWaveform(LFPs,[1])
+#Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
 pdb.set_trace()
 #filterData = SpikeClass.filterData(Type)
-SpikeClass.stimArtifactRemoval(algo='Template')
+#SpikeClass.stimArtifactRemoval(algo='Template')
 
