@@ -341,7 +341,115 @@ class Spike(object):
                 plt.xlabel('Time [sec]')
                 plt.show()
         return Sxx,t,f
-
+class Spike_Processed(object):
+    """
+    Purpose: This is the main spike analysis method. Within will hold analysis operations, data loaders, and plotters. For Brandon's INS Data
+    Class Methods: 
+        __init__: Initialize the class, load class variables
+            Inputs: data - This is a string containing the name of the datafile to be analyzed
+                    *args - Arguments to be passed to TsData parent class.
+                    stores - Names of stores to load from TDT tank. If empty, load all stores. Stores should be in form of list i.e. ['EPOCHS','Streams']
+                    rawDataStore - Names of raw data variable. Should point to 
+                    rz_sample_rate : int sample rate of RZ processor in TDT chain
+                    si_sample_rate : int sample rate of SI processor in TDT chain
+                    hasStim: Set to 0 if no stim present, set to 1 if stim is present
+        loadData: This loads data into memory. 
+        TODO: Check if GPU flag is needed with cp.get_array_module
+    """
+    def __init__(self, data, stores=None, streamStore = None,debug=0, hasStim=0, rz_sample_rate=None, si_sample_rate=None, sample_delay=None,GPU=True,stimulation=True,SpksOrLFPs=['Spike','LFP'],**kwargs):
+        super().__init__()
+        self.stores = stores
+        pdb.set_trace()
+        if stores==None:
+            self.data = tdt.read_block(data)
+        else:
+            self.data = tdt.read_block(data,'store',self.stores)
+        print(self.data)
+        self.GPU = GPU
+        self.storage = getattr(self.data,streamStore)
+        if len(SpksOrLFPs) > 1:
+            self.Spikes = getattr(self.storage,'Spks')
+            self.LFP = getattr(self.storage,'LFPs')
+            self.fs = self.LFP['fs']
+            self.channel = self.LFP['channel']
+            self.numChannel = len(self.channel)
+            self.LFP = self.LFP['data']
+            self.Spikes = self.Spikes['data']
+            self.totSamp = len(self.Spikes[0,:])
+            self.ts = np.arange(0,self.totSamp/self.fs,1/self.fs)
+        elif SpksOrLFPs[0] == 'Spike':
+            self.Spikes = getattr(self.storage,'Spks')
+            self.fs = self.Spikes['fs']
+            self.channel = self.Spikes['channel']
+            self.numChannel = len(self.channel)
+            self.Spikes = self.Spikes['data']
+            self.totSamp = len(self.Spikes[0,:])
+            self.ts = np.arange(0,self.totSamp/self.fs,1/self.fs)
+        elif SpksOrLFPs[0] == 'LFP':
+            self.LFP = getattr(self.storage,'LFPs')
+            self.fs = self.LFP['fs']
+            self.channel = self.LFP['channel']
+            self.numChannel = len(self.channel)
+            self.LFP = self.LFP['data']
+            self.totSamp = len(self.LFP[0,:])
+            self.ts = np.arange(0,self.totSamp/self.fs,1/self.fs)
+            self.LFP = self.lineHarmonicFilter(self.LFP)
+        #if self.GPU == True:
+            #self.rawData = cp.asarray(self.raw['data'])            #Get this into a CuPy for GPU processing
+        #else:
+            #self.rawData = dask.delayed(self.raw['data'])          #Get this into a dask array for quick processing.
+        
+        
+        # if 'Spike' in SpksOrLFPs:
+        #     self.convertSpikes2Bin()
+        #     self.sortSpikesKilosort()
+        if hasStim == 1:
+            self.extractStimEvents()
+        #pdb.set_trace()
+        
+        
+    
+    def gpu2cpu(self,data2transfer):
+        """
+        This is a helper function to transfer gpu to cpu 
+        Inputs: data2transfer - the data to move from GPU to CPU
+        """
+        return cp.asnumpy(data2transfer)
+    
+    def filterData(self,Data,channels=[]):
+        """
+        This function will filter the data for Spikes or for LFPs from predefined filters.
+        Type - 'Spike' Will load a Chebychev type II filter with passband low = 500 and passband high = 5000
+             - 'LFP' Will load a Chebychev type II filter with passband low = 3 and passband high = 500
+        Channels - List of channels to filter. If empty, do all
+        TODO - Independent channel filtering
+             - Add filter coefficients and if statements for sampling rates at 50kHz. Right now filters are for 24415 Hz.
+        """
+    
+        if self.fs < 25000:                   #For reasons unknown to me, matlab saves SOS coeffs as non C-contiguous arrays. Fixed here
+            SOSRaw = loadmat('SOS_Raw')
+            SOS = np.ascontiguousarray(SOSRaw['SOS'])
+        elif self.fs > 25000:
+            SOSRaw = loadmat('SOS_Raw_50')
+            SOS = np.ascontiguousarray(SOSRaw['SOS'])
+        filteredData = sosfiltfilt(SOS,Data)
+        return filteredData
+        "This filter is for removing DC offset in the raw signal"
+        
+    def lineHarmonicFilter(self,DATA):
+       
+        SOS60 = loadmat('SOS_60')
+        SOS120 = loadmat('SOS_120')
+        SOS240 = loadmat('SOS_240')
+        SOS = np.ascontiguousarray(SOS60['SOS_60'])   #For reasons unknown to me, matlab saves SOS coeffs as non C-contiguous arrays. Fixed here
+        filteredData1 = sosfiltfilt(SOS,DATA)
+        SOS = np.ascontiguousarray(SOS120['SOS_120'])
+        filteredData2 = sosfiltfilt(SOS,filteredData1)
+        SOS = np.ascontiguousarray(SOS240['SOS_240'])
+        filteredData3 = sosfiltfilt(SOS,filteredData2)
+        self.lineFilterRawData = filteredData3
+        
+        return filteredData3
     
 
 

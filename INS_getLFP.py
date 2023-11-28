@@ -26,7 +26,7 @@ SpikeClass = Spike_Processed(dataPath,stores,streamStore,debug,stim,SpksOrLFPs=S
 #Spikes = SpikeClass.Spikes
 LFPs = SpikeClass.LFP
 #SpikeClass.plotSampleWaveform(Spikes,[1])
-SpikeClass.plotSampleWaveform(LFPs,[1])
+#SpikeClass.plotSampleWaveform(LFPs,[1])
 #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
 pdb.set_trace()
 #filterData = SpikeClass.filterData(Type)
