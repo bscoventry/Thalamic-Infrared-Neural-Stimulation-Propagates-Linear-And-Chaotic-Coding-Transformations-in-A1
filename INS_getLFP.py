@@ -13,22 +13,22 @@ import matplotlib.pyplot as plt
 import dask
 from SPyke import Spike_Processed
 import pdb
-dataPath = 'C://DataRepos//INS//INS2102//20210216//5PU_5PW_5ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
-stores = None             #Load all stores
-streamStore = 'streams'
-rawDataStore = 'TDT2'
-debug = 0
-stim = 0
-Type = 'LFP'
-SpksOrLFPs = [Type]
-SpikeClass = Spike_Processed(dataPath,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+if __name__ == "__main__":
+    dataPath = 'C://DataRepos//INS//INS2102//20210216//5PU_5PW_5ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    SpikeClass = Spike_Processed(dataPath,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
 
-#Spikes = SpikeClass.Spikes
-LFPs = SpikeClass.LFP
-#SpikeClass.plotSampleWaveform(Spikes,[1])
-#SpikeClass.plotSampleWaveform(LFPs,[1])
-#Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
-pdb.set_trace()
-#filterData = SpikeClass.filterData(Type)
-#SpikeClass.stimArtifactRemoval(algo='Template')
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    pdb.set_trace()
+    #filterData = SpikeClass.filterData(Type)
+    #SpikeClass.stimArtifactRemoval(algo='Template')
 

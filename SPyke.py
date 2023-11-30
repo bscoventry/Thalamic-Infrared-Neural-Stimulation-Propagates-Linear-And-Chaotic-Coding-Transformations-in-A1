@@ -19,6 +19,8 @@ import cupy as cp
 from scipy.io import loadmat
 from scipy.signal import sosfiltfilt
 from scipy.signal import spectrogram
+from scipy.signal import decimate
+import fcwt         #For T-F decomposition https://github.com/fastlib/fCWT
 import pickle as pkl
 class Spike(object):
     """
@@ -59,6 +61,7 @@ class Spike(object):
         self.numChannel = len(self.channel)
         self.totSamp = len(self.rawData[0,:])
         self.ts = np.arange(0,self.totSamp/self.fs,1/self.fs)
+        
         if debug == 0:
             self.lineHarmonicFilter()
             if len(SpksOrLFPs) > 1:
@@ -359,7 +362,7 @@ class Spike_Processed(object):
     def __init__(self, data, stores=None, streamStore = None,debug=0, hasStim=0, rz_sample_rate=None, si_sample_rate=None, sample_delay=None,GPU=True,stimulation=True,SpksOrLFPs=['Spike','LFP'],**kwargs):
         super().__init__()
         self.stores = stores
-        pdb.set_trace()
+        self.numCores = 6         #For CWT, set to number of CPU cores
         if stores==None:
             self.data = tdt.read_block(data)
         else:
@@ -377,6 +380,7 @@ class Spike_Processed(object):
             self.Spikes = self.Spikes['data']
             self.totSamp = len(self.Spikes[0,:])
             self.ts = np.arange(0,self.totSamp/self.fs,1/self.fs)
+            
         elif SpksOrLFPs[0] == 'Spike':
             self.Spikes = getattr(self.storage,'Spks')
             self.fs = self.Spikes['fs']
@@ -391,9 +395,18 @@ class Spike_Processed(object):
             self.channel = self.LFP['channel']
             self.numChannel = len(self.channel)
             self.LFP = self.LFP['data']
+            self.LFP = self.lineHarmonicFilter(self.LFP)
+            self.LFP = decimate(self.LFP,16)
+            self.fs = self.fs/16
             self.totSamp = len(self.LFP[0,:])
             self.ts = np.arange(0,self.totSamp/self.fs,1/self.fs)
-            self.LFP = self.lineHarmonicFilter(self.LFP)
+            self.waveletDecomposition()
+
+        self.epocs = self.data.epocs.RZ2T.onset
+        self.getEpocSamp
+        if 'self.LFP' in locals():
+            pass
+
         #if self.GPU == True:
             #self.rawData = cp.asarray(self.raw['data'])            #Get this into a CuPy for GPU processing
         #else:
@@ -408,7 +421,14 @@ class Spike_Processed(object):
         #pdb.set_trace()
         
         
-    
+    def getEpocSamp(self):
+        # This helper function finds the start samples of stimulation epocs.
+        lenEpoch = len(self.epocs)
+        epochSamp = np.zeros(lenEpoch,)
+        for ck in range(lenEpoch):
+            epochSamp[ck] = np.argwhere(abs((self.ts-self.epocs[ck]))<.00001)
+        self.epochSamp = epochSamp
+
     def gpu2cpu(self,data2transfer):
         """
         This is a helper function to transfer gpu to cpu 
@@ -450,7 +470,14 @@ class Spike_Processed(object):
         self.lineFilterRawData = filteredData3
         
         return filteredData3
-    
+    def waveletDecomposition(self,flow=0.3,fhi=200,fn=250):
+        #This helper function computes the CWT using the fCWT method.
+        #This helper function computes the CWT using the fCWT method.
+        self.wavelet = np.zeros((self.numChannel,fn,self.totSamp),dtype=np.csingle)
+        for ck in range(self.numChannel):
+            freqs, cwt = fcwt.cwt(self.LFP[ck,:], int(np.floor(self.fs)), flow, fhi, fn, nthreads=self.numCores)
+            self.wavelet[ck,:,:] = cwt
+        self.freqs = freqs
 
 
 
