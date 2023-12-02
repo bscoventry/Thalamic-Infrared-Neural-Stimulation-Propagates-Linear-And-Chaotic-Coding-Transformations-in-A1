@@ -368,6 +368,7 @@ class Spike_Processed(object):
         else:
             self.data = tdt.read_block(data,'store',self.stores)
         print(self.data)
+        
         self.GPU = GPU
         self.storage = getattr(self.data,streamStore)
         if len(SpksOrLFPs) > 1:
@@ -400,13 +401,14 @@ class Spike_Processed(object):
             self.fs = self.fs/16
             self.totSamp = len(self.LFP[0,:])
             self.ts = np.arange(0,self.totSamp/self.fs,1/self.fs)
-            self.waveletDecomposition()
+            #self.waveletDecomposition()
 
         self.epocs = self.data.epocs.RZ2T.onset
-        self.getEpocSamp
+        
+        self.getEpocSamp()
         if 'self.LFP' in locals():
             pass
-
+        self.epocLFP = self.epocTrials(self.LFP)
         #if self.GPU == True:
             #self.rawData = cp.asarray(self.raw['data'])            #Get this into a CuPy for GPU processing
         #else:
@@ -423,11 +425,18 @@ class Spike_Processed(object):
         
     def getEpocSamp(self):
         # This helper function finds the start samples of stimulation epocs.
+        
         lenEpoch = len(self.epocs)
         epochSamp = np.zeros(lenEpoch,)
+        
         for ck in range(lenEpoch):
-            epochSamp[ck] = np.argwhere(abs((self.ts-self.epocs[ck]))<.00001)
+            try:
+                epochSamp[ck] = int(np.argwhere(abs((self.ts-self.epocs[ck]))<.0003))
+            except:
+                print('weird')
+                pdb.set_trace()
         self.epochSamp = epochSamp
+       
 
     def gpu2cpu(self,data2transfer):
         """
@@ -454,7 +463,7 @@ class Spike_Processed(object):
             SOS = np.ascontiguousarray(SOSRaw['SOS'])
         filteredData = sosfiltfilt(SOS,Data)
         return filteredData
-        "This filter is for removing DC offset in the raw signal"
+        #"This filter is for removing DC offset in the raw signal"
         
     def lineHarmonicFilter(self,DATA):
        
@@ -479,6 +488,30 @@ class Spike_Processed(object):
             self.wavelet[ck,:,:] = cwt
         self.freqs = freqs
 
+    def epocTrials(self,data):
+        
+        
+        lenTrials = self.totSamp
+        lenEpocs = len(self.epocs)
+        LFP_Trials = {}
+        
+        for bc in range(self.numChannel):
+            
+            curData = data[bc,:]
+            dataLen = len(curData[int(self.epochSamp[0]):int(self.epochSamp[1])])
+            lenTrials = dataLen
+            epocedData = np.zeros((lenEpocs,lenTrials))
+            for ck in range(lenEpocs-1):
+                    newRangeStart = int(self.epochSamp[ck])
+                    newRangeEnd = int(self.epochSamp[ck+1])
+                    if newRangeEnd-newRangeStart == 1525:
+                        newRangeEnd = newRangeEnd+1
+                    try:
+                        epocedData[ck,:] = curData[newRangeStart:newRangeEnd]
+                    except:
+                        pdb.set_trace()
+            LFP_Trials[str(bc)] = epocedData
+        return LFP_Trials
 
 
         
