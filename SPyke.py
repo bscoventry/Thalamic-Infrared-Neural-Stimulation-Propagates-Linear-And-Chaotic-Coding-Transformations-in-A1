@@ -401,7 +401,7 @@ class Spike_Processed(object):
             self.fs = self.fs/16
             self.totSamp = len(self.LFP[0,:])
             self.ts = np.arange(0,self.totSamp/self.fs,1/self.fs)
-            #self.waveletDecomposition()
+            self.waveletDecomposition()
 
         self.epocs = self.data.epocs.RZ2T.onset
         
@@ -409,6 +409,9 @@ class Spike_Processed(object):
         if 'self.LFP' in locals():
             pass
         self.epocLFP = self.epocTrials(self.LFP)
+        
+        self.readINSLaserVoltages()
+        self.epochedLFPS = self.sortByStimCondition(self.epocLFP)
         #if self.GPU == True:
             #self.rawData = cp.asarray(self.raw['data'])            #Get this into a CuPy for GPU processing
         #else:
@@ -430,11 +433,8 @@ class Spike_Processed(object):
         epochSamp = np.zeros(lenEpoch,)
         
         for ck in range(lenEpoch):
-            try:
-                epochSamp[ck] = int(np.argwhere(abs((self.ts-self.epocs[ck]))<.0003))
-            except:
-                print('weird')
-                pdb.set_trace()
+            
+            epochSamp[ck] = int(np.argwhere(abs((self.ts-self.epocs[ck]))<.0003))
         self.epochSamp = epochSamp
        
 
@@ -444,7 +444,25 @@ class Spike_Processed(object):
         Inputs: data2transfer - the data to move from GPU to CPU
         """
         return cp.asnumpy(data2transfer)
-    
+    def readINSLaserVoltages(self):
+        
+        curVales = loadmat('INSvoltagevals.mat')
+        curVales = curVales['stimpeaks']
+        [rows,cols] = np.shape(curVales)
+        voltageVals = np.zeros((rows,))
+        for ck in range(rows):
+            
+            voltageVals[ck] = curVales[ck][0]
+        self.voltageVals = voltageVals
+        uniqueVals = np.unique(self.voltageVals)
+        numUnique = len(uniqueVals)
+        uniqueWhere = {}
+        for bc in range(numUnique):
+            curUniq = uniqueVals[bc]
+            uniWhere = np.argwhere(curUniq==self.voltageVals)
+            uniqueWhere[str(curUniq)] = uniWhere
+        self.uniqueWhere = uniqueWhere
+
     def filterData(self,Data,channels=[]):
         """
         This function will filter the data for Spikes or for LFPs from predefined filters.
@@ -479,13 +497,34 @@ class Spike_Processed(object):
         self.lineFilterRawData = filteredData3
         
         return filteredData3
-    def waveletDecomposition(self,flow=0.3,fhi=200,fn=250):
+    def waveletDecomposition(self,flow=3,fhi=200,fn=250):
         #This helper function computes the CWT using the fCWT method.
         #This helper function computes the CWT using the fCWT method.
-        self.wavelet = np.zeros((self.numChannel,fn,self.totSamp),dtype=np.csingle)
+        theta = [4,8]
+        alpha = [8,13]
+        beta  = [13,30]
+        lowgamma = [30,80]
+        highgamma = [80,200]
+        import scipy.integrate as tegral
+        self.wavelet = np.zeros((self.numChannel,fn,self.totSamp))
+        self.theta = np.zeros((self.numChannel,self.totSamp))
+        self.alpha = np.zeros((self.numChannel,self.totSamp))
+        self.beta = np.zeros((self.numChannel,self.totSamp))
+        self.lowgamma = np.zeros((self.numChannel,self.totSamp))
+        self.highgamma = np.zeros((self.numChannel,self.totSamp))
+        
         for ck in range(self.numChannel):
             freqs, cwt = fcwt.cwt(self.LFP[ck,:], int(np.floor(self.fs)), flow, fhi, fn, nthreads=self.numCores)
-            self.wavelet[ck,:,:] = cwt
+            alphaWhere = np.where(np.logical_and(freqs>=alpha[0], freqs<=alpha[1]))
+            thetaWhere = np.where(np.logical_and(freqs>=theta[0], freqs<=theta[1]))
+            betaWhere = np.where(np.logical_and(freqs>=beta[0], freqs<=beta[1]))
+            lowGammaWhere = np.where(np.logical_and(freqs>=lowgamma[0], freqs<=lowgamma[1]))
+            highGammaWhere = np.where(np.logical_and(freqs>=highgamma[0], freqs<=highgamma[1]))
+            wavelet = np.square(np.abs(cwt))
+            pdb.set_trace()
+            self.theta[ck,:] = np.squeeze(tegral.simpson(wavelet[thetaWhere,:],axis=1))
+            
+            self.wavelet[ck,:,:] = np.abs(cwt)
         self.freqs = freqs
 
     def epocTrials(self,data):
@@ -513,6 +552,24 @@ class Spike_Processed(object):
             LFP_Trials[str(bc)] = epocedData
         return LFP_Trials
 
+    def sortByStimCondition(self,data):
+        numElectrodes = len(data.keys())
+        epochedLFPs = {}
+        
+        for ck in range(numElectrodes):
+            curData = data[str(ck)]
+            stimCondition = {}
+            for bc in range(len(self.uniqueWhere.keys())):
+                curStimValKey = list(self.uniqueWhere.keys())[bc]
+                curStimVal = np.squeeze(self.uniqueWhere[curStimValKey])
+                stimCondition[str(curStimValKey)] = curData[curStimVal,:]
+            epochedLFPs[str(ck)] = stimCondition
+        return epochedLFPs  
+    
+
+
+
+            
 
         
         
