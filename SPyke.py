@@ -359,7 +359,7 @@ class Spike_Processed(object):
         loadData: This loads data into memory. 
         TODO: Check if GPU flag is needed with cp.get_array_module
     """
-    def __init__(self, data, stores=None, streamStore = None,debug=0, hasStim=0, rz_sample_rate=None, si_sample_rate=None, sample_delay=None,GPU=True,stimulation=True,SpksOrLFPs=['Spike','LFP'],**kwargs):
+    def __init__(self, data, numpulses, PW, ISI,power, stores=None, streamStore = None,debug=0, hasStim=0, rz_sample_rate=None, si_sample_rate=None, sample_delay=None,GPU=True,stimulation=True,SpksOrLFPs=['Spike','LFP'],**kwargs):
         super().__init__()
         self.stores = stores
         self.numCores = 6         #For CWT, set to number of CPU cores
@@ -368,7 +368,10 @@ class Spike_Processed(object):
         else:
             self.data = tdt.read_block(data,'store',self.stores)
         print(self.data)
-        
+        self.numpulses = numpulses
+        self.PW = PW
+        self.ISI = ISI
+        self.power = power
         self.GPU = GPU
         self.storage = getattr(self.data,streamStore)
         if len(SpksOrLFPs) > 1:
@@ -402,16 +405,24 @@ class Spike_Processed(object):
             self.totSamp = len(self.LFP[0,:])
             self.ts = np.arange(0,self.totSamp/self.fs,1/self.fs)
             self.waveletDecomposition()
-
+            
         self.epocs = self.data.epocs.RZ2T.onset
-        
         self.getEpocSamp()
         if 'self.LFP' in locals():
             pass
+        self.alphaTrials = self.epocTrials(self.alpha)
+        self.betaTrials = self.epocTrials(self.beta)
+        self.thetaTrials = self.epocTrials(self.theta)
+        self.lowGammaTrials = self.epocTrials(self.lowgamma)
+        self.highGammaTrials = self.epocTrials(self.highgamma)
         self.epocLFP = self.epocTrials(self.LFP)
         
         self.readINSLaserVoltages()
-        self.epochedLFPS = self.sortByStimCondition(self.epocLFP)
+        self.epocedAlpha = self.sortByStimCondition(self.alphaTrials)
+        self.epochedBeta = self.sortByStimCondition(self.betaTrials)
+        self.epochedTheta = self.sortByStimCondition(self.thetaTrials)
+        self.epochedLowGamma = self.sortByStimCondition(self.lowGammaTrials)
+        self.epochedHighGamma = self.sortByStimCondition(self.highGammaTrials)
         #if self.GPU == True:
             #self.rawData = cp.asarray(self.raw['data'])            #Get this into a CuPy for GPU processing
         #else:
@@ -455,12 +466,16 @@ class Spike_Processed(object):
             voltageVals[ck] = curVales[ck][0]
         self.voltageVals = voltageVals
         uniqueVals = np.unique(self.voltageVals)
+        #Get energy per pulse
+        self.energyPerPulse = (self.power*0.001)*(self.PW*0.001)*1000
+        
         numUnique = len(uniqueVals)
         uniqueWhere = {}
         for bc in range(numUnique):
             curUniq = uniqueVals[bc]
+            curEnergy = self.energyPerPulse[bc]
             uniWhere = np.argwhere(curUniq==self.voltageVals)
-            uniqueWhere[str(curUniq)] = uniWhere
+            uniqueWhere[str(curEnergy)] = uniWhere
         self.uniqueWhere = uniqueWhere
 
     def filterData(self,Data,channels=[]):
@@ -521,10 +536,13 @@ class Spike_Processed(object):
             lowGammaWhere = np.where(np.logical_and(freqs>=lowgamma[0], freqs<=lowgamma[1]))
             highGammaWhere = np.where(np.logical_and(freqs>=highgamma[0], freqs<=highgamma[1]))
             wavelet = np.square(np.abs(cwt))
-            pdb.set_trace()
-            self.theta[ck,:] = np.squeeze(tegral.simpson(wavelet[thetaWhere,:],axis=1))
-            
-            self.wavelet[ck,:,:] = np.abs(cwt)
+            #pdb.set_trace()
+            self.theta[ck,:] = np.squeeze(2*tegral.simpson(wavelet[thetaWhere,:],axis=1))
+            self.alpha[ck,:] = np.squeeze(2*tegral.simpson(wavelet[alphaWhere,:],axis=1))
+            self.beta[ck,:] = np.squeeze(2*tegral.simpson(wavelet[betaWhere,:],axis=1))
+            self.lowgamma[ck,:] = np.squeeze(2*tegral.simpson(wavelet[lowGammaWhere,:],axis=1))
+            self.highgamma[ck,:] = np.squeeze(2*tegral.simpson(wavelet[highGammaWhere,:],axis=1))
+            #self.wavelet[ck,:,:] = np.abs(cwt)
         self.freqs = freqs
 
     def epocTrials(self,data):
@@ -550,6 +568,7 @@ class Spike_Processed(object):
                     except:
                         pdb.set_trace()
             LFP_Trials[str(bc)] = epocedData
+        
         return LFP_Trials
 
     def sortByStimCondition(self,data):
@@ -564,6 +583,7 @@ class Spike_Processed(object):
                 curStimVal = np.squeeze(self.uniqueWhere[curStimValKey])
                 stimCondition[str(curStimValKey)] = curData[curStimVal,:]
             epochedLFPs[str(ck)] = stimCondition
+            #pdb.set_trace()
         return epochedLFPs  
     
 
