@@ -373,6 +373,7 @@ class Spike_Processed(object):
         self.ISI = ISI
         self.power = power
         self.GPU = GPU
+        pdb.set_trace()
         self.storage = getattr(self.data,streamStore)
         if len(SpksOrLFPs) > 1:
             self.Spikes = getattr(self.storage,'Spks')
