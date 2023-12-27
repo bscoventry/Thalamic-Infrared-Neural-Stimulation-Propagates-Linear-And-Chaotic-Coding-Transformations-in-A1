@@ -2230,6 +2230,4127 @@ if __name__ == "__main__":
     except:
         print('Matlab data did not save')
         pdb.set_trace()
+
+    #
+    animalName = 'INS2008'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20200822'
+    PU = 5
+    PW = 1
+    ISI = 5
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2008//08_22_20//INS_5PU_1PW_5ISI_2' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2008'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20200822'
+    PU = 5
+    PW = 0.2
+    ISI = 5
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2008//08_22_20//INS_5PU_0_2PW_5ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2008'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20200822'
+    PU = 5
+    PW = 0.5
+    ISI = 5
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2008//08_22_20//INS_5PU_0_5PW_5ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2008'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20200822'
+    PU = 5
+    PW = 1
+    ISI = 1
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2008//08_22_20//INS_5PU_1PW_1ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2008'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20200822'
+    PU = 5
+    PW = 5
+    ISI = 1
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2008//08_22_20//INS_5PU_5PW_1ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2008'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20200822'
+    PU = 5
+    PW = 5
+    ISI = 5
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2008//08_22_20//INS_5PU_5PW_5ISI_2' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2008'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20200825'
+    PU = 5
+    PW = 5
+    ISI = 100
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2008//08_25_20//INS_5PU_5PW_100ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2008'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20200825'
+    PU = 5
+    PW = 0.2
+    ISI = 100
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2008//08_25_20//INS_5PU_0_2PW_100ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2008'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20200825'
+    PU = 5
+    PW = 0.5
+    ISI = 100
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2008//08_25_20//INS_5PU_0_5PW_100ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2008'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20200825'
+    PU = 5
+    PW = 1
+    ISI = 100
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2008//08_25_20//INS_5PU_1ms_100ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2008'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20200826'
+    PU = 5
+    PW = 5
+    ISI = 5
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2008//08_26_20_2//INS_5PU_5PW_5ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2008'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20200826'
+    PU = 5
+    PW = 0.2
+    ISI = 5
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2008//08_26_20_2//INS_5PU_0_2PW_5ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2008'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20200826'
+    PU = 5
+    PW = 0.2
+    ISI = 10
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2008//08_26_20_2//INS_5PU_0_2PW_10ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2008'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20200826'
+    PU = 5
+    PW = 0.5
+    ISI = 5
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2008//08_26_20_2//INS_5PU_0_5PW_5ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2008'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20200826'
+    PU = 5
+    PW = 0.5
+    ISI = 10
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2008//08_26_20_2//INS_5PU_0_5PW_10ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2008'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20200826'
+    PU = 5
+    PW = 1
+    ISI = 5
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2008//08_26_20_2//INS_5PU_1PW_5ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2008'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20200826'
+    PU = 5
+    PW = 1
+    ISI = 10
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2008//08_26_20_2//INS_5PU_1PW_10ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2008'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20200826'
+    PU = 5
+    PW = 5
+    ISI = 10
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2008//08_26_20_2//INS_5PU_5PW_10ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2008'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20200901'
+    PU = 5
+    PW = 5
+    ISI = 5
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2008//09_01_20//INS_5PU_5PW_5ISI_2' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2008'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20200901'
+    PU = 5
+    PW = 0.2
+    ISI = 1
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2008//09_01_20//INS_5PU_0_2PW_1ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2008'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20200901'
+    PU = 5
+    PW = 0.5
+    ISI = 1
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2008//09_01_20//INS_5PU_0_5PW_1ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2008'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20200901'
+    PU = 5
+    PW = 1
+    ISI = 1
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2008//09_01_20//INS_5PU_1PW_1ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2008'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20200901'
+    PU = 5
+    PW = 5
+    ISI = 1
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2008//09_01_20//INS_5PU_5PW_1ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2008'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20200901'
+    PU = 5
+    PW = 10
+    ISI = 50
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2008//09_01_20//INS_5PU_10PW_50ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2008'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20200908'
+    PU = 5
+    PW = 5
+    ISI = 5
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2008//09_08_20//INS_5PU_5PW_5ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2008'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20200908'
+    PU = 5
+    PW = 0.1
+    ISI = 5
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2008//09_08_20//INS_5PU_0_1PW_5ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2008'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20200908'
+    PU = 5
+    PW = 0.2
+    ISI = 5
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2008//09_08_20//INS_5PU_0_2PW_5ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2008'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20200908'
+    PU = 5
+    PW = 0.5
+    ISI = 20
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2008//09_08_20//INS_5PU_0_5PW_20ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2008'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20200908'
+    PU = 5
+    PW = 1
+    ISI = 5
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2008//09_08_20//INS_5PU_1PW_5ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2008'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20200908'
+    PU = 5
+    PW = 1
+    ISI = 20
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2008//09_08_20//INS_5PU_1PW_20ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2008'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20200908'
+    PU = 5
+    PW = 10
+    ISI = 50
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2008//09_08_20//INS_5PU_10PW_50ISI_3' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    try:
+        sio.savemat('LFP.mat',dataStore)
+    except:
+        print('Matlab data did not save')
+        pdb.set_trace()
+
+    #
+    animalName = 'INS2013'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20201031'
+    PU = 5
+    PW = 5
+    ISI = 5
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2013//10_31_20//INS_5PU_5PW_5ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2013'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20201031'
+    PU = 5
+    PW = 1
+    ISI = 5
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2013//10_31_20//INS_5PU_1PW_5ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2013'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20201031'
+    PU = 5
+    PW = 5
+    ISI = 100
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2013//10_31_20//INS_5PU_5PW_100ISI_LaserOn' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2013'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20201031'
+    PU = 5
+    PW = 0.5
+    ISI = 5
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2013//10_31_20//INS_5PU_0_5ms_5ISI_2' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2013'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20201101'
+    PU = 5
+    PW = 5
+    ISI = 5
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2013//11_01_20//INS_5PU_5PW_5ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2013'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20201101'
+    PU = 5
+    PW = 1
+    ISI = 1
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2013//11_01_20//INS_5PU_1PW_1ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2013'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20201101'
+    PU = 5
+    PW = 1
+    ISI = 5
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2013//11_01_20//INS_5PU_1PW_5ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2013'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20201101'
+    PU = 5
+    PW = 5
+    ISI = 1
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2013//11_01_20//INS_5PU_5PW_1ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2013'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20201101'
+    PU = 5
+    PW = 10
+    ISI = 50
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2013//11_01_20//INS_5PU_10PW_50ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2013'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20201102'
+    PU = 5
+    PW = 5
+    ISI = 1
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2013//11_02_20//INS_5PU_5PW_1ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2013'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20201102'
+    PU = 5
+    PW = 0.5
+    ISI = 0.3
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2013//11_02_20//INS_5PU_0_5PW_0_3ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2013'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20201102'
+    PU = 5
+    PW = 0.5
+    ISI = 1
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2013//11_02_20//INS_5PU_0_5PW_1ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2013'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20201102'
+    PU = 5
+    PW = 10
+    ISI = 25
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2013//11_02_20//INS_5PU_10PW_25ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2013'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20201102'
+    PU = 5
+    PW = 10
+    ISI = 50
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2013//11_02_20//INS_5PU_10PW_50ISI_2' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2013'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20201102'
+    PU = 10
+    PW = 0.5
+    ISI = 0.25
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2013//11_02_20//INS_10PU_0_5PW_0_25ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2013'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20201104'
+    PU = 1
+    PW = 5
+    ISI = 50
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2013//11_04_20//INS_1PU_5PW_50ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2013'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20201104'
+    PU = 1
+    PW = 0.2
+    ISI = 1
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2013//11_04_20//INS_1PU_0_2PW_1ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2013'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20201104'
+    PU = 1
+    PW = 0.5
+    ISI = 1
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2013//11_04_20//INS_1PU_0_5PW_1ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2013'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20201104'
+    PU = 1
+    PW = 10
+    ISI = 50
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2013//11_04_20//INS_1PU_10PW_50ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2013'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20201104'
+    PU = 5
+    PW = 10
+    ISI = 50
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2013//11_04_20//INS_5PU_10PW_50ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2013'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20201104'
+    PU = 10
+    PW = 0.2
+    ISI = 1
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2013//11_04_20//INS_10PU_0_2PW_1ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2013'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20201107'
+    PU = 5
+    PW = 1
+    ISI = 5
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2013//11_07_20//INS_5PU_1PW_5ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+     #
+    animalName = 'INS2013'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20201107'
+    PU = 5
+    PW = 0.2
+    ISI = 0.2
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2013//11_07_20//INS_5PU_0_2PW_0_2ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+     #
+    animalName = 'INS2013'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20201107'
+    PU = 5
+    PW = 0.5
+    ISI = 0.5
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2013//11_07_20//INS_5PU_0_5PW_0_5ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+     #
+    animalName = 'INS2013'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20201107'
+    PU = 5
+    PW = 10
+    ISI = 50
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2013//11_07_20//INS_5PU_10PW_50ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+     #
+    animalName = 'INS2013'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20201107'
+    PU = 10
+    PW = 1
+    ISI =1
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2013//11_07_20//INS_10PU_1PW_1ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2013'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20201109'
+    PU = 5
+    PW = 1
+    ISI = 0.5
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2013//11_09_20//INS_5PU_1PW_0_5ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2013'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20201109'
+    PU = 5
+    PW = 0.2
+    ISI = 0.5
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2013//11_09_20//INS_5PU_0_2PW_0_5ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2013'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20201109'
+    PU = 5
+    PW = 0.5
+    ISI = 0.5
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2013//11_09_20//INS_5PU_0_5PW_0_5ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2013'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20201109'
+    PU = 10
+    PW = 1
+    ISI = 1
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2013//11_09_20//INS_10PU_1PW_1ISI_2' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2013'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20201110'
+    PU = 1
+    PW = 5
+    ISI = 1
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2013//11_10_20//INS_1PU_5PW_1ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2013'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20201110'
+    PU = 1
+    PW = 0.2
+    ISI = 1
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2013//11_10_20//INS_1PU_0_2PW_1ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2013'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20201110'
+    PU = 1
+    PW = 0.5
+    ISI = 1
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2013//11_10_20//INS_1PU_0_5PW_1ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2013'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20201110'
+    PU = 1
+    PW = 1
+    ISI = 1
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2013//11_10_20//INS_1PU_1PW_1ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2013'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20201110'
+    PU = 1
+    PW = 10
+    ISI = 1
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2013//11_10_20//INS_1PU_10PW_1ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2013'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20201112'
+    PU = 10
+    PW = 5
+    ISI = 5
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2013//11_12_20//INS_10PU_5PW_5ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2013'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20201112'
+    PU = 10
+    PW = 0.2
+    ISI = 0.5
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2013//11_12_20//INS_10PU_0_2PW_0_5ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2013'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20201112'
+    PU = 10
+    PW = 0.5
+    ISI = 1
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2013//11_12_20//INS_10PU_0_5PW_1ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2013'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20201112'
+    PU = 10
+    PW = 1
+    ISI = 5
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2013//11_12_20//INS_10PU_1PW_5ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2013'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20201112'
+    PU = 10
+    PW = 10
+    ISI = 10
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2013//11_12_20//INS_10PU_10PW_10ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2013'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20201129'
+    PU = 5
+    PW = 1
+    ISI = 1
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2013//11_29_20//INS_5PU_1PW_1ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2013'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20201129'
+    PU = 5
+    PW = 5
+    ISI = 5
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2013//11_29_20//INS_5PU_5PW_5ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2013'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20201129'
+    PU = 5
+    PW = 10
+    ISI = 5
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2013//11_29_20//INS_5PU_10PW_5ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2013'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20201129'
+    PU = 5
+    PW = 10
+    ISI = 25
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2013//11_29_20//INS_5PU_10PW_25ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+    #
+    animalName = 'INS2013'
+    if animalName == 'INS2013':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2007':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431])
+    elif animalName == 'INS2015':
+        power = np.array([-1.1, 62.1, 77.42, 87.4, 101.2, 115.9, 130, 184.34, 257.3, 308.8, 360.7, 374.4])
+    elif animalName == 'INS2102':
+        power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    elif animalName == 'INS2008':
+        power = np.array([0, 4, 117, 130, 143.17, 155.9, 207, 292, 357, 370, 410, 431]) 
+    else:
+        print('Brandon you messed')
+        pdb.set_trace()
+           
+    Date = '20201129'
+    PU = 5
+    PW = 10
+    ISI = 50
+    storage = animalName+'_'+Date+'_'+str(PU)+'_'+str(PW)+'_'+str(ISI)
+    dataPath = 'Z://PhDData//INSdata//INS2013//11_29_20//INS_5PU_10PW_50ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+    #power = np.array([-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414])
+    stores = None             #Load all stores
+    streamStore = 'streams'
+    debug = 0
+    stim = 0
+    Type = 'LFP'
+    SpksOrLFPs = [Type]
+    try:
+        SpikeClass = Spike_Processed(dataPath,PU,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    except:
+        print('File'+dataPath+'Did not Work')
+
+    #Spikes = SpikeClass.Spikes
+    LFPs = SpikeClass.LFP
+    #SpikeClass.plotSampleWaveform(Spikes,[1])
+    #SpikeClass.plotSampleWaveform(LFPs,[1])
+    #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
+    alpha = SpikeClass.epocedAlpha
+    beta = SpikeClass.epochedBeta
+    theta = SpikeClass.epochedTheta
+    lowGamma = SpikeClass.epochedLowGamma
+    highGamma = SpikeClass.epochedHighGamma
+    
+    
+    bandStore={}
+    bandStore['alpha'] = alpha 
+    bandStore['beta'] = beta
+    bandStore['theta'] = theta
+    bandStore['lowgamma'] = lowGamma
+    bandStore['highgamma'] = highGamma    
+    dataStore[storage]=bandStore
+
+
+
+    try:
+        sio.savemat('LFP.mat',dataStore)
+    except:
+        print('Matlab data did not save')
+        pdb.set_trace()
+
+    
+
     print('Done!')
     pdb.set_trace()
     #filterData = SpikeClass.filterData(Type)
