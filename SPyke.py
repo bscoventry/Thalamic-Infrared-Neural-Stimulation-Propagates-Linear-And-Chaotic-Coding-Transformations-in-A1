@@ -359,8 +359,11 @@ class Spike_Processed(object):
         loadData: This loads data into memory. 
         TODO: Check if GPU flag is needed with cp.get_array_module
     """
-    def __init__(self, data, numpulses, PW, ISI,power, stores=None, streamStore = None,debug=0, hasStim=0, rz_sample_rate=None, si_sample_rate=None, sample_delay=None,GPU=True,stimulation=True,SpksOrLFPs=['Spike','LFP'],**kwargs):
+    def __init__(self, data, numpulses, PW, ISI, power, stores=None, streamStore = None,debug=0, hasStim=0, rz_sample_rate=None, si_sample_rate=None, sample_delay=None,GPU=True,stimulation=True,SpksOrLFPs=['Spike','LFP'],**kwargs):
         super().__init__()
+        
+        if stores == 0:
+            stores = None
         self.stores = stores
         self.numCores = 6         #For CWT, set to number of CPU cores
         if stores==None:
@@ -373,6 +376,7 @@ class Spike_Processed(object):
         self.ISI = ISI
         self.power = power
         self.GPU = GPU
+        
         self.storage = getattr(self.data,streamStore)
         if len(SpksOrLFPs) > 1:
             self.Spikes = getattr(self.storage,'Spks')

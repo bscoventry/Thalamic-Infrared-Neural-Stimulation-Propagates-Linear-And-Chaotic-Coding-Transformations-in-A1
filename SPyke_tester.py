@@ -21,10 +21,15 @@ debug = 0
 stim = 0
 Type = 'LFP'
 SpksOrLFPs = [Type]
-SpikeClass = Spike_Processed(dataPath,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+numPulses=5
+PW = 5
+ISI = 5
+power = np.array((-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414))
+SpikeClass = Spike_Processed(dataPath,numPulses,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
 
 #Spikes = SpikeClass.Spikes
 LFPs = SpikeClass.LFP
+pdb.set_trace()
 #SpikeClass.plotSampleWaveform(Spikes,[1])
 SpikeClass.plotSampleWaveform(LFPs,[1])
 #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
