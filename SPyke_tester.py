@@ -29,9 +29,15 @@ SpikeClass = Spike_Processed(dataPath,numPulses,PW,ISI,power,stores,streamStore,
 
 #Spikes = SpikeClass.Spikes
 LFPs = SpikeClass.LFP
+
+epocedLFPs = SpikeClass.epocTrials(LFPs)
+sortedLFPs = SpikeClass.sortByStimCondition(epocedLFPs)
+#LFPtest = sortedLFPs['0']
+#LFP1 = LFPtest['2.0700000000000003']
 pdb.set_trace()
+LFPmean,LFPsder = SpikeClass.getMeanSdEr(sortedLFPs)
 #SpikeClass.plotSampleWaveform(Spikes,[1])
-SpikeClass.plotSampleWaveform(LFPs,[1])
+#SpikeClass.plotSampleWaveform(LFPs,[1])
 #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
 pdb.set_trace()
 #filterData = SpikeClass.filterData(Type)

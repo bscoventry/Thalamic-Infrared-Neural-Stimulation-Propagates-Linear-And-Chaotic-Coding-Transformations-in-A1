@@ -590,6 +590,28 @@ class Spike_Processed(object):
             #pdb.set_trace()
         return epochedLFPs  
     
+    def getMeanSdEr(self,data):
+        electrodes = len(data.keys())
+        dataMean = {}
+        dataSdEr = {}
+        for ck in range(electrodes):
+            curData = data[str(ck)]
+            dataMeanEnergy = {}
+            dataSdErEnergy = {}
+            for key in curData.keys():
+                curDataE = curData[key]
+                [r,c] = np.shape(curDataE)
+                meanData = np.mean(curDataE,axis=0)
+                sddvData = np.std(curDataE,axis=0)
+                sderData = sddvData/np.sqrt(r)
+                dataMeanEnergy[key] = meanData
+                dataSdErEnergy[key] = sderData
+            dataMean[str(ck)] = dataMeanEnergy
+            dataSdEr[str(ck)] = dataSdErEnergy
+        return dataMean,dataSdEr
+
+
+    
 
 
 
