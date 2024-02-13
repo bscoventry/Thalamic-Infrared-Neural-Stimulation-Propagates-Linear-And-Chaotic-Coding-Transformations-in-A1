@@ -22,6 +22,7 @@ from scipy.signal import spectrogram
 from scipy.signal import decimate
 import fcwt         #For T-F decomposition https://github.com/fastlib/fCWT
 import pickle as pkl
+import pandas as pd
 class Spike(object):
     """
     Purpose: This is the main spike analysis method. Within will hold analysis operations, data loaders, and plotters.
@@ -609,6 +610,69 @@ class Spike_Processed(object):
             dataMean[str(ck)] = dataMeanEnergy
             dataSdEr[str(ck)] = dataSdErEnergy
         return dataMean,dataSdEr
+
+    def sortMeanByElectrode16(self,meanData,numSamples=1526):
+        
+        #The -1 on each of the entries below is just to help me convert between 0 indexing (Python) and 1 indexing (electrode array)
+        self.electrodeConfig = np.array([[10-1,12-1,14-1,16-1,9-1,11-1,13-1,15-1],[1-1,3-1,5-1,7-1,2-1,4-1,6-1,8-1]],np.int16)
+        sortedMean = {str(key): {} for key in self.energyPerPulse}
+        electrodes = ['0','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15']
+        
+        for ck in range(len(electrodes)):
+            curData = meanData[str(ck)]
+            for key in curData.keys():
+                currentData = curData[key]
+                sortedMean[key][str(ck)] = currentData
+        sortedE = {}
+        for key in sortedMean.keys():
+            cDat = sortedMean[key]
+            electrodeArray = np.zeros((2,8,numSamples))
+            for newkey in cDat.keys():
+                curE = np.where(int(newkey)==self.electrodeConfig)
+                electrodeArray[curE[0][0],curE[1][0],:]=cDat[newkey]
+            sortedE[key] = electrodeArray
+        
+        return sortedE
+    
+    def convert2DF(self,data):
+        # Assumes the DF convention of PDE params, ie
+        """
+        t     x      y       LFP(t,x,y)
+        """
+        dfDictionary = {str(key): {} for key in self.energyPerPulse}
+        pdb.set_trace()
+        for key in data.keys():
+            curData = data[key]
+            dataSize = np.shape(curData)
+            dataList = np.zeros((dataSize[0]*dataSize[1]*dataSize[2],4))
+            counter = 0
+            ts = np.arange(0,1,1/dataSize[2])
+            for ck in range(dataSize[2]):
+                for jt in range(dataSize[1]):
+                    for bc in range(dataSize[0]):
+                        dataList[counter,0] = ts[ck]
+                        dataList[counter,2] = bc*0.500
+                        dataList[counter,1] = jt*0.250
+                        dataList[counter,3] = curData[bc,jt,ck]
+                        counter = counter + 1
+            curDF = pd.DataFrame(dataList, columns =['t', 'x', 'y', 'f']) 
+            dfDictionary[key] = curDF
+        return dfDictionary
+    
+    def WaveEq(self,z, t, grid, alpha, gamma):
+        '''The input z corresponds to the current state of the system, and it's a flattened vector in both the number
+        of outputs and the spatial dimensions. 
+    
+        t is the current time.
+    
+        grid is the spatial grid of the model.
+
+        alpha and gamma correspond to the unknown parameters.
+        '''
+
+
+
+
 
 
     

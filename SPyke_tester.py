@@ -34,8 +34,10 @@ epocedLFPs = SpikeClass.epocTrials(LFPs)
 sortedLFPs = SpikeClass.sortByStimCondition(epocedLFPs)
 #LFPtest = sortedLFPs['0']
 #LFP1 = LFPtest['2.0700000000000003']
-
 LFPmean,LFPsder = SpikeClass.getMeanSdEr(sortedLFPs)
+sArray = SpikeClass.sortMeanByElectrode16(LFPmean)
+dfDictionary = SpikeClass.convert2DF(sArray)
+sampleData = dfDictionary['2.0700000000000003']
 #SpikeClass.plotSampleWaveform(Spikes,[1])
 #SpikeClass.plotSampleWaveform(LFPs,[1])
 #Sxx,t,f = SpikeClass.getLFPSpectrogram([0])
