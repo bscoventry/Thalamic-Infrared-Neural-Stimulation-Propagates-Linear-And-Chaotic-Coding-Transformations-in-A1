@@ -23,6 +23,7 @@ from scipy.signal import decimate
 import fcwt         #For T-F decomposition https://github.com/fastlib/fCWT
 import pickle as pkl
 import pandas as pd
+import PDEparams as pde
 class Spike(object):
     """
     Purpose: This is the main spike analysis method. Within will hold analysis operations, data loaders, and plotters.
@@ -659,7 +660,7 @@ class Spike_Processed(object):
             dfDictionary[key] = curDF
         return dfDictionary
     
-    def WaveEq(self,z, t, grid, alpha, gamma):
+    def WaveEq(self,z, t, grid, c, b):
         '''The input z corresponds to the current state of the system, and it's a flattened vector in both the number
         of outputs and the spatial dimensions. 
     
@@ -669,6 +670,79 @@ class Spike_Processed(object):
 
         alpha and gamma correspond to the unknown parameters.
         '''
+        '''Here we obtain both functions by reshaping the input: we divide it into 1 portions (number of outputs)
+    of whatever shape the spatial grid has (this is what the -1 stands for)'''
+    
+        u = z.reshape(1,-1)
+        
+        '''Now we reshape both functions using the actual dimensions of the spatial grid.
+        
+        The shape of the spatial grid array is given by:
+        
+                            (number of points in dim 1, number of points in dim 2, ..., ndims)
+                            
+        with ndims the number of spatial dimensions. This is due to the fact that we have a grid of 
+                            
+                            (number of points in dim 1)x(number of points in dim 2)
+                            
+        elements, but each element is ndims-dimensional. Therefore, we must take the first "ndims" elements of the
+        shape of the grid, ignoring the last one, to reconstruct the shape of each function. The slice with [:-1]
+        stands for "all elements up to and excluding the last one".
+        '''
+        
+        u = u.reshape(grid.shape[:-1])
+        
+        
+        '''The grid has the form
+                    
+                    (x0,y0), (x0,y1), ...
+                    (x1,y0), (x1,y1), ...
+                    
+        So that:
+            x0 = first element of the first element of the first row of the grid: grid[0,0,0]
+            x1 = first element of the first element of the second row of the grid: grid[1,0,0]
+            y0 = second element of the first element of the first row of the grid: grid[0,0,1]
+            y1 = second element of the second element of the first row of the grid: grid[0,1,1]
+        '''
+        
+        dx = grid[1,0,0]-grid[0,0,0]
+        dy = grid[0,1,1]-grid[0,0,1]
+        dt = 1/1526           #fs period
+        # We initialise the spatial derivatives we need as empty arrays of the same shape of our N and L functions
+        
+        dudx = np.gradient(u, axis=0)/dx
+        dudy = np.gradient(u, axis=1)/dy
+        
+         # Second-order derivatives
+    
+        dudxx = np.gradient(dudx, axis=0)/dx
+        dudyy = np.gradient(dudy, axis=1)/dy
+        
+        # np.gradient(array, axis) returns centred 1st-order differences between values along x (rows, axis=0)
+        # or y (columns, axis=1), plus forward/backward differences for the left/right boundaries
+        #Now get the time derivatives
+
+        dudt = (np.power(c,2)*t*(dudxx+dudyy))-b*u
+
+        #Set up boundary conditions
+        dudt[0,:] = c*dudx[0,:]
+        dudt[:,0] = c*dudy[:,0]
+        dudt[-1,:] = -c*dudx[0,:]
+        dudt[0,-1] = -c*dudy[:,-1]
+
+        return dudt.reshape(-1)
+    
+    def initValWaveEq(self,LFPinit=0):
+        return np.zeros((1,2))
+    
+    def runWaveFit(self,LFPdf,cBound,bBound):
+        my_model = pde.PDEmodel(LFPdf, self.WaveEq, [self.initValWaveEq], 
+                        bounds=[cBound, bBound], param_names=[r'$\velocity$', r'$\beta$'], 
+                        nvars=1, ndims=2, nreplicates=0, obsidx=None, outfunc=None)
+        my_model.fit()
+        my_model.best_params
+        my_model.best_error
+        return my_model.best_params,my_model.best_error
 
 
 
