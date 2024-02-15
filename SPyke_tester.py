@@ -38,9 +38,9 @@ LFPmean,LFPsder = SpikeClass.getMeanSdEr(sortedLFPs)
 sArray = SpikeClass.sortMeanByElectrode16(LFPmean)
 dfDictionary = SpikeClass.convert2DF(sArray)
 sampleData = dfDictionary['2.0700000000000003']
-cBound = (0,1000)
-bBound = (-1000,1000)
-pdb.set_trace()
+cBound = (0,5)
+bBound = (-100,100)
+
 para,bFit = SpikeClass.runWaveFit(sampleData,cBound,bBound)
 #SpikeClass.plotSampleWaveform(Spikes,[1])
 #SpikeClass.plotSampleWaveform(LFPs,[1])

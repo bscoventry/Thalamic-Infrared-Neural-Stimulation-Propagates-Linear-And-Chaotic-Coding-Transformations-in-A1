@@ -641,7 +641,7 @@ class Spike_Processed(object):
         t     x      y       LFP(t,x,y)
         """
         dfDictionary = {str(key): {} for key in self.energyPerPulse}
-        pdb.set_trace()
+        
         for key in data.keys():
             curData = data[key]
             dataSize = np.shape(curData)
@@ -661,6 +661,7 @@ class Spike_Processed(object):
         return dfDictionary
     
     def WaveEq(self,z, t, grid, c, b):
+        
         '''The input z corresponds to the current state of the system, and it's a flattened vector in both the number
         of outputs and the spatial dimensions. 
     
@@ -673,7 +674,7 @@ class Spike_Processed(object):
         '''Here we obtain both functions by reshaping the input: we divide it into 1 portions (number of outputs)
     of whatever shape the spatial grid has (this is what the -1 stands for)'''
     
-        u = z.reshape(1,-1)
+        u = z.reshape(-1)
         
         '''Now we reshape both functions using the actual dimensions of the spatial grid.
         
@@ -723,26 +724,28 @@ class Spike_Processed(object):
         #Now get the time derivatives
 
         dudt = (np.power(c,2)*t*(dudxx+dudyy))-b*u
-
+        
         #Set up boundary conditions
         dudt[0,:] = c*dudx[0,:]
         dudt[:,0] = c*dudy[:,0]
         dudt[-1,:] = -c*dudx[0,:]
-        dudt[0,-1] = -c*dudy[:,-1]
-
+        dudt[:,-1] = -c*dudy[:,0]
+        
         return dudt.reshape(-1)
     
     def initValWaveEq(self,LFPinit=0):
-        return np.zeros((1,2))
+        return np.zeros((1,))
     
     def runWaveFit(self,LFPdf,cBound,bBound):
+        
         my_model = pde.PDEmodel(LFPdf, self.WaveEq, [self.initValWaveEq], 
                         bounds=[cBound, bBound], param_names=[r'$\velocity$', r'$\beta$'], 
                         nvars=1, ndims=2, nreplicates=0, obsidx=None, outfunc=None)
         my_model.fit()
         my_model.best_params
         my_model.best_error
-        return my_model.best_params,my_model.best_error
+        print('Best Error = ' + str(my_model.best_error))
+        return [my_model.best_params,my_model.best_error]
 
 
 
