@@ -36,6 +36,9 @@ sortedLFPs = SpikeClass.sortByStimCondition(epocedLFPs)
 #LFP1 = LFPtest['2.0700000000000003']
 LFPmean,LFPsder = SpikeClass.getMeanSdEr(sortedLFPs)
 sArray = SpikeClass.sortMeanByElectrode16(LFPmean)
+LFPCOG = SpikeClass.COG(sArray)
+pdb.set_trace()
+SpikeClass.plotCOG(LFPCOG['2.0700000000000003'])
 dfDictionary = SpikeClass.convert2DF(sArray)
 sampleData = dfDictionary['2.0700000000000003']
 cBound = (0,5)

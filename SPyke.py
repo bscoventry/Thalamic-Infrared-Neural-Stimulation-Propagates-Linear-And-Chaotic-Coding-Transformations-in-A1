@@ -746,6 +746,36 @@ class Spike_Processed(object):
         my_model.best_error
         print('Best Error = ' + str(my_model.best_error))
         return [my_model.best_params,my_model.best_error]
+    
+    def COG(self,LFP):
+        from scipy.ndimage import center_of_mass 
+        COGLFP = {}
+        for key in LFP.keys():
+            curDat = LFP[key]
+            [nx,ny,nz] = np.shape(curDat)
+            massTS = np.zeros((2,nz))
+            for ck in range(nz):
+                curtime = np.squeeze(curDat[:,:,ck])
+                [massx,massy] = center_of_mass(curtime)
+                massTS[0,ck] = massx
+                massTS[1,ck] = massy
+            COGLFP[key] = massTS
+        return COGLFP
+    
+    def plotCOG(self,COG):
+        [nd,tsamp] = np.shape(COG)
+        ts = np.arange(0,1,1/1526)
+        xs = COG[0,:]
+        ys = COG[0,:]
+        ax = plt.figure().add_subplot(projection='3d')
+        ax.plot(xs,ys,ts)
+        plt.show()
+        pdb.set_trace()
+        
+
+                
+
+
 
 
 
