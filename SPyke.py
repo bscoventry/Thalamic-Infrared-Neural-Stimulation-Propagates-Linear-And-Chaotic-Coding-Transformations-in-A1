@@ -748,17 +748,27 @@ class Spike_Processed(object):
         return [my_model.best_params,my_model.best_error]
     
     def COG(self,LFP):
-        from scipy.ndimage import center_of_mass 
+        xvals = [0, 0.250, 0.500, 0.750, 1.00, 1.25, 1.50, 1.75]
+        yvals = [0, 0.375]
         COGLFP = {}
         for key in LFP.keys():
             curDat = LFP[key]
             [nx,ny,nz] = np.shape(curDat)
             massTS = np.zeros((2,nz))
             for ck in range(nz):
+                xLFP = []
+                yLFP = []
+                sLFP = []
                 curtime = np.squeeze(curDat[:,:,ck])
-                [massx,massy] = center_of_mass(curtime)
-                massTS[0,ck] = massx
-                massTS[1,ck] = massy
+                for bc in range(nx):
+                    for jk in range(ny):
+                        curX = xvals[bc]
+                        curY = yvals[jk]
+                        xLFP.append(curX*curtime[bc,jk])
+                        yLFP.append(curY*curtime[bc,jk])
+                        sLFP.append(curtime[bc,ck])
+                massTS[0,ck] = (np.sum(xLFP))/np.sum(sLFP)
+                massTS[1,ck] = (np.sum(yLFP))/np.sum(sLFP)
             COGLFP[key] = massTS
         return COGLFP
     
@@ -766,7 +776,7 @@ class Spike_Processed(object):
         [nd,tsamp] = np.shape(COG)
         ts = np.arange(0,1,1/1526)
         xs = COG[0,:]
-        ys = COG[0,:]
+        ys = COG[1,:]
         ax = plt.figure().add_subplot(projection='3d')
         ax.plot(xs,ys,ts)
         plt.show()
