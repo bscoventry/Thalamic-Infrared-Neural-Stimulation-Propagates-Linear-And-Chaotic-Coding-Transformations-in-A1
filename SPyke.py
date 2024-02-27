@@ -760,13 +760,14 @@ class Spike_Processed(object):
                 yLFP = []
                 sLFP = []
                 curtime = np.squeeze(curDat[:,:,ck])
-                for bc in range(nx):
-                    for jk in range(ny):
+                
+                for bc in range(ny):
+                    for jk in range(nx):
                         curX = xvals[bc]
                         curY = yvals[jk]
-                        xLFP.append(curX*curtime[bc,jk])
-                        yLFP.append(curY*curtime[bc,jk])
-                        sLFP.append(curtime[bc,ck])
+                        xLFP.append(curX*curtime[jk,bc])
+                        yLFP.append(curY*curtime[jk,bc])
+                        sLFP.append(curtime[jk,bc])
                 massTS[0,ck] = (np.sum(xLFP))/np.sum(sLFP)
                 massTS[1,ck] = (np.sum(yLFP))/np.sum(sLFP)
             COGLFP[key] = massTS
@@ -781,6 +782,16 @@ class Spike_Processed(object):
         ax.plot(xs,ys,ts)
         plt.show()
         pdb.set_trace()
+    
+    def convert2Array(self,data):
+        energyArray = np.zeros((2,8,1526,12))
+        energy = data.keys()
+        counter = 0
+        for keys in data.keys():
+            energyArray[:,:,:,counter] = data[keys]
+        return energyArray,energy
+            
+
         
 
                 
