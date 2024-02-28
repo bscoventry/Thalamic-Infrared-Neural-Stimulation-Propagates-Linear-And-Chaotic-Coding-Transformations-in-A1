@@ -24,6 +24,7 @@ import fcwt         #For T-F decomposition https://github.com/fastlib/fCWT
 import pickle as pkl
 import pandas as pd
 import PDEparams as pde
+from scipy.optimize import curve_fit
 class Spike(object):
     """
     Purpose: This is the main spike analysis method. Within will hold analysis operations, data loaders, and plotters.
@@ -790,6 +791,62 @@ class Spike_Processed(object):
         for keys in data.keys():
             energyArray[:,:,:,counter] = data[keys]
         return energyArray,energy
+    
+    def regressionChaos(self,data,a,b):
+        return a+(b*data)
+    
+    def chaos01Test(self,data,c=np.pi/2,ncut=152,fs = []):
+        if fs:
+            ts = np.linspace(0, len(data)/fs, 1/fs)
+        else:
+            ts = np.linspace(0,len(data))
+        ts = np.linspace(0,len(data))
+        N = len(data)
+        p = np.zeros((N,))
+        q = np.zeros((N,))
+        #A little silly I realize, 
+        p[0] = data[ck]*np.cos(c)
+        q[0] = data[ck]*np.sin(c)
+        M = np.zeros((ncut,))
+        for ck in range(N-1):
+            p[ck+1] = p[ck] + (data[ck]*np.cos(c*ts[ck]))
+            q[ck+1] = q[ck] + (data[ck]*np.sin(c*ts[ck]))
+        #Get mean-squared displacement
+        for jk in range(ncut):
+            curSum = []
+            for bc in range(N):
+                if bc+ncut > len(data-1):
+                    break
+                else:
+                    curVal = np.power((p[bc+jk]-p[bc]),2) + np.power((q[bc+jk]-q[bc]),2)
+                    curSum.append(curVal)
+            M[jk] = np.mean(curSum)
+        #Get oscillation term
+        expectedValData = np.mean(data)
+        Vosc = np.zeros((ncut,))
+        for tk in range(ncut):
+            Vosc[tk] = np.power(expectedValData,2)*((1-np.cos(tk*c))/(1-np.cos(c)))
+        D = M - Vosc
+        a = 1.1
+        Dtilde = D-(a*np.min(D))
+        Kc = curve_fit(self.regressionChaos,np.log(np.arange(1,ncut)),np.log(Dtilde+0.0001))
+        pdb.set_trace()
+        return Kc
+
+    
+
+                
+                    
+
+
+        
+
+
+
+
+
+
+
             
 
         
