@@ -63,7 +63,7 @@ hgArrayS = SpikeClass.sortMeanByElectrode16(hgSD)
 saveArray = {'alphaMean':alphaArrayM,'alphaSD':alphaArrayS,'betaMean':betaArrayM,'betaSD':betaArrayS,'thetaMean':thetaArrayM,'thetaSD':thetaArrayS,'lowGammaMean':lgArrayM,'lowGammaSD':lgArrayS,'highGammaMean':hgArrayM,'highGammaSD':lgArrayS,'Energy':list(energy)}
 #LFPCOG = SpikeClass.COG(sArray)
 pdb.set_trace()
-test = SpikeClass.chaos01Test(data,c=np.pi/2,ncut=152,fs = []):
+test = SpikeClass.chaos01Test(data,c=np.pi/2,ncut=152,fs = [])
 SpikeClass.plotCOG(LFPCOG['2.0700000000000003'])
 dfDictionary = SpikeClass.convert2DF(sArray)
 sampleData = dfDictionary['2.0700000000000003']
