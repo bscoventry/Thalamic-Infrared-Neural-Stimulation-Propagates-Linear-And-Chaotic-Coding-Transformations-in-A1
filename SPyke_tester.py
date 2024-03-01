@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 import dask
 from SPyke import Spike_Processed
 import pdb
-dataPath = 'C://DataRepos//INS//INS2102//20210216//5PU_5PW_5ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
+dataPath = 'C://DataRepos//INS//INS2102//20210216//5PU_5PW_5ISI'#'C://DataRepos//INS//INS2015//20201128//5PU_10PW_50ISI'#'C://DataRepos//INS//INS2102//20210216//5PU_5PW_5ISI' #'C://Users//coventry//Desktop//P119-230317-165356'
 stores = None             #Load all stores
 streamStore = 'streams'
 rawDataStore = 'TDT2'
@@ -62,8 +62,11 @@ hgArrayS = SpikeClass.sortMeanByElectrode16(hgSD)
 [hgArrayS,energy] = SpikeClass.convert2Array(hgArrayS)
 saveArray = {'alphaMean':alphaArrayM,'alphaSD':alphaArrayS,'betaMean':betaArrayM,'betaSD':betaArrayS,'thetaMean':thetaArrayM,'thetaSD':thetaArrayS,'lowGammaMean':lgArrayM,'lowGammaSD':lgArrayS,'highGammaMean':hgArrayM,'highGammaSD':lgArrayS,'Energy':list(energy)}
 #LFPCOG = SpikeClass.COG(sArray)
+
+testLFP = sortedLFPs['11']['2.0700000000000003']
+testLFP = np.mean(testLFP,axis=0)
+test = SpikeClass.estimateChaos(testLFP,pltFlag=1)
 pdb.set_trace()
-test = SpikeClass.chaos01Test(data,c=np.pi/2,ncut=152,fs = [])
 SpikeClass.plotCOG(LFPCOG['2.0700000000000003'])
 dfDictionary = SpikeClass.convert2DF(sArray)
 sampleData = dfDictionary['2.0700000000000003']
