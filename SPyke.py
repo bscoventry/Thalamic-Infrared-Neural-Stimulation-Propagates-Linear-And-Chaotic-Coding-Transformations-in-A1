@@ -774,6 +774,11 @@ class Spike_Processed(object):
             COGLFP[key] = massTS
         return COGLFP
     
+    def normalizeMeanLFP(self,data):
+        for key in data.keys():
+            curDat = data[key]
+            pdb.set_trace()
+    
     def plotCOG(self,COG):
         [nd,tsamp] = np.shape(COG)
         ts = np.arange(0,1,1/1526)
@@ -843,8 +848,8 @@ class Spike_Processed(object):
         return Kc[1]
 
     def estimateChaos(self,data,pltFlag = 0):
-        numtrials = 1000
-        carray = np.random.uniform(low=0.0,high = 2*np.pi,size = numtrials)
+        numtrials = 100
+        carray = np.random.uniform(low=np.pi/5,high = 3*np.pi/5,size = numtrials)
         #carray = np.arange(0.01,2*np.pi,0.01)
         Kest = np.zeros(len(carray),)
         for ck in range(len(carray)):

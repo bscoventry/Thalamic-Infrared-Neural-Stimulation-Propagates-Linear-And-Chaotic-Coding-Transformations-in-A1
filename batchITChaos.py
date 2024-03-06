@@ -47,29 +47,42 @@ for ck, word in enumerate(dataPath):
         curDataElec = sortedLFPs[electrode]
         Rs = np.zeros((12,21))
         R = np.zeros((1,1526))
-        counter = 1
+        counter = 0
         Klist = np.zeros((12,))
         for energies in curDataElec.keys():
             curLFP = curDataElec[energies]
-            [hist,bins] = np.histogram(curLFP,bins=21)       #21 bins from ‘doane’ estimator
-            Rs[counter,:] = matlab.double(hist.tolist())
+            #[hist,bins] = np.histogram(curLFP,bins=21)       #21 bins from ‘doane’ estimator
+            #Rs[counter,:] = matlab.double(hist.tolist())
             R = np.append(R,curLFP,axis=0)
-            meanLFP = np.mean(curLFP,axis=0)
+            meanLFP = np.squeeze(np.mean(curLFP,axis=0))
+            meanLFP = meanLFP.reshape((1526,1))    # Apparently I need to do this twice...
             meanLFP = matlab.double(meanLFP.tolist())
-            K = eng.chaos(meanLFP,0.5,'bvr','schreiber',2,'aaft_cpp')
+            [numtrials,nts] = np.shape(curLFP)
+            sddvLFP = np.std(curLFP,axis=0)
+            sderLFP = sddvLFP/np.sqrt(numtrials)
+            K = eng.chaos(meanLFP,0.5,'bvr','schreiber',2,'aaft_cpp','fouda')
             Klist[counter] = K
             counter = counter + 1
-            pdb.set_trace()
+            
         R = np.delete(R,0,0)
+        
         [Rhist,bins] = np.histogram(R,bins=21)
         Rhist = matlab.double(Rhist.tolist())
         Iarray = np.zeros((12,))
-        for bc in range(12):
-            [I, Iqe,bias] = eng.MIdrQE(Rs[bc],R)
-            Iarray[bc] = I-bias
+        for bc,energies in enumerate(curDataElec.keys()):
+            Rs = curDataElec[energies]
+            Rs = matlab.double(Rs.tolist())
+            Iqe = eng.MIdrQE(matlab.double(np.transpose(Rs)),matlab.double(np.transpose(R)))
+            Iarray[bc] = Iqe
+            
+            df.loc[-1] = [dataPath,str(electrode),str(energies),ISI,NPul,Iqe,Klist[bc],np.asarray(meanLFP),sderLFP]
+            df.index = df.index + 1  # shifting index
+            df = df.sort_index()  # sorting by index
         
+  
 
             
 
     
     del SpikeClass             #Just for memory
+pdb.set_trace()
