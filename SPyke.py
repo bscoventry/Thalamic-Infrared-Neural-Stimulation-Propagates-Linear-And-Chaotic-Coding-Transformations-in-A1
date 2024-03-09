@@ -519,6 +519,11 @@ class Spike_Processed(object):
         self.lineFilterRawData = filteredData3
         
         return filteredData3
+    def chaosFilter(self,data):
+        SOS = loadmat('chaosFilt')
+        SOS = np.ascontiguousarray(SOS['SOS'])
+        filteredData1 = sosfiltfilt(SOS,data)
+        return filteredData1
     def waveletDecomposition(self,flow=3,fhi=200,fn=250):
         #This helper function computes the CWT using the fCWT method.
         #This helper function computes the CWT using the fCWT method.
@@ -773,6 +778,28 @@ class Spike_Processed(object):
                 massTS[1,ck] = (np.sum(yLFP))/np.sum(sLFP)
             COGLFP[key] = massTS
         return COGLFP
+
+    def trackLFP(self,meanArray):
+        #Mean array is of size 2x8x1526
+        pdb.set_trace()
+        [y,x,ts] = np.shape(meanArray)
+        maxXArray = np.zeros((ts,))
+        maxYArray = np.zeros((ts,))
+        minXArray = np.zeros((ts,))
+        minYArray = np.zeros((ts,))
+        for ck in range(ts):
+            curData=np.squeeze(meanArray[:,:,ck])
+            maxCurData = np.max(curData)
+            minCurData = np.min(curData)
+            [row,col] = np.where(curData==maxCurData)
+            maxXArray[ck] = col
+            maxYArray[ck] = row
+            [row,col] = np.where(curData==minCurData)
+            minXArray[ck] = col
+            minYArray[ck] = row
+        return [maxXArray,maxYArray,minXArray,minYArray]
+
+
     
     def normalizeMeanLFP(self,data):
         for key in data.keys():
@@ -820,7 +847,7 @@ class Spike_Processed(object):
             p[ck] = p[ck-1] + (data[ck-1]*np.cos(c*ts[ck-1]))
             q[ck] = q[ck-1] + (data[ck-1]*np.sin(c*ts[ck-1]))
         #Get mean-squared displacement
-        
+        pdb.set_trace()
         for jk in range(ncut):
             curSum = []
             for bc in range(N):
@@ -844,7 +871,7 @@ class Spike_Processed(object):
         Dtilde = D-(a*np.min(D))
         Dtilde = Dtilde[1:len(Dtilde)]
         [Kc, pcov] = curve_fit(self.regressionChaos,np.log(np.arange(1,ncut)),np.log(Dtilde+0.0001))
-        
+        pdb.set_trace()
         return Kc[1]
 
     def estimateChaos(self,data,pltFlag = 0):
