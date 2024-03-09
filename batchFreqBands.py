@@ -21,7 +21,7 @@ PWs = [5]
 ISIs = [5]
 NPulse = [5]
 AClass = [5]
-df = pd.DataFrame(columns=['DataID', 'Electrode', 'EnergyPerPulse','ISI','NPulses','alphaMean','alphaSDER','betaMean','betaSDER','thetaMean','thetaSDER','lowGammaMean','lowGammaSDER','highGammaMean','highGammaSDER'])
+df = pd.DataFrame(columns=['DataID', 'Electrode', 'EnergyPerPulse','ISI','NPulses','alphaMean','alphaSDER','betaMean','betaSDER','thetaMean','thetaSDER','lowGammaMean','lowGammaSDER','highGammaMean','highGammaSDER','zAlpha','zBeta','zTheta','zLowGamma','zHighGamma'])
 #eng = matlab.engine.start_matlab()          #Use the matlab backend for Info theory and Chaos calcs
 for ck, word in enumerate(dataPath):
     stores = None             #Load all stores
@@ -74,7 +74,11 @@ for ck, word in enumerate(dataPath):
         for bc in range(nx):
             for jk in range(ne):
                 zAlpha = SpikeClass.getZ(alphaArrayM)
-                df.loc[-1] = [dataPath,str(SpikeClass.electrodeConfig[ck,bc]),str(SpikeClass.energyPerPulse[jk]),ISI,NPul,alphaArrayM[ny,nx,:,ne],alphaArrayS[ny,nx,:,ne],betaArrayM[ny,nx,:,ne],betaArrayS[ny,nx,:,ne],thetaArrayM[ny,nx,:,ne],thetaArrayM[ny,nx,:,ne],lgArrayM[ny,nx,:,ne],lgArrayM[ny,nx,:,ne],hgArrayM[ny,nx,:,ne],hgArrayS[ny,nx,:,ne]]
+                zBeta = SpikeClass.getZ(betaArrayM)
+                zTheta = SpikeClass.getZ(thetaArrayM)
+                zLG = SpikeClass.getZ(lgArrayM)
+                zHG = SpikeClass.getZ(hgArrayM)
+                df.loc[-1] = [dataPath,str(SpikeClass.electrodeConfig[ck,bc]),str(SpikeClass.energyPerPulse[jk]),ISI,NPul,alphaArrayM[ny,nx,:,ne],alphaArrayS[ny,nx,:,ne],betaArrayM[ny,nx,:,ne],betaArrayS[ny,nx,:,ne],thetaArrayM[ny,nx,:,ne],thetaArrayM[ny,nx,:,ne],lgArrayM[ny,nx,:,ne],lgArrayM[ny,nx,:,ne],hgArrayM[ny,nx,:,ne],hgArrayS[ny,nx,:,ne],zAlpha,zBeta,zTheta,zLG,zHG]
                 df.index = df.index + 1  # shifting index
                 df = df.sort_index()  # sorting by index
     df.to_pickle('LFPBands.pkl')
