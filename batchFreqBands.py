@@ -15,6 +15,7 @@ from SPyke import Spike_Processed
 import pdb
 import matlab.engine
 import pandas as pd
+precurser = 'Z://PhDData//'
 dataPath = ['C://DataRepos//INS//INS2102//20210216//5PU_5PW_5ISI']               #List of data to sort through
 PWs = [5]
 ISIs = [5]
@@ -36,7 +37,7 @@ for ck, word in enumerate(dataPath):
     if AClass[ck] == 5:
         power = np.array((-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414))
     
-    SpikeClass = Spike_Processed(word,NPul,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+    SpikeClass = Spike_Processed(precurser+word,NPul,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
 
     #Spikes = SpikeClass.Spikes
     LFPs = SpikeClass.LFP
@@ -72,10 +73,12 @@ for ck, word in enumerate(dataPath):
     for ck in range(ny):
         for bc in range(nx):
             for jk in range(ne):
+                zAlpha = SpikeClass.getZ(alphaArrayM)
                 df.loc[-1] = [dataPath,str(SpikeClass.electrodeConfig[ck,bc]),str(SpikeClass.energyPerPulse[jk]),ISI,NPul,alphaArrayM[ny,nx,:,ne],alphaArrayS[ny,nx,:,ne],betaArrayM[ny,nx,:,ne],betaArrayS[ny,nx,:,ne],thetaArrayM[ny,nx,:,ne],thetaArrayM[ny,nx,:,ne],lgArrayM[ny,nx,:,ne],lgArrayM[ny,nx,:,ne],hgArrayM[ny,nx,:,ne],hgArrayS[ny,nx,:,ne]]
                 df.index = df.index + 1  # shifting index
                 df = df.sort_index()  # sorting by index
     df.to_pickle('LFPBands.pkl')
+    del SpikeClass             #Just for memory
     pdb.set_trace()
         
 #         [Rhist,bins] = np.histogram(R,bins=21)
