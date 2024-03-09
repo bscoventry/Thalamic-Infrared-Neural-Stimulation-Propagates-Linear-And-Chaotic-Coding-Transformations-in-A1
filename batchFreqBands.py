@@ -58,6 +58,16 @@ for ck, word in enumerate(dataPath):
     lgArrayS = SpikeClass.sortMeanByElectrode16(lgSD)
     hgArrayM = SpikeClass.sortMeanByElectrode16(hgMean)
     hgArrayS = SpikeClass.sortMeanByElectrode16(hgSD)
+    [alphaArrayM,energy] = SpikeClass.convert2Array(alphaArrayM)
+    [alphaArrayS,energy] = SpikeClass.convert2Array(alphaArrayS)
+    [betaArrayM,energy] = SpikeClass.convert2Array(betaArrayM)
+    [betaArrayS,energy] = SpikeClass.convert2Array(betaArrayS)
+    [thetaArrayM,energy] = SpikeClass.convert2Array(thetaArrayM)
+    [thetaArrayS,energy] = SpikeClass.convert2Array(thetaArrayS)
+    [lgArrayM,energy] = SpikeClass.convert2Array(lgArrayM)
+    [lgArrayS,energy] = SpikeClass.convert2Array(lgArrayS)
+    [hgArrayM,energy] = SpikeClass.convert2Array(hgArrayM)
+    [hgArrayS,energy] = SpikeClass.convert2Array(hgArrayS)
     [ny,nx,nt,ne] = np.shape(betaMean)
     for ck in range(ny):
         for bc in range(nx):
@@ -65,6 +75,7 @@ for ck, word in enumerate(dataPath):
                 df.loc[-1] = [dataPath,str(SpikeClass.electrodeConfig[ck,bc]),str(SpikeClass.energyPerPulse[jk]),ISI,NPul,alphaArrayM[ny,nx,:,ne],alphaArrayS[ny,nx,:,ne],betaArrayM[ny,nx,:,ne],betaArrayS[ny,nx,:,ne],thetaArrayM[ny,nx,:,ne],thetaArrayM[ny,nx,:,ne],lgArrayM[ny,nx,:,ne],lgArrayM[ny,nx,:,ne],hgArrayM[ny,nx,:,ne],hgArrayS[ny,nx,:,ne]]
                 df.index = df.index + 1  # shifting index
                 df = df.sort_index()  # sorting by index
+    df.to_pickle('LFPBands.pkl')
     pdb.set_trace()
         
 #         [Rhist,bins] = np.histogram(R,bins=21)

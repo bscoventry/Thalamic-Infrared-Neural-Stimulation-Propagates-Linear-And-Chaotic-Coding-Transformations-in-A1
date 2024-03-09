@@ -885,6 +885,13 @@ class Spike_Processed(object):
             plt.plot(carray,Kest)
             plt.show()
         return np.median(Kest)
+    
+    def getZ(self,data):
+        mArray = data[0:305]
+        aMean = np.mean(mArray)
+        aSDDV = np.std(mArray)
+        ZScore = (data-aMean)/aSDDV
+        return ZScore
 
     
 
