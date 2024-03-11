@@ -16,7 +16,7 @@ import pdb
 import matlab.engine
 import pandas as pd
 precurser = 'Z://PhDData//'
-dataPath = ['C://DataRepos//INS//INS2102//20210216//5PU_5PW_5ISI']               #List of data to sort through
+dataPath = ['INS2102//20210216//5PU_5PW_5ISI','INS2102//20210216//5PU_5PW_5ISI']               #List of data to sort through
 PWs = [5]
 ISIs = [5]
 NPulse = [5]
