@@ -781,7 +781,7 @@ class Spike_Processed(object):
 
     def trackLFP(self,meanArray):
         #Mean array is of size 2x8x1526
-        pdb.set_trace()
+        
         [y,x,ts] = np.shape(meanArray)
         maxXArray = np.zeros((ts,))
         maxYArray = np.zeros((ts,))
@@ -799,12 +799,42 @@ class Spike_Processed(object):
             minYArray[ck] = row
         return [maxXArray,maxYArray,minXArray,minYArray]
 
+    def cogMean(self,data):
+        from scipy.ndimage import center_of_mass
+        [ny,nx,nt] = np.shape(data)
+        COGX = np.zeros((nt,))
+        COGY = np.zeros((nt,))
+        for ck in range(nt):
+            curLFP = data[:,:,ck]
+            [yp,xp] = center_of_mass(curLFP)
+            COGX[ck] = xp
+            COGY[ck] = yp
+        return COGX,COGY
+
 
     
     def normalizeMeanLFP(self,data):
-        for key in data.keys():
-            curDat = data[key]
-            pdb.set_trace()
+        max = -100000
+        min = 1000000
+        [ny,nx,nt] = np.shape(data)
+        normLFP = np.zeros((ny,nx,nt))
+        for ck in range(ny):
+            for bc in range(nx):
+                curLFP = np.abs(data[ck,bc,:])
+                maxLFP = np.max(curLFP)
+                minLFP = np.min(curLFP)
+                if maxLFP>=max:
+                    max = maxLFP
+                if minLFP <= min:
+                    min = minLFP
+        for ck in range(ny):
+            for bc in range(nx):
+                curLFP = data[ck,bc,:]
+                normLFP[ck,bc,:] = self.minMaxNorm(curLFP,min,max)
+        return normLFP
+    
+    def minMaxNorm(self,data,min,max,a=-1,b=1):
+        return ((b-a)*((data-min)/max-min))+1
     
     def plotCOG(self,COG):
         [nd,tsamp] = np.shape(COG)
@@ -847,7 +877,7 @@ class Spike_Processed(object):
             p[ck] = p[ck-1] + (data[ck-1]*np.cos(c*ts[ck-1]))
             q[ck] = q[ck-1] + (data[ck-1]*np.sin(c*ts[ck-1]))
         #Get mean-squared displacement
-        pdb.set_trace()
+        
         for jk in range(ncut):
             curSum = []
             for bc in range(N):
