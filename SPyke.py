@@ -832,17 +832,23 @@ class Spike_Processed(object):
                 curLFP = data[ck,bc,:]
                 normLFP[ck,bc,:] = self.minMaxNorm(curLFP,min,max)
         return normLFP
-    
+    def normalizeByLFP(self,data):
+        [ny,nx,nt] = np.shape(data)
+        normLFP = np.zeros((ny,nx,nt))
+        for ck in range(ny):
+            for bc in range(nx):
+                curLFP = data[ck,bc,:]
+                normLFP[ck,bc,:] = self.minMaxNorm(curLFP,np.min(curLFP),np.max(curLFP))
+        return normLFP
     def minMaxNorm(self,data,min,max,a=-1,b=1):
         return ((b-a)*((data-min)/max-min))+1
     
-    def plotCOG(self,COG):
-        [nd,tsamp] = np.shape(COG)
-        ts = np.arange(0,1,1/1526)
-        xs = COG[0,:]
-        ys = COG[1,:]
+    def plotCOG(self,COGX,COGY):
+        tsamp = np.shape(COGX)
+        ts = np.arange(0,1,1/tsamp[0])
+        
         ax = plt.figure().add_subplot(projection='3d')
-        ax.plot(xs,ys,ts)
+        ax.plot(ts,COGX,COGY)
         plt.show()
         pdb.set_trace()
     
