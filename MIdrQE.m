@@ -17,10 +17,10 @@
 % that bias is going to be more broadly expressed in lower sampled p(R|S)
 % than p(R). This should be explored more.
 %--------------------------------------------------------------------------
-function [I, Iqe,bias] = MIdrQE(RS,R)
+function Iqe = MIdrQE(RS,R)
 %Get the number of trials in both RS and R
-[nTrials,~] = size(R);
-[nTrialsPerS,~] = size(RS);
+[~,nTrials] = size(R);
+[~,nTrialsPerS] = size(RS);
 %Fractions of data to use for QE estimate; randomly drawn so we repeat a
 %few times
 fractions = [1 .5 .5 .5 .5 .25 .25 .25 .25 .25 .25 .25 .25];
@@ -28,14 +28,13 @@ fractions = [1 .5 .5 .5 .5 .25 .25 .25 .25 .25 .25 .25 .25];
 useTrials = round(fractions*nTrials);
 useTrialsPerS = round(fractions*nTrialsPerS);
 partMIestimates = zeros(size(useTrials));
-
 %Now estimate empirical probability mass functions (since this is discrete
 %counts.
 pR = estimatePMF(R);
 pRS = estimatePMF(RS);
 
-[numBinsR,~] = size(pR);
-[numBinsRS,~] = size(pRS);
+[~,numBinsR] = size(pR);
+[~,numBinsRS] = size(pRS);
 if numBinsR ~= numBinsRS
     error("Value Error: Number of bins in R and RS are not equal. Estimates of probability need to have equal numbers of bins");
 end
@@ -43,19 +42,20 @@ IperBin = pRS.*log2(pRS./pR); %Borst 1999.
 %Remove any infs. This is allowable from MacKay's "Information Theory,
 %Inference, and Learning Algorithms" where 0xlog(0/0) = 0 by convention.
 IperBin(isinf(IperBin)|isnan(IperBin)) = [];
-I = sum(IperBin);
+I = sum(IperBin);%I = mi(R,RS);%sum(IperBin);
 %We have the direct estimate now. Now let's estimate the bias.
 for ck=1:length(useTrials)
     kR = randperm(nTrials);
     kRS = randperm(nTrialsPerS);
-    RSamp = R(kR(1:useTrials(ck)),:);
-    RSSamp = RS(kRS(1:useTrialsPerS(ck)));
-    pRSamp = estimatePMF(RSamp);
-    pRSSamp = esimatePMF(RSSamp);
+    RSamp = R(:,kR(1:useTrials(ck)));
+    RSSamp = RS(:,kRS(1:useTrialsPerS(ck)));
+    [pRSamp,~] = histcounts(RSamp,21,'Normalization', 'probability');%estimatePMF(RSamp);
+    [pRSSamp,~] = histcounts(RSSamp,21,'Normalization', 'probability');%(RSSamp);
     IperBinSamp = pRSSamp.*log2(pRSSamp./pRSamp);
     IperBinSamp(isinf(IperBinSamp)|isnan(IperBinSamp)) = [];
-    partMIestimates(ck) = sum(IperBinSamp);
+    partMIestimates(ck) = sum(IperBin);%mi(RSamp,RSSamp);%sum(IperBinSamp);
 end
 [p,S,mu] = polyfit(1./useTrialsPerS,partMIestimates,2);
 Iqe = polyval(p,0,S,mu);
 bias = polyval(p,1/nTrialsPerS,S,mu)-Iqe;
+
