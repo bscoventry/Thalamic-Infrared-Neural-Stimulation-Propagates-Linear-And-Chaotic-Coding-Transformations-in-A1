@@ -813,7 +813,7 @@ class Spike_Processed(object):
         for ck in range(nt):
             curLFP = data[:,:,ck]
             [yp,xp] = center_of_mass(curLFP)
-            COGX[ck] = xp*0.2
+            COGX[ck] = xp*0.250
             COGY[ck] = yp*0.375
         return COGX,COGY
 
