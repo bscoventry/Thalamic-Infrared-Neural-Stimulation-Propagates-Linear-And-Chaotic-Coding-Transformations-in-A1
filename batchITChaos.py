@@ -92,8 +92,16 @@ for ck, word in enumerate(dataPath):
     PW = PWs[ck]
     ISI = ISIs[ck]
     NPul = NPulse[ck]
-    if AClass[ck] == 5:
+    if AClass[ck] == 0:
         power = np.array((-1.4, 37.2, 46.15, 58.6, 88, 94, 123, 182.62, 259, 313.6, 386.1, 414))
+    elif AClass[ck] == 1:
+        power = np.array((0,4,117,130,143.17,155.9,207,292,357,370,410,431))
+    elif AClass[ck] == 2:
+        power = np.array((0,4,117,130,143.17,155.9,207,292,357,370,410,431))
+    elif AClass[ck] == 3:
+        power = np.array((-1.1,62.1,77.42,87.4,101.2,115.9,130,184.34,257.3,308.8,360.7,374.4))
+    elif AClass[ck] == 4:
+        power = np.array((-1.1,62.1,77.42,87.4,101.2,115.9,130,184.34,257.3,308.8,360.7,374.4))
     try:
         SpikeClass = Spike_Processed(word,NPul,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
 
