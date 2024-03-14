@@ -665,7 +665,13 @@ class Spike_Processed(object):
             curDF = pd.DataFrame(dataList, columns =['t', 'x', 'y', 'f']) 
             dfDictionary[key] = curDF
         return dfDictionary
-    
+    def convert2DFCOG(self,data,COGX,COGY):
+        # Assumes the DF convention of PDE params, ie
+        """
+        t     x      y       LFP(t,x,y)
+        """
+        [ny,nx,nt] = np.shape(data)
+
     def WaveEq(self,z, t, grid, c, b):
         
         '''The input z corresponds to the current state of the system, and it's a flattened vector in both the number
@@ -807,9 +813,29 @@ class Spike_Processed(object):
         for ck in range(nt):
             curLFP = data[:,:,ck]
             [yp,xp] = center_of_mass(curLFP)
-            COGX[ck] = xp
-            COGY[ck] = yp
+            COGX[ck] = xp*0.2
+            COGY[ck] = yp*0.375
         return COGX,COGY
+
+    def calcDistVelocity(self,x,y):
+        nt = np.shape(x)
+        dx = x[1:]-x[:-1]
+        dy = y[1:]-y[:-1]
+        step_size = np.sqrt(dx**2+dy**2)
+        instV = step_size/1526*1000
+        accel = np.diff(instV)
+        accelSDDV = 5*np.std(accel[0:305])
+        
+        accelWhere = np.where(accel > accelSDDV)
+        accelWhere = accelWhere[0]
+        if len(accelWhere) > 1:
+            waveTime = (accelWhere[-1] - accelWhere[0])/1526*1000
+        elif len(accelWhere) == 1:
+            waveTime = accelWhere[0]/1526*1000
+        else:
+            waveTime = -1
+        cumulative_distance = np.concatenate(([0], np.cumsum(step_size)))
+        return cumulative_distance,instV,waveTime
 
 
     
@@ -850,7 +876,7 @@ class Spike_Processed(object):
         ax = plt.figure().add_subplot(projection='3d')
         ax.plot(COGX,COGY,ts)
         plt.show()
-        pdb.set_trace()
+        
     
     def convert2Array(self,data):
         energyArray = np.zeros((2,8,1526,12))
