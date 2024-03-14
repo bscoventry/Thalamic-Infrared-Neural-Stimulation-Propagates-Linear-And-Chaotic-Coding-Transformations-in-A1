@@ -79,7 +79,7 @@ for bc, word1 in enumerate(dataPath):
     else:
         print(str(word1)+' is Missed')
 
-df = pd.DataFrame(columns=['DataID', 'Electrode', 'EnergyPerPulse','ISI','NPulses','alphaMean','alphaSDER','betaMean','betaSDER','thetaMean','thetaSDER','lowGammaMean','lowGammaSDER','highGammaMean','highGammaSDER','zAlpha','zBeta','zTheta','zLowGamma','zHighGamma'])
+df = pd.DataFrame(columns=['DataID', 'Electrode', 'EnergyPerPulse','ISI','NPulses','zAlpha','zBeta','zTheta','zLowGamma','zHighGamma'])
 #eng = matlab.engine.start_matlab()          #Use the matlab backend for Info theory and Chaos calcs
 for ck, word in enumerate(dataPath):
     
@@ -147,7 +147,7 @@ for ck, word in enumerate(dataPath):
                     zTheta = SpikeClass.getZ(thetaArrayM)
                     zLG = SpikeClass.getZ(lgArrayM)
                     zHG = SpikeClass.getZ(hgArrayM)
-                    df.loc[-1] = [dataPath,str(SpikeClass.electrodeConfig[ck,bc]),str(SpikeClass.energyPerPulse[jk]),ISI,NPul,alphaArrayM[ck,bc,:,jk],alphaArrayS[ck,bc,:,jk],betaArrayM[ck,bc,:,jk],betaArrayS[ck,bc,:,jk],thetaArrayM[ck,bc,:,jk],thetaArrayM[ck,bc,:,jk],lgArrayM[ck,bc,:,jk],lgArrayM[ck,bc,:,jk],hgArrayM[ck,bc,:,jk],hgArrayS[ck,bc,:,jk],zAlpha,zBeta,zTheta,zLG,zHG]
+                    df.loc[-1] = [dataPath,str(SpikeClass.electrodeConfig[ck,bc]),str(SpikeClass.energyPerPulse[jk]),ISI,NPul,zAlpha,zBeta,zTheta,zLG,zHG]
                     df.index = df.index + 1  # shifting index
                     df = df.sort_index()  # sorting by index
         
