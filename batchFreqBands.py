@@ -15,8 +15,8 @@ from SPyke import Spike_Processed
 import pdb
 import matlab.engine
 import pandas as pd
-precurser = 'Z://PhDData//'
-dataPath = ['INS2102//02_15_21//INS_5PU_0_2PW_1ISI_5','INS2102//02_15_21//INS_5PU_0_5PW_1ISI','INS2102//02_15_21//INS_5PU_10PW_5ISI','INS2102//02_16_21//INS_5PU_0_2PW_0_1ISI',
+precurser = 'Z://PhDData//INSData//'
+dataPath = ['INS2102//02_15_21//INS_5PU_0_5PW_1ISI','INS2102//02_15_21//INS_5PU_10PW_5ISI','INS2102//02_16_21//INS_5PU_0_2PW_0_1ISI',
             'INS2102//02_16_21//INS_5PU_0_5PW_0_2ISI','INS2102//02_16_21//INS_5PU_0_7PW_0_5ISI','INS2102//02_16_21//INS_5PU_1PW_0_5ISI','INS2102//02_16_21//INS_5PU_5PW_5ISI',
             'INS2102//02_16_21//INS_5PU_5PW_100ISI','INS2102//02_16_21//INS_5PU_10PW_5ISI','INS2102//02_19_21//INS_5PU_10PW_100ISI','INS2102//02_19_21//INS_50PU_0_5PW_0_2ISI',
             'INS2102//02_22_21//INS_5PU_10PW_50ISI_2','INS2102//02_22_21//INS_10PU_0_2PW_0_5ISI','INS2102//02_22_21//INS_10PU_0_2PW_1ISI','INS2102//02_22_21//INS_10PU_0_5PW_1ISI',
@@ -54,13 +54,13 @@ dataPath = ['INS2102//02_15_21//INS_5PU_0_2PW_1ISI_5','INS2102//02_15_21//INS_5P
             'INS2015//12_02_20//INS_5PU_10PW_50ISI','INS2015//12_03_20//INS_5PU_1PW_1ISI','INS2015//12_03_20//INS_5PU_1PW_5ISI','INS2015//12_03_20//INS_5PU_5PW_1ISI','INS2015//12_03_20//INS_5PU_5PW_5ISI',
             'INS2015//12_03_20//INS_5PU_5PW_10ISI','INS2015//12_03_20//INS_5PU_10PW_5ISI','INS2015//12_03_20//INS_5PU_10PW_10ISI','INS2015//12_14_20//INS_5PU_0_5PW_1ISI','INS2015//12_14_20//INS_5PU_5PW_1ISI',
             'INS2015//12_14_20//INS_5PU_10PW_1ISI','INS2015//12_14_20//INS_5PU_10PW_5ISI']               #List of data to sort through
-NPulse = [5,5,5,5,5,5,5,5,5,5,5,50,5,10,10,10,10,10,10,20,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,
+NPulse = [5,5,5,5,5,5,5,5,5,5,50,5,10,10,10,10,10,10,20,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,
           5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,10,1,1,1,1,5,10,5,5,5,5,10,5,5,5,10,1,1,1,1,1,10,
           10,10,10,10,5,5,5,5,5,1,5,5,10,10,10,5,5,5,5,5,5,1,1,1,1,1,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5]
-PWs = [0.2,0.5,10,0.2,0.5,0.7,1,5,5,10,10,0.5,10,0.2,0.2,0.5,0.7,1,5,0.2,0.7,10,10,0.2,0.2,0.5,0.5,1,1,0.2,5,0.1,0.2,0.5,1,5,0.2,0.2,0.5,0.5,1,1,5,5,0.2,0.5,1,1,5,5,10,0.5,1,5,5,10,10,0.1,0.2,1,10,1,1,1,1,0.2,0.5,
+PWs = [0.5,10,0.2,0.5,0.7,1,5,5,10,10,0.5,10,0.2,0.2,0.5,0.7,1,5,0.2,0.7,10,10,0.2,0.2,0.5,0.5,1,1,0.2,5,0.1,0.2,0.5,1,5,0.2,0.2,0.5,0.5,1,1,5,5,0.2,0.5,1,1,5,5,10,0.5,1,5,5,10,10,0.1,0.2,1,10,1,1,1,1,0.2,0.5,
        1,1,5,5,0.2,0.5,1,5,0.2,0.2,0.5,0.5,1,1,5,5,0.2,0.5,1,5,5,10,0.1,0.2,0.5,1,1,5,10,1,0.5,5,5,1,1,5,5,10,0.5,0.5,5,10,10,0.5,0.2,0.5,5,10,10,0.2,0.2,0.5,1,10,1,0.2,0.5,1,1,0.2,0.5,1,5,10,0.2,
        0.5,1,5,10,1,5,10,10,10,10,5,10,0.5,1,1,1,5,10,10,10,10,0.2,0.5,1,5,10,10,0.1,0.1,0.2,0.5,0.8,1,5,10,1,1,5,5,5,10,10,0.5,5,10,10]
-ISIs = [1,1,5,0.1,0.2,0.5,0.5,5,100,5,100,0.2,50,0.5,1,1,0.5,1,5,0.5,0.5,50,50,1,5,1,5,1,5,1,5,5,5,5,5,5,10,100,10,100,10,100,10,100,5,5,5,100,5,100,5,20,1,1,50,50,100,5,5,1,50,1,5,10,50,5,5,
+ISIs = [1,5,0.1,0.2,0.5,0.5,5,100,5,100,0.2,50,0.5,1,1,0.5,1,5,0.5,0.5,50,50,1,5,1,5,1,5,1,5,5,5,5,5,5,10,100,10,100,10,100,10,100,5,5,5,100,5,100,5,20,1,1,50,50,100,5,5,1,50,1,5,10,50,5,5,
         1,5,1,5,100,100,100,100,5,10,5,10,5,10,5,10,1,1,1,1,5,50,5,5,20,5,20,5,50,5,5,5,100,1,5,1,5,50,0.3,1,1,25,50,0.25,1,1,50,50,50,1,0.2,0.5,5,50,1,0.5,0.5,0.5,1,1,1,1,1,1,0.5,
         1,5,5,10,1,5,5,25,50,5,5,50,1,1,5,5,5,5,10,25,50,5,5,5,5,5,50,5,50,50,50,50,50,50,50,1,5,1,5,10,5,10,1,1,1,5]
 
@@ -82,7 +82,7 @@ for bc, word1 in enumerate(dataPath):
 df = pd.DataFrame(columns=['DataID', 'Electrode', 'EnergyPerPulse','ISI','NPulses','alphaMean','alphaSDER','betaMean','betaSDER','thetaMean','thetaSDER','lowGammaMean','lowGammaSDER','highGammaMean','highGammaSDER','zAlpha','zBeta','zTheta','zLowGamma','zHighGamma'])
 #eng = matlab.engine.start_matlab()          #Use the matlab backend for Info theory and Chaos calcs
 for ck, word in enumerate(dataPath):
-    pdb.set_trace()
+    
     stores = None             #Load all stores
     streamStore = 'streams'
     rawDataStore = 'TDT2'
@@ -104,6 +104,7 @@ for ck, word in enumerate(dataPath):
     elif AClass[ck] == 4:
         power = np.array((-1.1,62.1,77.42,87.4,101.2,115.9,130,184.34,257.3,308.8,360.7,374.4))
     try:
+        
         SpikeClass = Spike_Processed(precurser+word,NPul,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
 
         #Spikes = SpikeClass.Spikes
@@ -136,7 +137,8 @@ for ck, word in enumerate(dataPath):
         [lgArrayS,energy] = SpikeClass.convert2Array(lgArrayS)
         [hgArrayM,energy] = SpikeClass.convert2Array(hgArrayM)
         [hgArrayS,energy] = SpikeClass.convert2Array(hgArrayS)
-        [ny,nx,nt,ne] = np.shape(betaMean)
+        [ny,nx,nt,ne] = np.shape(betaArrayM)
+        
         for ck in range(ny):
             for bc in range(nx):
                 for jk in range(ne):
@@ -145,14 +147,15 @@ for ck, word in enumerate(dataPath):
                     zTheta = SpikeClass.getZ(thetaArrayM)
                     zLG = SpikeClass.getZ(lgArrayM)
                     zHG = SpikeClass.getZ(hgArrayM)
-                    df.loc[-1] = [dataPath,str(SpikeClass.electrodeConfig[ck,bc]),str(SpikeClass.energyPerPulse[jk]),ISI,NPul,alphaArrayM[ny,nx,:,ne],alphaArrayS[ny,nx,:,ne],betaArrayM[ny,nx,:,ne],betaArrayS[ny,nx,:,ne],thetaArrayM[ny,nx,:,ne],thetaArrayM[ny,nx,:,ne],lgArrayM[ny,nx,:,ne],lgArrayM[ny,nx,:,ne],hgArrayM[ny,nx,:,ne],hgArrayS[ny,nx,:,ne],zAlpha,zBeta,zTheta,zLG,zHG]
+                    df.loc[-1] = [dataPath,str(SpikeClass.electrodeConfig[ck,bc]),str(SpikeClass.energyPerPulse[jk]),ISI,NPul,alphaArrayM[ck,bc,:,jk],alphaArrayS[ck,bc,:,jk],betaArrayM[ck,bc,:,jk],betaArrayS[ck,bc,:,jk],thetaArrayM[ck,bc,:,jk],thetaArrayM[ck,bc,:,jk],lgArrayM[ck,bc,:,jk],lgArrayM[ck,bc,:,jk],hgArrayM[ck,bc,:,jk],hgArrayS[ck,bc,:,jk],zAlpha,zBeta,zTheta,zLG,zHG]
                     df.index = df.index + 1  # shifting index
                     df = df.sort_index()  # sorting by index
+        
         df.to_pickle('LFPBands.pkl')
         del SpikeClass             #Just for memory
     except:
         print('Brandon, Check'+' '+word)
-    pdb.set_trace()
+    
         
 #         [Rhist,bins] = np.histogram(R,bins=21)
 #         Rhist = matlab.double(Rhist.tolist())
