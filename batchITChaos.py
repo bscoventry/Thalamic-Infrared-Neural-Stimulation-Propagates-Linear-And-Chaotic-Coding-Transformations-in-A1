@@ -152,6 +152,9 @@ for ck, word in enumerate(dataPath):
 
         
         del SpikeClass             #Just for memory
-    except:
+    except Exception as error:
+        # handle the exception
+        print("An exception occurred:", type(error).__name__, "–", error) # An exception occurred: ZeroDivisionError – division by zero
         print('Brandon, check'+' '+word)
+df.to_pickle('LFPChaos.pkl')
 pdb.set_trace()

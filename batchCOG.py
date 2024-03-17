@@ -128,10 +128,13 @@ for ck, word in enumerate(dataPath):
                 df.index = df.index + 1  # shifting index
                 df = df.sort_index()  # sorting by index
                 
-                df.to_pickle('LFPWaves.pkl')
+                
         del SpikeClass             #Just for memory
-    except:
+    except Exception as error:
+    # handle the exception
+        print("An exception occurred:", type(error).__name__, "–", error) # An exception occurred: ZeroDivisionError – division by zero
         print('Brandon, Check'+' '+word)
+    df.to_pickle('LFPCOG.pkl')
     
         
 #         [Rhist,bins] = np.histogram(R,bins=21)
