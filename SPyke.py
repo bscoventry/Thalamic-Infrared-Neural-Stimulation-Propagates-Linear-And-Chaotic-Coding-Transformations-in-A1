@@ -831,7 +831,7 @@ class Spike_Processed(object):
         if len(accelWhere) > 1:
             waveTime = (accelWhere[-1] - accelWhere[0])/1526*1000
         elif len(accelWhere) == 1:
-            waveTime = accelWhere[0]/1526*1000
+            waveTime = 1/1526*1000
         else:
             waveTime = -1
         cumulative_distance = np.concatenate(([0], np.cumsum(step_size)))
