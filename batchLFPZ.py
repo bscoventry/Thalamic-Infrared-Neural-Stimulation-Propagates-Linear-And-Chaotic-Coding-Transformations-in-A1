@@ -123,7 +123,7 @@ for ck, word in enumerate(dataPath):
                             curMLFP = arrayLFPs[ck][bc,jk,:]
                             curSLFP = arrayLFPsSD[ck][bc,jk,:]
                             z = SpikeClass.getZ(curMLFP)
-                            df.loc[-1] = [dataPath,str(SpikeClass.electrodeConfig[bc,jk]),float(ck),ISI,NPul,z,curMLFP,curSLFP]
+                            df.loc[-1] = [word,str(SpikeClass.electrodeConfig[bc,jk]),float(ck),ISI,NPul,z,curMLFP,curSLFP]
                             df.index = df.index + 1  # shifting index
                             df = df.sort_index()  # sorting by index
         
