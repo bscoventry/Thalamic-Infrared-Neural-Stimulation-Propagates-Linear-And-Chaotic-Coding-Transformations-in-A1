@@ -18,7 +18,10 @@ from mpl_toolkits.mplot3d import Axes3D
 import json
 import pickle # python3
 import seaborn as sns
+
+import jax
 if __name__ == '__main__': 
+    print(f"Running on PyMC v{pm.__version__}")
     LFPZ = pd.read_pickle('LFPZ.pkl')
     def RMS(data):
         return np.sqrt(np.mean(data**2))
@@ -102,7 +105,7 @@ if __name__ == '__main__':
     with Heirarchical_Regression:
         if __name__ == '__main__':
                 step = pm.NUTS()
-                rTrace = pm.sampling_jax.sample_numpyro_nuts(numSamples, tune=numBurnIn, target_accept=0.90,chains = 4)
+                rTrace = pm.sample(numSamples, tune=numBurnIn, target_accept=0.90,chains = 4, nuts_sampler="nutpie")
                 #rTrace = pm.sampling_jax.sample_numpyro_nuts(numSamples, tune=numBurnIn, target_accept=0.95,chains = 4)
     """
     Now do model analytics
