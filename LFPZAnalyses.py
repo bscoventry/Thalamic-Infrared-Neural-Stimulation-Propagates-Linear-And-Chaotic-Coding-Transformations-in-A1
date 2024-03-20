@@ -21,6 +21,8 @@ import seaborn as sns
 
 import jax
 if __name__ == '__main__': 
+    color = '#87ceeb'
+    az.style.use("arviz-darkgrid")
     print(f"Running on PyMC v{pm.__version__}")
     LFPZ = pd.read_pickle('LFPZ.pkl')
     def RMS(data):
