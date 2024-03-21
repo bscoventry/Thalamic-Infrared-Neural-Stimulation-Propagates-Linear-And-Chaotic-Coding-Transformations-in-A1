@@ -30,9 +30,10 @@ useTrialsPerS = round(fractions*nTrialsPerS);
 partMIestimates = zeros(size(useTrials));
 %Now estimate empirical probability mass functions (since this is discrete
 %counts.
-pR = estimatePMF(R);
-pRS = estimatePMF(RS);
-
+% pR = estimatePMF(R);
+% pRS = estimatePMF(RS);
+[pR,~] = histcounts(R,21,'Normalization', 'probability');%estimatePMF(RSamp);
+[pRS,~] = histcounts(RS,21,'Normalization', 'probability');%(RSSamp);
 [~,numBinsR] = size(pR);
 [~,numBinsRS] = size(pRS);
 if numBinsR ~= numBinsRS
