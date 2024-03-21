@@ -21,6 +21,7 @@ import seaborn as sns
 
 import jax
 if __name__ == '__main__': 
+    randomSeed = 777
     color = '#87ceeb'
     az.style.use("arviz-darkgrid")
     print(f"Running on PyMC v{pm.__version__}")
@@ -43,7 +44,7 @@ if __name__ == '__main__':
         curZ = z[ck]
         maxZArray[ck] = np.max(curZ)
         RMSArray[ck] = RMS(curMLFP)
-    
+    maxZArray = np.log(maxZArray+0.001)
     #Create a distribution plot of the data.
     sns.scatterplot(x=np.log(epp+0.01), y=RMSArray)
     plt.show()
@@ -77,7 +78,7 @@ if __name__ == '__main__':
         sigma_b = pm.HalfNormal("sigma_b", 5)
         mu_b2 = pm.Normal("mu_b2",mu=0.0, sigma=5)
         sigma_b2 = pm.HalfNormal("sigma_b2",5)
-        mu_b3 = pm.Normal("mu_b3", 5)
+        mu_b3 = pm.Normal("mu_b3", mu=0.0,sigma=5)
         sigma_b3 = pm.HalfNormal("sigma_b3",5)
         
         sigma_nu = pm.Exponential("sigma_nu",5.0)
@@ -99,7 +100,7 @@ if __name__ == '__main__':
 
         regression = a[animalID] + (b1[animalID] * lepp) + (b2[animalID] * nISI) +(b3[animalID]*lepp*nISI)
 
-        likelihood = pm.StudentT("MaxZ_like",nu=nu,mu=regression,sigma=eps[animalID], observed= RMSArray) 
+        likelihood = pm.StudentT("MaxZ_like",nu=nu,mu=regression,sigma=eps[animalID], observed= maxZArray) 
 
     """
     Now we run the model!
@@ -127,7 +128,15 @@ if __name__ == '__main__':
         pm.plot_posterior(estimate, point_estimate='mode', ax=ax, color=color,hdi_prob=0.95)
         ax.set_title(title, fontdict=f_dict)
         ax.set_xlabel(xlabel, fontdict=f_dict)
+    with Heirarchical_Regression:
+        pm.compute_log_likelihood(rTrace)
     pdb.set_trace()
+    with Heirarchical_Regression:
+        if __name__ == '__main__':
+            ppc = pm.sample_posterior_predictive(rTrace, random_seed=randomSeed)
 
+    az.plot_bpv(ppc, hdi_prob=0.95,kind='p_value')
+    az.plot_ppc(ppc)
+    pdb.set_trace()
 
 
