@@ -1,4 +1,4 @@
-function [mWaveVel,transitionMatrix]=batchWavePatt(LFP,fs)
+function [mWaveVel,transitionMatrix,prctVar]=batchWavePatt(LFP,fs)
 addpath(genpath('Filtering'));
 addpath(genpath('InDevelopment'));
 addpath(genpath('OpticalFlow'));
@@ -10,6 +10,7 @@ results = mainProcessingWithOutput(LFP,fs,params);
 mWaveVel = results.maxVelocityVal;
 pvals = results.pvals;
 sig = find(pvals<=0.05);
+prctVar = results.prctVar;
 if length(sig)>0
     [nc,nr] = size(pvals);
     transitionMatrix = zeros(nc*nr,1);

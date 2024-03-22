@@ -105,7 +105,7 @@ if params.performSVD && ~suppressFigures
     % Open new figure and plot SVD modes
     figure('Name', 'Dominant SVD modes')
     plotTime = (1:ntimesteps)/Fs;
-    plotcsvd(vfs, params.nSVDmodes, plotTime, params.useComplexSVD);
+    [U, S, V, prctVar]=plotcsvd(vfs, params.nSVDmodes, plotTime, params.useComplexSVD);
     toc
 end
 
@@ -186,6 +186,7 @@ outputs.processTime = datetime - startTime;
 outputs.velocityVector = velocityVector;
 outputs.maxVelocityVal = maxVelocityVal;
 outputs.pvals = pvals;
+outputs.prctVar = prctVar;
 
 function outputProgress(outputStr, textboxHandle)
 % Outputs the current progress given by TEXTSTR to the terminal and also
