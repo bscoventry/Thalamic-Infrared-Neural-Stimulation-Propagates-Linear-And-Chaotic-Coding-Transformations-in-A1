@@ -411,25 +411,25 @@ class Spike_Processed(object):
             self.fs = self.fs/16
             self.totSamp = len(self.LFP[0,:])
             self.ts = np.arange(0,self.totSamp/self.fs,1/self.fs)
-            self.waveletDecomposition()
+            #self.waveletDecomposition()
             
         self.epocs = self.data.epocs.RZ2T.onset
         self.getEpocSamp()
         if 'self.LFP' in locals():
             pass
-        self.alphaTrials = self.epocTrials(self.alpha)
-        self.betaTrials = self.epocTrials(self.beta)
-        self.thetaTrials = self.epocTrials(self.theta)
-        self.lowGammaTrials = self.epocTrials(self.lowgamma)
-        self.highGammaTrials = self.epocTrials(self.highgamma)
+        # self.alphaTrials = self.epocTrials(self.alpha)
+        # self.betaTrials = self.epocTrials(self.beta)
+        # self.thetaTrials = self.epocTrials(self.theta)
+        # self.lowGammaTrials = self.epocTrials(self.lowgamma)
+        # self.highGammaTrials = self.epocTrials(self.highgamma)
         self.epocLFP = self.epocTrials(self.LFP)
         
         self.readINSLaserVoltages()
-        self.epocedAlpha = self.sortByStimCondition(self.alphaTrials)
-        self.epochedBeta = self.sortByStimCondition(self.betaTrials)
-        self.epochedTheta = self.sortByStimCondition(self.thetaTrials)
-        self.epochedLowGamma = self.sortByStimCondition(self.lowGammaTrials)
-        self.epochedHighGamma = self.sortByStimCondition(self.highGammaTrials)
+        # self.epocedAlpha = self.sortByStimCondition(self.alphaTrials)
+        # self.epochedBeta = self.sortByStimCondition(self.betaTrials)
+        # self.epochedTheta = self.sortByStimCondition(self.thetaTrials)
+        # self.epochedLowGamma = self.sortByStimCondition(self.lowGammaTrials)
+        # self.epochedHighGamma = self.sortByStimCondition(self.highGammaTrials)
         #if self.GPU == True:
             #self.rawData = cp.asarray(self.raw['data'])            #Get this into a CuPy for GPU processing
         #else:
@@ -641,6 +641,46 @@ class Spike_Processed(object):
         
         return sortedE
     
+    def sortByElectrode16(self,meanData,numSamples=1526):
+        
+        #The -1 on each of the entries below is just to help me convert between 0 indexing (Python) and 1 indexing (electrode array)
+        self.electrodeConfig = np.array([[10-1,12-1,14-1,16-1,9-1,11-1,13-1,15-1],[1-1,3-1,5-1,7-1,2-1,4-1,6-1,8-1]],np.int16)
+        sortedMean = {str(key): {} for key in self.energyPerPulse}
+        electrodes = ['0','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15']
+        
+        for ck in range(len(electrodes)):
+            curData = meanData[str(ck)]
+            for key in curData.keys():
+                currentData = curData[key]
+                sortedMean[key][str(ck)] = currentData
+        sortedE = {}
+        
+        for key in sortedMean.keys():
+            cDat = sortedMean[key]
+            test2GetTrials = cDat['0']
+            [nTrials,nt] = np.shape(test2GetTrials)
+            electrodeArray = np.zeros((2,8,numSamples,nTrials))
+            for newkey in cDat.keys():
+                curE = np.where(int(newkey)==self.electrodeConfig)
+                electrodeArray[curE[0][0],curE[1][0],:,:]=np.transpose(cDat[newkey])
+            sortedE[key] = electrodeArray
+        
+        return sortedE
+    
+    def sortByElectrode16_MonoEnergy(self,meanData,numSamples=1526):
+        self.electrodeConfig = np.array([[10-1,12-1,14-1,16-1,9-1,11-1,13-1,15-1],[1-1,3-1,5-1,7-1,2-1,4-1,6-1,8-1]],np.int16)
+        sortedMean = {str(key): {} for key in self.energyPerPulse}
+        electrodes = ['0','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15']
+        
+        nTrials = 200
+        electrodeArray = np.zeros((2,8,numSamples,nTrials))
+        for newkey in meanData.keys():
+            cDat = meanData[newkey]
+            curE = np.where(int(newkey)==self.electrodeConfig)
+            electrodeArray[curE[0][0],curE[1][0],:,:]=np.transpose(cDat)
+        sortedE = electrodeArray
+        return sortedE
+
     def convert2DF(self,data):
         # Assumes the DF convention of PDE params, ie
         """
@@ -950,6 +990,12 @@ class Spike_Processed(object):
     
     def getZ(self,data):
         mArray = data[0:305]
+        aMean = np.mean(mArray)
+        aSDDV = np.std(mArray)
+        ZScore = (data-aMean)/aSDDV
+        return ZScore
+    def getZBehind(self,data):
+        mArray = data[1526-305:1526]
         aMean = np.mean(mArray)
         aSDDV = np.std(mArray)
         ZScore = (data-aMean)/aSDDV
