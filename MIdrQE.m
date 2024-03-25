@@ -32,8 +32,8 @@ partMIestimates = zeros(size(useTrials));
 %counts.
 % pR = estimatePMF(R);
 % pRS = estimatePMF(RS);
-[pR,~] = histcounts(R,21,'Normalization', 'probability');%estimatePMF(RSamp);
-[pRS,~] = histcounts(RS,21,'Normalization', 'probability');%(RSSamp);
+[pR,~] = histcounts(R,763,'Normalization', 'probability');%estimatePMF(RSamp);
+[pRS,~] = histcounts(RS,763,'Normalization', 'probability');%(RSSamp);
 [~,numBinsR] = size(pR);
 [~,numBinsRS] = size(pRS);
 if numBinsR ~= numBinsRS
