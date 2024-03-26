@@ -124,7 +124,7 @@ for ck, word in enumerate(dataPath):
                 [COGX,COGY]=SpikeClass.cogMean(testLFP)
                 
                 dist,instV,waveTime = SpikeClass.calcDistVelocity(COGX,COGY)
-                df.loc[-1] = [dataPath,energies,ISI,NPul,COGX,COGY,dist[-1],np.max(instV),waveTime]
+                df.loc[-1] = [dataPath,energies,ISI,NPul,COGX,COGY,dist,np.max(instV),waveTime]
                 df.index = df.index + 1  # shifting index
                 df = df.sort_index()  # sorting by index
                 
