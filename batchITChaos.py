@@ -15,6 +15,8 @@ from SPyke import Spike_Processed
 import pdb
 import matlab.engine
 import pandas as pd
+import scipy.io as sio
+from scipy.signal import sosfiltfilt
 precurser = 'Z://PhDData//INSData//'
 dataPath = ['INS2102//02_15_21//INS_5PU_0_5PW_1ISI','INS2102//02_15_21//INS_5PU_10PW_5ISI','INS2102//02_16_21//INS_5PU_0_2PW_0_1ISI',
             'INS2102//02_16_21//INS_5PU_0_5PW_0_2ISI','INS2102//02_16_21//INS_5PU_0_7PW_0_5ISI','INS2102//02_16_21//INS_5PU_1PW_0_5ISI','INS2102//02_16_21//INS_5PU_5PW_5ISI',
@@ -81,6 +83,8 @@ for bc, word1 in enumerate(dataPath):
 
 df = pd.DataFrame(columns=['DataID', 'Electrode', 'EnergyPerPulse','ISI','NPulses','MI','KChaos'])
 eng = matlab.engine.start_matlab()          #Use the matlab backend for Info theory and Chaos calcs
+SOS10 = sio.loadmat('ChaosBandPass')
+SOS10 = np.ascontiguousarray(SOS10['SOS'])
 for ck, word in enumerate(dataPath):
     stores = None             #Load all stores
     streamStore = 'streams'
@@ -103,7 +107,7 @@ for ck, word in enumerate(dataPath):
     elif AClass[ck] == 4:
         power = np.array((-1.1,62.1,77.42,87.4,101.2,115.9,130,184.34,257.3,308.8,360.7,374.4))
     try:
-        SpikeClass = Spike_Processed(word,NPul,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+        SpikeClass = Spike_Processed(precurser+word,NPul,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
 
         #Spikes = SpikeClass.Spikes
         LFPs = SpikeClass.LFP
@@ -118,6 +122,7 @@ for ck, word in enumerate(dataPath):
             Klist = np.zeros((12,))
             for energies in curDataElec.keys():
                 curLFP = curDataElec[energies]
+                curLFP = sosfiltfilt(SOS10,curLFP)
                 #[hist,bins] = np.histogram(curLFP,bins=21)       #21 bins from ‘doane’ estimator
                 #Rs[counter,:] = matlab.double(hist.tolist())
                 R = np.append(R,curLFP,axis=0)
@@ -142,7 +147,7 @@ for ck, word in enumerate(dataPath):
                 Iqe = eng.MIdrQE(matlab.double(np.transpose(Rs)),matlab.double(np.transpose(R)))
                 Iarray[bc] = Iqe
                 
-                df.loc[-1] = [dataPath,str(electrode),str(energies),ISI,NPul,Iqe,Klist[bc]]
+                df.loc[-1] = [word,str(electrode),str(energies),ISI,NPul,Iqe,Klist[bc]]
                 df.index = df.index + 1  # shifting index
                 df = df.sort_index()  # sorting by index
             

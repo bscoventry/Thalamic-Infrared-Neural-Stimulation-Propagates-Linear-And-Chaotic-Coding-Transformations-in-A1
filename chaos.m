@@ -182,9 +182,9 @@ else
         stochastic = perm_h>=min(surr_h)&&perm_h<=max(surr_h);
     end
     
-    if stochastic
-        K= -1; %= 'stochastic';
-    else
+%     if stochastic
+%         K= -1; %= 'stochastic';
+%     else
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         % Step 3: De-noise the data
         if strcmp(denoising_algorithm, 'schreiber')
