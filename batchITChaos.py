@@ -81,7 +81,7 @@ for bc, word1 in enumerate(dataPath):
     else:
         print(str(word1)+' is Missed')
 
-df = pd.DataFrame(columns=['DataID', 'Electrode', 'EnergyPerPulse','ISI','NPulses','MI','KChaos'])
+df = pd.DataFrame(columns=['DataID', 'Electrode', 'EnergyPerPulse','ISI','NPulses','MI','KChaos','Stochastic'])
 eng = matlab.engine.start_matlab()          #Use the matlab backend for Info theory and Chaos calcs
 SOS10 = sio.loadmat('ChaosBandPass')
 SOS10 = np.ascontiguousarray(SOS10['SOS'])
@@ -120,6 +120,7 @@ for ck, word in enumerate(dataPath):
             R = np.zeros((1,1526))
             counter = 0
             Klist = np.zeros((12,))
+            sList = np.zeros((12,))
             for energies in curDataElec.keys():
                 curLFP = curDataElec[energies]
                 curLFP = sosfiltfilt(SOS10,curLFP)
@@ -132,8 +133,9 @@ for ck, word in enumerate(dataPath):
                 [numtrials,nts] = np.shape(curLFP)
                 sddvLFP = np.std(curLFP,axis=0)
                 sderLFP = sddvLFP/np.sqrt(numtrials)
-                K = eng.chaos(meanLFP,0.5,'bvr','schreiber',2,'aaft_cpp','fouda')
+                K,stoc = eng.chaos(meanLFP,0.5,'bvr','schreiber',2,'aaft_cpp','fouda',nargout=2)
                 Klist[counter] = K
+                sList[counter] = stoc
                 counter = counter + 1
                 
             R = np.delete(R,0,0)
@@ -147,7 +149,7 @@ for ck, word in enumerate(dataPath):
                 Iqe = eng.MIdrQE(matlab.double(np.transpose(Rs)),matlab.double(np.transpose(R)))
                 Iarray[bc] = Iqe
                 
-                df.loc[-1] = [word,str(electrode),str(energies),ISI,NPul,Iqe,Klist[bc]]
+                df.loc[-1] = [word,str(electrode),str(energies),ISI,NPul,Iqe,Klist[bc],sList[bc]]
                 df.index = df.index + 1  # shifting index
                 df = df.sort_index()  # sorting by index
             
