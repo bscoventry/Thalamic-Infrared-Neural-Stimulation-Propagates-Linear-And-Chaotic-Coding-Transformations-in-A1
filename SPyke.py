@@ -851,6 +851,7 @@ class Spike_Processed(object):
         COGX = np.zeros((nt,))
         COGY = np.zeros((nt,))
         for ck in range(nt):
+            
             curLFP = data[:,:,ck]
             [yp,xp] = center_of_mass(curLFP)
             COGX[ck] = xp*0.250
@@ -858,6 +859,7 @@ class Spike_Processed(object):
         return COGX,COGY
 
     def calcDistVelocity(self,x,y):
+        
         nt = np.shape(x)
         dx = x[1:]-x[:-1]
         dy = y[1:]-y[:-1]
@@ -875,7 +877,7 @@ class Spike_Processed(object):
         else:
             waveTime = -1
         cumulative_distance = np.concatenate(([0], np.cumsum(step_size)))
-        return cumulative_distance,instV,waveTime
+        return step_size,instV,waveTime
 
 
     
