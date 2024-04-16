@@ -1002,6 +1002,37 @@ class Spike_Processed(object):
         aSDDV = np.std(mArray)
         ZScore = (data-aMean)/aSDDV
         return ZScore
+    
+    def estimateEntropy_Continuous(R,RS,doQE=True):
+        from entropy_estimators import continuous
+        # compute the entropy using the k-nearest neighbour approach
+        # developed by Kozachenko and Leonenko (1987):
+        HR = continuous.get_h(R, k=5)
+        HRS = continuous.get_h(RS,k=5)
+        MIS = HR-HRS
+        if doQE:
+            #MI_Shuff = np.zeros((useTrials,))
+            fractions = np.array([1, .5, .5, .5, .5, .25, .25, .25, .25, .25, .25, .25, .25])
+            [nRows,nTrials] = np.shape(R)
+            [nRows,nTrialsPerS] = np.shape(RS)
+            useTrials = round(fractions*nTrials)
+            useTrialsPerS = round(fractions*nTrialsPerS)
+            partMIestimates = np.zeros((useTrials,))
+            for ck in range(useTrials):
+                #Rand perm around the rows
+                sR = HR[np.arange(len(HR))[:,None], np.random.randn(*HR.shape).argsort(axis=1)]
+                sRS = HRS[np.arange(len(HRS))[:,None], np.random.randn(*HRS.shape).argsort(axis=1)]
+                RShuff = continuous.get_h(sR,k=5)
+                RSShuff = continuous.get_h(sRS,k=5)
+                partMIestimates[ck] = RShuff-RSShuff
+            [p,S,mu] = np.polyfit(1./useTrialsPerS,partMIestimates,2)
+            MIS = np.polyval(p,0)
+        return MIS
+
+
+
+
+
 
     
 
