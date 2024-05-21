@@ -1,4 +1,4 @@
-function [U, S, V, prctVar] = plotcsvd(vf, nmodeplot, realTime, useComplexSVD, vectorScale)
+function [U, S, V, prctVar,absUav] = plotcsvd(vf, nmodeplot, realTime, useComplexSVD, vectorScale)
 % PLOTCSVD performs a singular vector decomposition of a vector field.
 %   Plots most dominant spatial modes and their time courses, and the
 %   trajectory of the top 3 most dominant modes.
@@ -133,4 +133,3 @@ grid on
 xlabel('Mode 1')
 ylabel('Mode 2')
 zlabel('Mode 3')
-
