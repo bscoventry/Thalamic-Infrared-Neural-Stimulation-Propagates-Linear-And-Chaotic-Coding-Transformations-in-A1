@@ -15,6 +15,7 @@ from SPyke import Spike_Processed
 import pdb
 import matlab.engine
 import pandas as pd
+import scipy.io as sio
 precurser = 'Z://PhDData//INSData//'
 dataPath = ['INS2102//02_15_21//INS_5PU_0_5PW_1ISI','INS2102//02_15_21//INS_5PU_10PW_5ISI','INS2102//02_16_21//INS_5PU_0_2PW_0_1ISI',
             'INS2102//02_16_21//INS_5PU_0_5PW_0_2ISI','INS2102//02_16_21//INS_5PU_0_7PW_0_5ISI','INS2102//02_16_21//INS_5PU_1PW_0_5ISI','INS2102//02_16_21//INS_5PU_5PW_5ISI',
@@ -79,7 +80,7 @@ for bc, word1 in enumerate(dataPath):
     else:
         print(str(word1)+' is Missed')
 
-df = pd.DataFrame(columns=['DataID','EnergyPerPulse','ISI','NPulses','Velocity','WaveTransistion','prctSVD'])
+df = pd.DataFrame(columns=['DataID','EnergyPerPulse','ISI','NPulses','mVelocity','sVelocity','prctSVD','absUav'])
 eng = matlab.engine.start_matlab()          #Use the matlab backend for Info theory and Chaos calcs
 fs = 1526
 for ck, word in enumerate(dataPath):
@@ -115,8 +116,11 @@ for ck, word in enumerate(dataPath):
         for energy in waveClass.keys():
             curLFP = waveClass[energy]
             curLFP = matlab.double(curLFP.tolist())
-            mWaveVel,transitionMatrix,prctVar = eng.batchWavePatt(curLFP,fs,nargout=3)
-            df.loc[-1] = [word,float(energy),ISI,NPul,mWaveVel,transitionMatrix,prctVar]
+            LFP = {}
+            LFP['LFP'] = curLFP
+            sio.savemat('LFP1.mat',LFP)
+            mWaveVel,sWaveVel,prctVar,absUav = eng.batchWavePatt(nargout=4)
+            df.loc[-1] = [word,float(energy),ISI,NPul,mWaveVel,sWaveVel,prctVar,absUav]
             df.index = df.index + 1  # shifting index
             df = df.sort_index()  # sorting by index
     except Exception as error:

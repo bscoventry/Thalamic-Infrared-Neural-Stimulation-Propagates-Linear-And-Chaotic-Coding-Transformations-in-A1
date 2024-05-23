@@ -67,7 +67,9 @@ tic
 % Pre-allocate velocity field variables
 vfs = zeros(size(wvcfs));
 vfs = vfs(:,:,1:end-1,:);
+[~,~,~,tt] = size(vfs);
 meanCSteps = zeros(size(wvcfs,4), 1);
+
 
 % Calculate velocity fields for every trial, and same average number of
 % steps to converge
@@ -92,7 +94,10 @@ for itrial = 1:size(wvcfs,4)
     meanCSteps(itrial) = mean(csteps);
     fprintf('Processed trial %i\n', itrial)
 end
-
+mVFS = mean(vfs,4);
+sVFS = std(vfs,0,4)./sqrt(tt);
+outputs.mVFS = mVFS;
+outputs.sVFS = sVFS;
 toc
 outputProgress(...
     sprintf('Optical flow took %0.1f steps on average to converge.\n', ...
@@ -105,10 +110,11 @@ if params.performSVD && ~suppressFigures
     % Open new figure and plot SVD modes
     figure('Name', 'Dominant SVD modes')
     plotTime = (1:ntimesteps)/Fs;
-    [U, S, V, prctVar]=plotcsvd(vfs, params.nSVDmodes, plotTime, params.useComplexSVD);
+    [~, ~, ~,prctVar,absUav]=plotcsvd(vfs, params.nSVDmodes, plotTime, params.useComplexSVD);
     toc
 end
-
+outputs.absUav = absUav;
+outputs.prctVar = prctVar;
 %% Find all patterns present
 outputProgress('Identifying all patterns in velocity fields...', textboxHandle)
 tic
@@ -186,7 +192,6 @@ outputs.processTime = datetime - startTime;
 outputs.velocityVector = velocityVector;
 outputs.maxVelocityVal = maxVelocityVal;
 outputs.pvals = pvals;
-outputs.prctVar = prctVar;
 
 function outputProgress(outputStr, textboxHandle)
 % Outputs the current progress given by TEXTSTR to the terminal and also

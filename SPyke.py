@@ -411,7 +411,7 @@ class Spike_Processed(object):
             self.fs = self.fs/16
             self.totSamp = len(self.LFP[0,:])
             self.ts = np.arange(0,self.totSamp/self.fs,1/self.fs)
-            #self.waveletDecomposition()
+            self.waveletDecomposition()
             
         self.epocs = self.data.epocs.RZ2T.onset
         self.getEpocSamp()
@@ -422,6 +422,8 @@ class Spike_Processed(object):
         # self.thetaTrials = self.epocTrials(self.theta)
         # self.lowGammaTrials = self.epocTrials(self.lowgamma)
         # self.highGammaTrials = self.epocTrials(self.highgamma)
+        self.epochCWT = self.epocTrials(self.wavelet)
+        pdb.set_trace()
         self.epocLFP = self.epocTrials(self.LFP)
         
         self.readINSLaserVoltages()
@@ -540,21 +542,22 @@ class Spike_Processed(object):
         self.lowgamma = np.zeros((self.numChannel,self.totSamp))
         self.highgamma = np.zeros((self.numChannel,self.totSamp))
         
-        for ck in range(self.numChannel):
+        for ck in range(4):
             freqs, cwt = fcwt.cwt(self.LFP[ck,:], int(np.floor(self.fs)), flow, fhi, fn, nthreads=self.numCores)
-            alphaWhere = np.where(np.logical_and(freqs>=alpha[0], freqs<=alpha[1]))
-            thetaWhere = np.where(np.logical_and(freqs>=theta[0], freqs<=theta[1]))
-            betaWhere = np.where(np.logical_and(freqs>=beta[0], freqs<=beta[1]))
-            lowGammaWhere = np.where(np.logical_and(freqs>=lowgamma[0], freqs<=lowgamma[1]))
-            highGammaWhere = np.where(np.logical_and(freqs>=highgamma[0], freqs<=highgamma[1]))
+            #alphaWhere = np.where(np.logical_and(freqs>=alpha[0], freqs<=alpha[1]))
+            #thetaWhere = np.where(np.logical_and(freqs>=theta[0], freqs<=theta[1]))
+            #betaWhere = np.where(np.logical_and(freqs>=beta[0], freqs<=beta[1]))
+            #lowGammaWhere = np.where(np.logical_and(freqs>=lowgamma[0], freqs<=lowgamma[1]))
+            #highGammaWhere = np.where(np.logical_and(freqs>=highgamma[0], freqs<=highgamma[1]))
             wavelet = np.square(np.abs(cwt))
             #pdb.set_trace()
-            self.theta[ck,:] = np.squeeze(2*tegral.simpson(wavelet[thetaWhere,:],axis=1))
-            self.alpha[ck,:] = np.squeeze(2*tegral.simpson(wavelet[alphaWhere,:],axis=1))
-            self.beta[ck,:] = np.squeeze(2*tegral.simpson(wavelet[betaWhere,:],axis=1))
-            self.lowgamma[ck,:] = np.squeeze(2*tegral.simpson(wavelet[lowGammaWhere,:],axis=1))
-            self.highgamma[ck,:] = np.squeeze(2*tegral.simpson(wavelet[highGammaWhere,:],axis=1))
-            #self.wavelet[ck,:,:] = np.abs(cwt)
+            #self.theta[ck,:] = np.squeeze(2*tegral.simpson(wavelet[thetaWhere,:],axis=1))
+            #self.alpha[ck,:] = np.squeeze(2*tegral.simpson(wavelet[alphaWhere,:],axis=1))
+            #self.beta[ck,:] = np.squeeze(2*tegral.simpson(wavelet[betaWhere,:],axis=1))
+            #self.lowgamma[ck,:] = np.squeeze(2*tegral.simpson(wavelet[lowGammaWhere,:],axis=1))
+            #self.highgamma[ck,:] = np.squeeze(2*tegral.simpson(wavelet[highGammaWhere,:],axis=1))
+            self.wavelet[ck,:,:] = np.abs(cwt)
+            pdb.set_trace()
         self.freqs = freqs
 
     def epocTrials(self,data):

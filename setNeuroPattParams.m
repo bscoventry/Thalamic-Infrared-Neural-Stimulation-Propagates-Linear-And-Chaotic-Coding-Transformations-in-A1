@@ -64,7 +64,7 @@ hilbFreqHigh = 4;
 %% Optical flow parameters
 % Smoothing parameter: higher values will give a smoother velocity field
 % (typically 0<OPALPHA<5, default 0.5).
-opAlpha = 0.5;
+opAlpha = 0.01;
 % Non-linearity penalty parameter: close to zero will be highly non-linear,
 % large values will be approximately linear, resulting in faster
 % computations but possibly less accurate flow fields (default 1)
@@ -80,7 +80,7 @@ performSVD = true;
 % Flag to perform a complex decomposition, allowing spatial modes that can
 % rotate over time. Otherwise, real decomposition will be used (default
 % false)
-useComplexSVD = false;
+useComplexSVD = true;
 % Number of modes to plot (default 6)
 nSVDmodes = 6;
 
@@ -101,7 +101,7 @@ maxDisplacement = 1;
 % Minimum spatial radius for a critical point to occupy for it to be
 % counted, quantified by the winding number (measured in grid spaces,
 % default 2)
-minCritRadius = 2;
+minCritRadius = 1;
 % Minimum distance from the edge of the system (in grid spaces, default 2)
 minEdgeDistance = 2;
 % Boolean paramter to combine node and focus type critical points (default
