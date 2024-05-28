@@ -83,7 +83,7 @@ for bc, word1 in enumerate(dataPath):
     else:
         print(str(word1)+' is Missed')
 
-df = pd.DataFrame(columns=['DataID','EnergyPerPulse','ISI','NPulses','estCSD'])
+df = pd.DataFrame(columns=['DataID','EnergyPerPulse','ISI','NPulses','estCSD','xarray','yarray'])
 eng = matlab.engine.start_matlab()          #Use the matlab backend for Info theory and Chaos calcs
 SOS10 = sio.loadmat('SOSHighPass.mat')
 SOS10 = np.ascontiguousarray(SOS10['SOS'])
@@ -133,9 +133,10 @@ for ck, word in enumerate(dataPath):
                     curE = electrodeConfig[bc,ck]
                     LFPArray[curE] = mLFP[bc,ck,:]
             
-            k = KCSD2D(ele_pos, LFPArray, h=1, sigma=1,xmin=0.0, xmax=2.0,ymin=0.0, ymax=0.375, ext_x=0.5,ext_y=0.5,n_src_init=1000, src_type='gauss', R_init=1.)
+            k = KCSD2D(ele_pos, LFPArray, h=1, sigma=1,xmin=0.0, xmax=1.75,ymin=0.0, ymax=0.375, ext_x=0.5,ext_y=0.5,n_src_init=1000, src_type='gauss', R_init=1.)
+            k.cross_validate(Rs=np.linspace(0.01, 0.15, 15))
             est_csd = k.values('CSD')
-            df.loc[-1] = [word,float(energy),ISI,NPul,est_csd]
+            df.loc[-1] = [word,float(energy),ISI,NPul,est_csd,k.estm_x,k.estm_y]
             df.index = df.index + 1  # shifting index
             df = df.sort_index()  # sorting by index
     except Exception as error:
