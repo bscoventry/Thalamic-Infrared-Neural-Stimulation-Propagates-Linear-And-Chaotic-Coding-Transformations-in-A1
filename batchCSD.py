@@ -152,4 +152,7 @@ for ck, word in enumerate(dataPath):
         del df
         df = pd.DataFrame(columns=['DataID','EnergyPerPulse','ISI','NPulses','estCSD','xarray','yarray'])
 #df.to_pickle('LFPCSD.pkl')
+counter = counter+1
+savePW = saveKW+str(counter)+'.pkl'
+df.to_pickle(precurser+savePW)
 pdb.set_trace()
