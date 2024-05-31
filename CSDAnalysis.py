@@ -3,6 +3,7 @@
 # Date: 05/28/29                       Lovely, cloudy, London-like day in wisco
 # Revision Hist: See github
 # Purpose: Batch analysis of CSD data.
+# Ref for Brandon: https://github.com/fmi-faim/napari-psf-analysis/blob/3c56c6aa8d22d586a045ac0698d759f2bfbba5dc/scratchpad/PSF%20Fitting.ipynb
 #-------------------------------------------------------------------------------------------------------
 import numpy as np
 import scipy.io as sio
