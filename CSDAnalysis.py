@@ -58,9 +58,9 @@ def parsePW(data):
         else:
             print(data + ' Error')
         return val
-# df1 = pd.read_pickle('LFPCSD0.pkl')
-# df2 = pd.read_pickle('LFPCSD1.pkl')
-# df3 = pd.read_pickle('LFPCSD3.pkl')
+# df1 = pd.read_pickle('Z://PhDData//INS//LFPCSD0.pkl')
+# df2 = pd.read_pickle('Z://PhDData//INS//LFPCSD1.pkl')
+# df3 = pd.read_pickle('Z://PhDData//INS//LFPCSD3.pkl')
 # df4 = df1.append(df2, ignore_index=True)
 # df = df4.append(df3, ignore_index=True)
 df = pd.read_pickle('testCSD.pkl')
@@ -70,9 +70,18 @@ EPP = df['EnergyPerPulse']
 uniqueEnergy = np.unique(EPP)
 ISI = df['ISI']
 xarray = df['xarray']
+deltaX = xarray[0][1]-xarray[0][0]
+deltaX = deltaX[0]
+deltaY = 0.00375
+xLocs = [0,14,29,43,57,71,86,100]           #np.where(np.abs(xarraylin-1.75)==np.min(np.abs(xarraylin-1.75))), xarraylin=np.arange(0,1.75+0.0175,0.0175)
+xHalf = int(np.floor(0.125/deltaX))         #1 sided half distance between X electrode locations
+yLocs = [0,100]
+yHalf = int(np.floor(0.1875/0.00375))
 yarray = df['yarray']
 maxSink = {}
 maxSource = {}
+elecX = np.array((0,0.25,0.5,0.75,1,1.25,1.5,1.75))
+elecY = np.array((0,0.375))
 for jk in range(len(uniqueEnergy)):
     maxSink[str(uniqueEnergy[jk])] = []
     maxSource[str(uniqueEnergy[jk])] = []
@@ -104,6 +113,7 @@ for ck in range(numrows):
     xSource = xSource[0]
     ySource = ySource[0]
     tSource = tSource[0]
+
 plt.figure()
 plt.boxplot(maxSink,vert=False)
 plt.boxplot(maxSource,vert=False)
