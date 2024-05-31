@@ -104,4 +104,7 @@ for ck in range(numrows):
     xSource = xSource[0]
     ySource = ySource[0]
     tSource = tSource[0]
+plt.figure()
+plt.boxplot(maxSink,vert=False)
+plt.boxplot(maxSource,vert=False)
     
