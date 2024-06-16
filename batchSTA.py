@@ -16,6 +16,7 @@ from scipy.io import loadmat
 from datetime import datetime, date, time
 from scipy.signal import sosfiltfilt
 import mat73
+import quantities as pq
 #Include any defs here
 def convert2SpikeTime(spikeArray):
     [nTrials,ncols] = np.shape(spikeArray)
@@ -146,7 +147,7 @@ for ck in range(nRows):
 fs = 1526
 uniqueVals = readINSLaserVoltages()
 pdb.set_trace()
-
+df = pd.DataFrame(columns=['DataID', 'Electrode', 'EnergyPerPulse','ISI','NPulses','NeuronNumber','STA','SFC','SFC_Freqs','STP'])
 for ck, word in enumerate(dataPath):
     stores = None             #Load all stores
     streamStore = 'streams'
@@ -195,7 +196,22 @@ for ck, word in enumerate(dataPath):
                 signal = neo.AnalogSignal(curLFP, units='uV',sampling_rate=fs)
                 stavg = spike_triggered_average(signal, spikeTimes,(-5 * ms, 10 * ms))
                 #To do, SpikeField Coherence, convert each train into a spikeTrain object using neo.SpikeTrain(spiketimes,t_stop=1)
-                phases, amps, times = elephant.phase_analysis.spike_triggered_phase(elephant.signal_processing.hilbert(analogsignal),spikeTimes,interpolate=True)
+                spikeTimesList = []
+                for jkt in range(nTrials):
+                    curSpikeTrial = neo.SpikeTrain(spikeTimes[jkt,:]*pq.s,t_stop=1)
+                    spikeTimesList.append(curSpikeTrial)
+                phases, amps, times = elephant.phase_analysis.spike_triggered_phase(elephant.signal_processing.hilbert(analogsignal),curSpikeTrial,interpolate=True)
+                freqVec = []
+                sfcVec = []
+                for tk in range(nTrials):
+                    curcurLFP = neo.AnalogSignal(curLFP[tk,:],units='uV',sampling_rate=fs)
+                    curcurSpikes = spikeTimes[tk,:]
+                    sfc, freqs = elephant.sta.spike_field_coherence(signal, spiketrain, window='boxcar')
+                    sfcVec.append(sfc)
+                    freqVec.append(freqs)
+                df.loc[-1] = [word,aElectrode[ck],energy,ISIs[ck],NPulse[ck],neuron,stavg,sfcVec,freqVec,phases]
+                df.index = df.index + 1  # shifting index
+                df = df.sort_index()  # sorting by index
     except:
         pdb.set_trace()
 pdb.set_trace()
