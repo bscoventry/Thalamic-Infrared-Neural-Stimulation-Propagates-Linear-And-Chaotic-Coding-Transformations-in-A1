@@ -30,6 +30,31 @@ def convert2SpikeTime(spikeArray):
         spikeTimes.append(curSpikeTimes)
     return spikeTimes
 
+def readINSLaserVoltages():
+        curVales = loadmat('INSvoltagevals.mat')
+        curVales = curVales['stimpeaks']
+        [rows,cols] = np.shape(curVales)
+        voltageVals = np.zeros((rows,))
+        for ck in range(rows):
+
+            voltageVals[ck] = curVales[ck][0]
+        #self.voltageVals = voltageVals
+        uniqueVals = np.unique(voltageVals)
+        #Get energy per pulse
+        #self.energyPerPulse = (self.power*0.001)*(self.PW*0.001)*1000
+
+        numUnique = len(uniqueVals)
+        uniqueWhere = {}
+        for bc in range(numUnique):
+            curUniq = uniqueVals[bc]
+            #curEnergy = self.energyPerPulse[bc]
+            uniWhere = np.argwhere(curUniq==voltageVals)
+            numT = len(uniWhere)
+            indArray = []
+            for jvk in range(numT):
+                indArray.append(uniWhere[jvk][0])
+            uniqueWhere[str(bc)] = indArray
+        return uniqueWhere
 dfSpikes = pd.read_csv('INS_statTable_STA.csv')#'C:\CodeRepos\SpikeAnalysis\INS_statTable_STA.csv')
 [nRows,nCols] = np.shape(dfSpikes)
 precurser = 'Z://PhDData//INSData//'
@@ -112,13 +137,14 @@ for ck in range(nRows):
     elif curISI == 0.0:
         curISI = '0'
     
-    aElectrode[ck] = dfSpikes.Electrode_Number[ck]
+    aElectrode[ck] = dfSpikes.Electrode_Number[ck]-1    #-1 to account for python numbering
     curDataPath = curName+'//'+curDate+'//INS_'+curNPulse+'PU_'+curPW+'PW_'+curISI+'ISI'
     dataPath.append(curDataPath)
     NPulse[ck] = float(curNPulse)
     PWs[ck] = float(curPW)
     ISIs[ck] = float(curISI)
 fs = 1526
+uniqueVals = readINSLaserVoltages()
 pdb.set_trace()
 
 for ck, word in enumerate(dataPath):
@@ -157,10 +183,19 @@ for ck, word in enumerate(dataPath):
         spikeRaster = spikeRaster1+spikeRaster2 #Is now (16,) in size.
         #for electrode in sortedLFPs.keys():
         curLFPset = sortedLFPs[aElectrode[ck]]
-            for energy in curLFPset.keys():
+        curSpikeRaster = spikeRaster[aElectrode[ck]]
+        [nNeurons,nTrials,nTS] = np.shape(curSpikeRaster)
+        for neuron in range(nNeurons):
+            curRaster = curSpikeRaster[neuron,:,:]
+            for pk,energy in enumerate(curLFPset.keys()):
+                curSpikes = curRaster(uniqueVals[str(pk)])
+                spikeTimes = convert2SpikeTime(curSpikes)
                 curLFP = curLFPset[energy]
                 curLFP = sosfiltfilt(SOS10,curLFP)
-                signal = neo.AnalogSignal(curLFP, units='uV',sampling_rate=fs) 
+                signal = neo.AnalogSignal(curLFP, units='uV',sampling_rate=fs)
+                stavg = spike_triggered_average(signal, spikeTimes,(-5 * ms, 10 * ms))
+                #To do, SpikeField Coherence, convert each train into a spikeTrain object using neo.SpikeTrain(spiketimes,t_stop=1)
+                phases, amps, times = elephant.phase_analysis.spike_triggered_phase(elephant.signal_processing.hilbert(analogsignal),spikeTimes,interpolate=True)
     except:
         pdb.set_trace()
 pdb.set_trace()
