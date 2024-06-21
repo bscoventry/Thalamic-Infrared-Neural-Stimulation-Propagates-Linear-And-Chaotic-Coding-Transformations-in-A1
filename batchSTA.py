@@ -17,6 +17,7 @@ from datetime import datetime, date, time
 from scipy.signal import sosfiltfilt
 import mat73
 import quantities as pq
+import neo
 #Include any defs here
 def convert2SpikeTime(spikeArray):
     [nTrials,ncols] = np.shape(spikeArray)
@@ -26,8 +27,9 @@ def convert2SpikeTime(spikeArray):
 
         #Only 1 spike per bin
         spikeLocs=np.where(curTrial>0)
+        spikeLocs = spikeLocs[0]
         #convert from samples to time
-        curSpikeTimes = float(spikeLocs)/24415.0
+        curSpikeTimes = spikeLocs/24415.0
         spikeTimes.append(curSpikeTimes)
     return spikeTimes
 
@@ -35,6 +37,7 @@ def readINSLaserVoltages():
         curVales = loadmat('INSvoltagevals.mat')
         curVales = curVales['stimpeaks']
         [rows,cols] = np.shape(curVales)
+        rows = rows-1
         voltageVals = np.zeros((rows,))
         for ck in range(rows):
 
@@ -146,7 +149,7 @@ for ck in range(nRows):
     ISIs[ck] = float(curISI)
 fs = 1526
 uniqueVals = readINSLaserVoltages()
-pdb.set_trace()
+
 df = pd.DataFrame(columns=['DataID', 'Electrode', 'EnergyPerPulse','ISI','NPulses','NeuronNumber','STA','SFC','SFC_Freqs','STP'])
 for ck, word in enumerate(dataPath):
     stores = None             #Load all stores
@@ -183,18 +186,20 @@ for ck, word in enumerate(dataPath):
         spikeRaster2 = spikeRaster2['spikeSortRaster2']
         spikeRaster = spikeRaster1+spikeRaster2 #Is now (16,) in size.
         #for electrode in sortedLFPs.keys():
-        curLFPset = sortedLFPs[aElectrode[ck]]
+        curLFPset = sortedLFPs[str(aElectrode[ck])]
         curSpikeRaster = spikeRaster[aElectrode[ck]]
         [nNeurons,nTrials,nTS] = np.shape(curSpikeRaster)
         for neuron in range(nNeurons):
-            curRaster = curSpikeRaster[neuron,:,:]
+            curRaster = curSpikeRaster[neuron]
             for pk,energy in enumerate(curLFPset.keys()):
                 curSpikes = curRaster(uniqueVals[str(pk)])
                 spikeTimes = convert2SpikeTime(curSpikes)
                 curLFP = curLFPset[energy]
+                if pk == 0:
+                    curLFP = curLFP[0:57,:]
                 curLFP = sosfiltfilt(SOS10,curLFP)
-                signal = neo.AnalogSignal(curLFP, units='uV',sampling_rate=fs)
-                stavg = spike_triggered_average(signal, spikeTimes,(-5 * ms, 10 * ms))
+                signal = neo.AnalogSignal(curLFP, units='uV',sampling_rate=fs*pq.hz)
+                stavg = spike_triggered_average(signal, spikeTimes,(-5 * pq.ms, 10 * pq.ms))
                 #To do, SpikeField Coherence, convert each train into a spikeTrain object using neo.SpikeTrain(spiketimes,t_stop=1)
                 spikeTimesList = []
                 for jkt in range(nTrials):
