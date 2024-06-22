@@ -29,8 +29,17 @@ def convert2SpikeTime(spikeArray):
         #convert from samples to time
         spikeLocs = spikeLocs[0]
         curSpikeTimes = spikeLocs/24415.0
-        spikeTimes.append(curSpikeTimes)
+        curSPK = neo.SpikeTrain(curSpikeTimes,t_stop = 1,units=pq.s)
+        spikeTimes.append(curSPK)
     return spikeTimes
+
+def convert2AnalogArray(curLFP):
+    [nTrials,nTS] = np.shape(curLFP)
+    analogArray = []
+    for nt in range(nTrials):
+        curAnalog = neo.AnalogSignal(curLFP[nt,:], units='uV',sampling_rate=fs*pq.Hz)
+        analogArray.append(curAnalog)
+    return analogArray
 
 def readINSLaserVoltages():
         curVales = loadmat('INSvoltagevals.mat')
@@ -95,7 +104,7 @@ for neuron in range(nNeurons):
     curRaster = curSpikeRaster[neuron]
     for pk,energy in enumerate(testKeys):
 
-        curSpikes = curRaster[uniqueVals[str(pk)],:]
+        curSpikes = curRaster[uniqueVals[str(11)],:]
         spikeTimes = convert2SpikeTime(curSpikes)
 
         curLFP = curLFPset[energy]
@@ -106,6 +115,15 @@ for neuron in range(nNeurons):
         [lfpRows,lfpcols] = np.shape(curLFP)
 
         signal = neo.AnalogSignal(curLFP.T, units='uV',sampling_rate=fs*pq.Hz)
+        #spkTimes = neo.SpikeTrain(spikeTimes,t_stop = 1,units=pq.s)
         stavg = elephant.sta.spike_triggered_average(signal, spikeTimes,(-5 * pq.ms, 10 * pq.ms))
+        phaseList = []
+
+        for jkt in range(nTrials):
+            curSpikeTrial = spikeTimes[jkt]
+            #curcurLFP = signal.T
+            curLFP = neo.AnalogSignal(signal[:,jkt],units='uV',sampling_rate=fs*pq.Hz)
+            phases, amps, times = elephant.phase_analysis.spike_triggered_phase(elephant.signal_processing.hilbert(curLFP),curSpikeTrial,interpolate=True)
+            sfc, freqs = elephant.sta.spike_field_coherence(curLFP, curSpikeTrial, window='boxcar')
         #To do, SpikeField Coherence, convert each train into a spikeTrain object using neo.SpikeTrain(spiketimes,t_stop=1)
         spikeTimesList = []
