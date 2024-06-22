@@ -4,7 +4,7 @@
 # Purpose: Batch LFP spike triggered average
 # Revision History: See Github
 #--------------------------------------------------------------------------------------------------------------------------------
-import elephant as neo
+import elephant
 import tdt              #For reading in tdt files
 import matplotlib.pyplot as plt
 import dask
@@ -177,7 +177,7 @@ for ck, word in enumerate(dataPath):
     try:
         SpikeClass = Spike_Processed(precurser+word,NPul,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
         LFPs = SpikeClass.LFP
-
+        
         epocedLFPs = SpikeClass.epocTrials(LFPs)
         sortedLFPs = SpikeClass.sortByStimCondition(epocedLFPs)
         #Now that we have LFPs, load in Spikes
@@ -188,20 +188,21 @@ for ck, word in enumerate(dataPath):
         spikeRaster2 = spikeRaster2['spikeSortRaster2']
         spikeRaster = spikeRaster1+spikeRaster2 #Is now (16,) in size.
         #for electrode in sortedLFPs.keys():
-        curLFPset = sortedLFPs[str(aElectrode[ck])]
-        curSpikeRaster = spikeRaster[aElectrode[ck]]
+        curLFPset = sortedLFPs[str(int(aElectrode[ck]))]
+        curSpikeRaster = spikeRaster[int(aElectrode[ck])]
         [nNeurons,nTrials,nTS] = np.shape(curSpikeRaster)
         for neuron in range(nNeurons):
             curRaster = curSpikeRaster[neuron]
             for pk,energy in enumerate(curLFPset.keys()):
-                curSpikes = curRaster(uniqueVals[str(pk)])
+                
+                curSpikes = curRaster[uniqueVals[str(pk)],:]
                 spikeTimes = convert2SpikeTime(curSpikes)
                 curLFP = curLFPset[energy]
                 if pk == 0:
                     curLFP = curLFP[0:57,:]
                 curLFP = sosfiltfilt(SOS10,curLFP)
-                signal = neo.AnalogSignal(curLFP, units='uV',sampling_rate=fs*pq.hz)
-                stavg = spike_triggered_average(signal, spikeTimes,(-5 * pq.ms, 10 * pq.ms))
+                signal = neo.AnalogSignal(curLFP.T, units='uV',sampling_rate=fs*pq.Hz)
+                stavg = elephant.sta.spike_triggered_average(signal, spikeTimes,(-5 * pq.ms, 10 * pq.ms))
                 #To do, SpikeField Coherence, convert each train into a spikeTrain object using neo.SpikeTrain(spiketimes,t_stop=1)
                 spikeTimesList = []
                 freqVec = []
@@ -217,9 +218,11 @@ for ck, word in enumerate(dataPath):
                     sfcVec.append(sfc)
                     freqVec.append(freqs)
                     phaseList.append(phases)
+                pdb.set_trace()
                 df.loc[-1] = [word,aElectrode[ck],energy,ISIs[ck],NPulse[ck],neuron,stavg,sfcVec,freqVec,phaseList,spikeTimes]
                 df.index = df.index + 1  # shifting index
                 df = df.sort_index()  # sorting by index
     except:
-        pdb.set_trace()
+        print('Problem with '+word)
+df.to_pickle('STA.pkl')
 pdb.set_trace()
