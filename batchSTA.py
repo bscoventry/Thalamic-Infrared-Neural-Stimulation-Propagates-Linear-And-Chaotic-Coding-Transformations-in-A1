@@ -196,6 +196,7 @@ for ck, word in enumerate(dataPath):
             for pk,energy in enumerate(curLFPset.keys()):
                 
                 curSpikes = curRaster[uniqueVals[str(pk)],:]
+                [numIter,dnc] = np.shape(curSpikes)
                 spikeTimes = convert2SpikeTime(curSpikes)
                 curLFP = curLFPset[energy]
                 if pk == 0:
@@ -208,17 +209,22 @@ for ck, word in enumerate(dataPath):
                 freqVec = []
                 sfcVec = []
                 phaseList = []
-
-                for jkt in range(nTrials):
-                    curSpikeTrial = spikeTimes[jkt]
-                    #curcurLFP = signal.T
-                    curLFP = neo.AnalogSignal(signal[:,jkt],units='uV',sampling_rate=fs*pq.Hz)
-                    phases, amps, times = elephant.phase_analysis.spike_triggered_phase(elephant.signal_processing.hilbert(curLFP),curSpikeTrial,interpolate=True)
-                    sfc, freqs = elephant.sta.spike_field_coherence(curLFP, curSpikeTrial, window='boxcar')
-                    sfcVec.append(sfc)
-                    freqVec.append(freqs)
-                    phaseList.append(phases)
-                pdb.set_trace()
+                
+                for jkt in range(numIter):
+                    try:
+                        curSpikeTrial = spikeTimes[jkt]
+                        testShape = np.shape(curSpikeTrial)
+                        if testShape[0] != 0:
+                            #curcurLFP = signal.T
+                            curLFP = neo.AnalogSignal(signal[:,jkt],units='uV',sampling_rate=fs*pq.Hz)
+                            phases, amps, times = elephant.phase_analysis.spike_triggered_phase(elephant.signal_processing.hilbert(curLFP),curSpikeTrial,interpolate=True)
+                            sfc, freqs = elephant.sta.spike_field_coherence(curLFP, curSpikeTrial, window='boxcar')
+                            sfcVec.append(sfc)
+                            freqVec.append(freqs)
+                            phaseList.append(phases)
+                    except:
+                        print('error!')
+                        pdb.set_trace()
                 df.loc[-1] = [word,aElectrode[ck],energy,ISIs[ck],NPulse[ck],neuron,stavg,sfcVec,freqVec,phaseList,spikeTimes]
                 df.index = df.index + 1  # shifting index
                 df = df.sort_index()  # sorting by index
