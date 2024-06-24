@@ -59,12 +59,15 @@ def parsePW(data):
         else:
             print(data + ' Error')
         return val
-df1 = pd.read_pickle('Z://PhDData//INSdata//LFPCSD0.pkl')
-df2 = pd.read_pickle('Z://PhDData//INSdata//LFPCSD1.pkl')
-df3 = pd.read_pickle('Z://PhDData//INSdata//LFPCSD3.pkl')
-frames = [df1, df2, df3]
-df = pd.concat(frames, ignore_index=True)
-#df = pd.read_pickle('testCSD.pkl')
+# df1 = pd.read_pickle('Z://PhDData//INS//LFPCSD0.pkl')
+# df2 = pd.read_pickle('Z://PhDData//INS//LFPCSD1.pkl')
+# df3 = pd.read_pickle('Z://PhDData//INS//LFPCSD3.pkl')
+# df4 = df1.append(df2, ignore_index=True)
+# df = df4.append(df3, ignore_index=True)
+
+df = df[~df['DataID']=='INS2008']         #Exclude because he recieved Michigan probe
+
+df = pd.read_pickle('testCSD.pkl')
 [numrows,numcols] = np.shape(df)
 #numrows = 1
 EPP = df['EnergyPerPulse']
@@ -105,7 +108,7 @@ for ck in range(numrows):
     curEPP = str(EPP[ck])
     maxSink[curEPP].append(maxCurrentSink)
     maxSource[curEPP].append(maxCurrentSource)
-    
+    pdb.set_trace()
     [xSink,ySink,tSink] = np.where(curCSD==maxCurrentSink)
     [xSource,ySource,tSource] = np.where(curCSD==maxCurrentSource)
     xSink = xSink[0]
@@ -118,4 +121,4 @@ for ck in range(numrows):
 plt.figure()
 plt.boxplot(maxSink,vert=False)
 plt.boxplot(maxSource,vert=False)
-pdb.set_trace()
+    
