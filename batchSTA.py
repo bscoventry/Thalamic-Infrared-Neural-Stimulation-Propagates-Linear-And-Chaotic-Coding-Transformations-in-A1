@@ -118,7 +118,7 @@ for ck in range(nRows):
         curPW = '0_8'
     elif curPW == 0.9:
         curPW = '0_9'
-    
+
     curISI = dfSpikes.ISI[ck]
     if curISI >= 1:
         curISI = str(round(curISI))
@@ -142,7 +142,7 @@ for ck in range(nRows):
         curISI = '0_9'
     elif curISI == 0.0:
         curISI = '0'
-    
+
     aElectrode[ck] = dfSpikes.Electrode_Number[ck]-1    #-1 to account for python numbering
     curDataPath = curName+'//'+curDate+'//INS_'+curNPulse+'PU_'+curPW+'PW_'+curISI+'ISI'
     dataPath.append(curDataPath)
@@ -153,6 +153,7 @@ fs = 1526
 uniqueVals = readINSLaserVoltages()
 
 df = pd.DataFrame(columns=['DataID', 'Electrode', 'EnergyPerPulse','ISI','NPulses','NeuronNumber','STA','SFC','SFC_Freqs','STP','spkTimes'])
+curWord = 'start'
 for ck, word in enumerate(dataPath):
     stores = None             #Load all stores
     streamStore = 'streams'
@@ -175,26 +176,28 @@ for ck, word in enumerate(dataPath):
     elif AClass[ck] == 4:
         power = np.array((-1.1,62.1,77.42,87.4,101.2,115.9,130,184.34,257.3,308.8,360.7,374.4))
     try:
-        SpikeClass = Spike_Processed(precurser+word,NPul,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
-        LFPs = SpikeClass.LFP
-        
-        epocedLFPs = SpikeClass.epocTrials(LFPs)
-        sortedLFPs = SpikeClass.sortByStimCondition(epocedLFPs)
-        #Now that we have LFPs, load in Spikes
-        spikeRaster1 = mat73.loadmat(precurser+word+'//spikeSortRaster1.mat')
-        spikeRaster1 = spikeRaster1['spikeSortRaster1']
-        #Shape of each is (8,). Inside this is the shape (n_neurons,n_trials,n_timesteps)
-        spikeRaster2 = mat73.loadmat(precurser+word+'//spikeSortRaster2.mat')
-        spikeRaster2 = spikeRaster2['spikeSortRaster2']
-        spikeRaster = spikeRaster1+spikeRaster2 #Is now (16,) in size.
-        #for electrode in sortedLFPs.keys():
+        if word!=curWord:
+            SpikeClass = Spike_Processed(precurser+word,NPul,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+            LFPs = SpikeClass.LFP
+
+            epocedLFPs = SpikeClass.epocTrials(LFPs)
+            sortedLFPs = SpikeClass.sortByStimCondition(epocedLFPs)
+            #Now that we have LFPs, load in Spikes
+            spikeRaster1 = mat73.loadmat(precurser+word+'//spikeSortRaster1.mat')
+            spikeRaster1 = spikeRaster1['spikeSortRaster1']
+            #Shape of each is (8,). Inside this is the shape (n_neurons,n_trials,n_timesteps)
+            spikeRaster2 = mat73.loadmat(precurser+word+'//spikeSortRaster2.mat')
+            spikeRaster2 = spikeRaster2['spikeSortRaster2']
+            spikeRaster = spikeRaster1+spikeRaster2 #Is now (16,) in size.
+            #for electrode in sortedLFPs.keys():
+            curWord = word
         curLFPset = sortedLFPs[str(int(aElectrode[ck]))]
         curSpikeRaster = spikeRaster[int(aElectrode[ck])]
         [nNeurons,nTrials,nTS] = np.shape(curSpikeRaster)
         for neuron in range(nNeurons):
             curRaster = curSpikeRaster[neuron]
             for pk,energy in enumerate(curLFPset.keys()):
-                
+
                 curSpikes = curRaster[uniqueVals[str(pk)],:]
                 [numIter,dnc] = np.shape(curSpikes)
                 spikeTimes = convert2SpikeTime(curSpikes)
@@ -209,7 +212,7 @@ for ck, word in enumerate(dataPath):
                 freqVec = []
                 sfcVec = []
                 phaseList = []
-                
+
                 for jkt in range(numIter):
                     try:
                         curSpikeTrial = spikeTimes[jkt]
