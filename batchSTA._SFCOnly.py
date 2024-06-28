@@ -152,7 +152,7 @@ for ck in range(nRows):
 fs = 1526
 uniqueVals = readINSLaserVoltages()
 
-df = pd.DataFrame(columns=['DataID', 'Electrode', 'EnergyPerPulse','ISI','NPulses','NeuronNumber','STP','spkTimes'])
+df = pd.DataFrame(columns=['DataID', 'Electrode', 'EnergyPerPulse','ISI','NPulses','NeuronNumber','SFC','SFC_Freqs','spkTimes'])
 curWord = 'start'
 for ck, word in enumerate(dataPath):
     stores = None             #Load all stores
@@ -220,18 +220,18 @@ for ck, word in enumerate(dataPath):
                         if testShape[0] != 0:
                             #curcurLFP = signal.T
                             curLFP = neo.AnalogSignal(signal[:,jkt],units='uV',sampling_rate=fs*pq.Hz)
-                            phases, amps, times = elephant.phase_analysis.spike_triggered_phase(elephant.signal_processing.hilbert(curLFP),curSpikeTrial,interpolate=True)
-                            #sfc, freqs = elephant.sta.spike_field_coherence(curLFP, curSpikeTrial, window='boxcar')
-                            #sfcVec.append(sfc)
-                            #freqVec.append(freqs)
-                            phaseList.append(phases)
+                            #phases, amps, times = elephant.phase_analysis.spike_triggered_phase(elephant.signal_processing.hilbert(curLFP),curSpikeTrial,interpolate=True)
+                            sfc, freqs = elephant.sta.spike_field_coherence(curLFP, curSpikeTrial, window='boxcar')
+                            sfcVec.append(sfc)
+                            freqVec.append(freqs)
+                            #phaseList.append(phases)
                     except:
                         print('error!')
                         pdb.set_trace()
-                df.loc[-1] = [word,aElectrode[ck],energy,ISIs[ck],NPulse[ck],neuron,phaseList,spikeTimes]
+                df.loc[-1] = [word,aElectrode[ck],energy,ISIs[ck],NPulse[ck],neuron,sfcVec,freqVec,spikeTimes]
                 df.index = df.index + 1  # shifting index
                 df = df.sort_index()  # sorting by index
     except:
         print('Problem with '+word)
-df.to_pickle('STP.pkl')
+df.to_pickle('SFC.pkl')
 pdb.set_trace()
