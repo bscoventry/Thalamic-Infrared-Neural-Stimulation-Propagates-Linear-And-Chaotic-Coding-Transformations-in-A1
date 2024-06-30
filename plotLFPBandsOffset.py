@@ -13,17 +13,17 @@ lISI = np.log(ISI+0.015)
 
 ener = np.linspace(-7,1.5,num=1000)
 iList = np.linspace(-2.2,4.6,num=1000)
-betaBSlope = -0.13
-betaBInter = -0.22
-betaBISI = -0.033
-betaBInteraction = -0.0079
+betaBSlope = -0.14
+betaBInter = -0.23
+betaBISI = -0.03
+betaBInteraction = -0.0074
 betaBError = 1.4
 
-betaBSlopeCI = [0.091,0.25]
-betaBInterCI = [0.37, 0.8]
-betaBISICI = [-0.08,0.015]
-betaBInteractionCI = [-0.024,-0.0059] 
-betaBErrorCI = [0.8,1]
+betaBSlopeCI = [-0.25,-0.033]
+betaBInterCI = [-0.51, 0.036]
+betaBISICI = [-0.092,0.034]
+betaBInteractionCI = [-0.02,0.01] 
+betaBErrorCI = [1.2,1.5]
 
 MAP = betaBInter + (ener*betaBSlope) + (iList*betaBISI) + (ener*iList*betaBInteraction) + betaBError
 MAPCI_L = betaBInterCI[0] + (ener*betaBSlopeCI[0]) + (iList*betaBISICI[0]) + (ener*iList*betaBInteractionCI[0]) + betaBErrorCI[0]
@@ -31,8 +31,8 @@ MAPCI_H = betaBInterCI[1] + (ener*betaBSlopeCI[1]) + (iList*betaBISICI[1]) + (en
 
 plt.scatter(lepp,beta)
 plt.plot(ener,MAP,'g')
-#plt.plot(ener,MAPCI_L,'r')
-#plt.plot(ener,MAPCI_H,'r')
+plt.plot(ener,MAPCI_L,'r')
+plt.plot(ener,MAPCI_H,'r')
 plt.title('Beta Band')
 plt.show()
 
@@ -40,14 +40,14 @@ plt.show()
 betaHGSlope = -0.1
 betaHGInter = 0.66
 betaHGISI = -0.059
-betaHGInteraction = 0.003
-betaHGError = 2
+betaHGInteraction = 0.0027
+betaHGError = 2.1
 
-betaHGSlopeCI = [0.31,0.67]
-betaHGInterCI = [1.5, 2.4]
-betaHGISICI = [-0.19,0.079]
-betaHGInteractionCI = [-0.092,0.0094] 
-betaHGErrorCI = [1.4,1.7]
+betaHGSlopeCI = [-0.22,0.0041]
+betaHGInterCI = [0.35, 0.97]
+betaHGISICI = [-0.14,0.02]
+betaHGInteractionCI = [-0.018,0.028] 
+betaHGErrorCI = [1.8,2.3]
 
 MAPHG = betaHGInter + (ener*betaHGSlope) + (iList*betaHGISI) + (ener*iList*betaHGInteraction) + betaHGError
 MAPCI_LHG = betaHGInterCI[0] + (ener*betaHGSlopeCI[0]) + (iList*betaHGISICI[0]) + (ener*iList*betaHGInteractionCI[0]) + betaHGErrorCI[0]
@@ -55,22 +55,22 @@ MAPCI_HHG = betaHGInterCI[1] + (ener*betaHGSlopeCI[1]) + (iList*betaHGISICI[1]) 
 
 plt.scatter(lepp,hg)
 plt.plot(ener,MAPHG,'g')
-##plt.plot(ener,MAPCI_LHG,'r')
-#plt.plot(ener,MAPCI_HHG,'r')
+plt.plot(ener,MAPCI_LHG,'r')
+plt.plot(ener,MAPCI_HHG,'r')
 plt.title('High Gamma Band')
 plt.show()
 
 betaLGSlope = -0.24
-betaLGInter = -0.1
+betaLGInter = -0.078
 betaLGISI = -0.037
 betaLGInteraction = 0.0034
 betaLGError = 2.1
 
-betaLGSlopeCI = [0.21,0.47]
-betaLGInterCI = [0.73, 1.4]
-betaLGISICI = [-0.061,0.093]
-betaLGInteractionCI = [-0.019,0.014] 
-betaLGErrorCI = [1.3,1.7]
+betaLGSlopeCI = [-0.39,-0.096]
+betaLGInterCI = [-0.46, 0.3]
+betaLGISICI = [-0.1,0.033]
+betaLGInteractionCI = [-0.024,0.046] 
+betaLGErrorCI = [1.9,2.3]
 
 MAPLG = betaLGInter + (ener*betaLGSlope) + (iList*betaLGISI) + (ener*iList*betaLGInteraction) + betaLGError
 MAPCI_LLG = betaLGInterCI[0] + (ener*betaLGSlopeCI[0]) + (iList*betaLGISICI[0]) + (ener*iList*betaLGInteractionCI[0]) + betaLGErrorCI[0]
@@ -78,8 +78,8 @@ MAPCI_HLG = betaLGInterCI[1] + (ener*betaLGSlopeCI[1]) + (iList*betaLGISICI[1]) 
 
 plt.scatter(lepp,hg)
 plt.plot(ener,MAPLG,'g')
-#plt.plot(ener,MAPCI_LLG,'r')
-#plt.plot(ener,MAPCI_HLG,'r')
+plt.plot(ener,MAPCI_LLG,'r')
+plt.plot(ener,MAPCI_HLG,'r')
 plt.title('Low Gamma Band')
 plt.show()
 pdb.set_trace()
