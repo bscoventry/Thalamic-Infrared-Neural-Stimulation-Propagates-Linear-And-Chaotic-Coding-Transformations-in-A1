@@ -59,19 +59,19 @@ def parsePW(data):
         else:
             print(data + ' Error')
         return val
-# df1 = pd.read_pickle('Z://PhDData//INS//LFPCSD0.pkl')
-# df2 = pd.read_pickle('Z://PhDData//INS//LFPCSD1.pkl')
-# df3 = pd.read_pickle('Z://PhDData//INS//LFPCSD3.pkl')
-# df4 = df1.append(df2, ignore_index=True)
-# df = df4.append(df3, ignore_index=True)
+df1 = pd.read_pickle('Z://PhDData//INSdata//LFPCSD0.pkl')
+df2 = pd.read_pickle('Z://PhDData//INSdata//LFPCSD1.pkl')
+df3 = pd.read_pickle('Z://PhDData//INSdata//LFPCSD3.pkl')
 
-df = df[~df['DataID']=='INS2008']         #Exclude because he recieved Michigan probe
-
-df = pd.read_pickle('testCSD.pkl')
+frames = [df1, df2, df3]
+df = pd.concat(frames, ignore_index=True)
+df = df.drop(df[df.DataID == 'INS2008'].index)       #Exclude because he recieved Michigan probe
+df.reset_index(drop=True, inplace = True)
+#df = pd.read_pickle('testCSD.pkl')
 [numrows,numcols] = np.shape(df)
 #numrows = 1
 EPP = df['EnergyPerPulse']
-uniqueEnergy = np.unique(EPP)
+uniqueEnergy = [0,0.5,1,1.5,2,2.5,3,3.5]
 ISI = df['ISI']
 xarray = df['xarray']
 deltaX = xarray[0][1]-xarray[0][0]
@@ -84,8 +84,13 @@ yHalf = int(np.floor(0.1875/0.00375))
 yarray = df['yarray']
 maxSink = {}
 maxSource = {}
+dfSink = pd.DataFrame(columns=['EnergyPerPulse','maxSink'])
+dfSource = pd.DataFrame(columns=['EnergyPerPulse','maxSource'])
 elecX = np.array((0,0.25,0.5,0.75,1,1.25,1.5,1.75))
 elecY = np.array((0,0.375))
+#sources = np.zeros((101,101,numrows))
+#sinks = np.zeros((101,101,numrows))
+dfCSD = pd.DataFrame(columns=['DataID', 'EnergyPerPulse','ISI','Sources','Sinks'])
 for jk in range(len(uniqueEnergy)):
     maxSink[str(uniqueEnergy[jk])] = []
     maxSource[str(uniqueEnergy[jk])] = []
@@ -94,21 +99,49 @@ for ck in range(numrows):
     ISI = df.ISI[ck]
     nP = df.NPulses[ck]
     stimTime = (nP*PW)+((nP-1)*ISI)
-    #Stim window + 100 ms
-    stimSamples = int(np.round(stimTime*(1526/1000))+153)
+    #Stim window + 50 ms
+    stimSamples = int(np.round(stimTime*(1526/1000))+77)
     curCSD = df['estCSD'][ck]
-    maxCurrentSinkVec = np.empty((1526,))
-    maxCurrentSourceVec = np.empty((1526,))
-    for bc in range(1526):
-        curcurCSD = curCSD[:,:,bc]
+    maxCurrentSinkVec = np.empty(stimSamples,)
+    maxCurrentSourceVec = np.empty(stimSamples,)
+    stimRangeVec = np.arange(305,305+stimSamples)
+    for bc in range(len(stimRangeVec)):
+        curcurCSD = curCSD[:,:,stimRangeVec[bc]]
         maxCurrentSinkVec[bc] = np.min(curcurCSD)
         maxCurrentSourceVec[bc] = np.max(curcurCSD)
-    maxCurrentSink = np.min(maxCurrentSinkVec[305:305+stimSamples])
-    maxCurrentSource = np.max(maxCurrentSourceVec[305:305+stimSamples])
-    curEPP = str(EPP[ck])
+    maxCurrentSink = np.min(maxCurrentSinkVec)
+    maxCurrentSource = np.max(maxCurrentSourceVec)
+    sinkWhere = np.where(maxCurrentSinkVec==maxCurrentSink)
+    sourceWhere = np.where(maxCurrentSourceVec==maxCurrentSource)
+    sinkWhere = sinkWhere[0][0]
+    sourceWhere = sourceWhere[0][0]
+    modCSD = curCSD[305:305+stimSamples]
+    sources = modCSD[:,:,sourceWhere]
+    sinks = modCSD[:,:,sinkWhere]
+    if EPP[ck] <0.5:
+        curEPP = str(uniqueEnergy[0])
+    elif 0.5<= EPP[ck] < 1: 
+        curEPP = str(uniqueEnergy[1])
+    elif 1<= EPP[ck] < 1.5: 
+        curEPP = str(uniqueEnergy[2])
+    elif 1.5<= EPP[ck] < 2: 
+        curEPP = str(uniqueEnergy[3])
+    elif 2<= EPP[ck] < 2.5: 
+        curEPP = str(uniqueEnergy[4])
+    elif 2.5<= EPP[ck] < 3: 
+        curEPP = str(uniqueEnergy[5])
+    elif 3<= EPP[ck] < 3.5: 
+        curEPP = str(uniqueEnergy[6])
+    elif EPP[ck]>=3.5: 
+        curEPP = str(uniqueEnergy[7])
     maxSink[curEPP].append(maxCurrentSink)
     maxSource[curEPP].append(maxCurrentSource)
-    pdb.set_trace()
+    dfSink.loc[-1] = [curEPP,maxCurrentSink]
+    dfSource.loc[-1] = [curEPP,maxCurrentSource]
+    dfSink.index = dfSink.index + 1  # shifting index
+    dfSink = dfSink.sort_index()  # sorting by index
+    dfSource.index = dfSource.index + 1  # shifting index
+    dfSource = dfSource.sort_index()  # sorting by index
     [xSink,ySink,tSink] = np.where(curCSD==maxCurrentSink)
     [xSource,ySource,tSource] = np.where(curCSD==maxCurrentSource)
     xSink = xSink[0]
@@ -117,8 +150,17 @@ for ck in range(numrows):
     xSource = xSource[0]
     ySource = ySource[0]
     tSource = tSource[0]
+    dfCSD.loc[-1] = [df.DataID[ck],EPP[ck],ISI,sources,sinks]
+    dfCSD.index = dfCSD.index + 1  # shifting index
+    dfCSD = dfCSD.sort_index()  # sorting by index
 
+labelsSink, dataSink = [*zip(*maxSink.items())]
+labelsSource, dataSource = [*zip(*maxSource.items())]
 plt.figure()
-plt.boxplot(maxSink,vert=False)
-plt.boxplot(maxSource,vert=False)
-    
+plt.boxplot(dataSink,vert=False)
+#plt.xticks(range(1, len(labelsSink) + 1), labelsSink)
+plt.boxplot(dataSource,vert=False)
+#plt.xticks(range(1, len(labelsSource) + 1), labelsSource)
+plt.show()
+pdb.set_trace()
+dfCSD.to_pickle('CSDTrain.pkl')
