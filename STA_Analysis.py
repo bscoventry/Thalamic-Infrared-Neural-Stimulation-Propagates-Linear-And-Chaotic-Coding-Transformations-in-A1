@@ -31,6 +31,13 @@ def addLabelsToDF(df):
 
 df = pd.read_pickle('STA.pkl')
 df = addLabelsToDF(df)
+#df = df.loc[df.NPulses==10]
+EPP = df.EnergyPerPulse.values
+EPP = [float(i) for i in EPP]
+EPP = np.array(EPP)
+EPP[EPP<=0] = 0
+lepp = np.log(EPP+0.001)
+df['lepp'] = lepp
 uniqueISIs = np.unique(df.ISI.values)
 numISIs = len(uniqueISIs)
 fig, axes = plt.subplots(2,4)
@@ -38,7 +45,8 @@ maxSTA = np.nanmax(df.STAMeanAUC.values)+0.000005
 
 for ck in range(numISIs):
     dfSamp = df.loc[df.ISI==uniqueISIs[ck]]
-    dfSamp.boxplot(column='STAMeanAUC',by='labels',ax=axes.flatten()[ck])
+    #dfSamp.boxplot(column='STAMeanAUC',by='labels',ax=axes.flatten()[ck])
+    dfSamp.plot.scatter(y='STAMeanAUC',x='lepp',ax=axes.flatten()[ck])
     axes.flatten()[ck].set_title(str(uniqueISIs[ck]))
     axes.flatten()[ck].set_ylim([0, maxSTA])
 #df.boxplot(column='STAMeanAUC',by='labels')
