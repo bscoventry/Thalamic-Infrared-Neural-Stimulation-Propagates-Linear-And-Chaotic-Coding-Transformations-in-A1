@@ -60,43 +60,43 @@ if __name__ == "__main__":
     df['hgCoh'] = hgCoh
     df['freqVec'] = freqVec
     df['lISI'] = np.log(df.ISI+0.01)
-    pdb.set_trace()
+    
     #Define knots
-    num_knots = 1
-    knot_list = [-1.4629]#[-1.8489] for LG#[-1.4629]for beta#np.quantile(df.lepp, np.linspace(0, 1, num_knots))
-    knot_list
+    #num_knots = 1
+    #knot_list = [-1.4629]#[-1.8489] for LG#[-1.4629]for beta#np.quantile(df.lepp, np.linspace(0, 1, num_knots))
+    #knot_list
     #Setup Patsy B-Matrix for Splines
-    B = dmatrix(
-        "bs(lepp, knots=knots, degree=1, include_intercept=True) - 1",
-        {"lepp": df.lepp.values, "knots": knot_list[1:-1]},
-    )
-    B
+    # B = dmatrix(
+    #     "bs(lepp, knots=knots, degree=1, include_intercept=True) - 1",
+    #     {"lepp": df.lepp.values, "knots": knot_list[1:-1]},
+    # )
+    # B
 
-    spline_df = (
-        pd.DataFrame(B)
-        .assign(lepp=df.lepp.values)
-        .melt("lepp", var_name="spline_i", value_name="value")
-    )
+    # spline_df = (
+    #     pd.DataFrame(B)
+    #     .assign(lepp=df.lepp.values)
+    #     .melt("lepp", var_name="spline_i", value_name="value")
+    # )
 
-    color = plt.cm.magma(np.linspace(0, 0.80, len(spline_df.spline_i.unique())))
+    # color = plt.cm.magma(np.linspace(0, 0.80, len(spline_df.spline_i.unique())))
 
-    fig = plt.figure()
-    for i, c in enumerate(color):
-        subset = spline_df.query(f"spline_i == {i}")
-        subset.plot("lepp", "value", c=c, ax=plt.gca(), label=i)
-    plt.legend(title="Spline Index", loc="upper center", fontsize=8, ncol=6)
+    # fig = plt.figure()
+    # for i, c in enumerate(color):
+    #     subset = spline_df.query(f"spline_i == {i}")
+    #     subset.plot("lepp", "value", c=c, ax=plt.gca(), label=i)
+    # plt.legend(title="Spline Index", loc="upper center", fontsize=8, ncol=6)
 
     #Setup regression model
-    COORDS = {"splines": np.arange(B.shape[1])}
+    #COORDS = {"splines": np.arange(B.shape[1])}
 
-    with pm.Model(coords=COORDS) as spline_model:
+    with pm.Model() as spline_model:
         a = pm.Normal("a", 0, 0.25)
-        w = pm.Normal("w", mu=0, sigma=0.5, size=B.shape[1], dims="splines")
-        mu = pm.Deterministic("mu", a + pm.math.dot(np.asarray(B, order="F"), w.T))
+        w = pm.Normal("w", mu=0, sigma=0.5,)
+        mu = pm.Deterministic("mu", a + (w*df.lepp))
         sigma = pm.Exponential("sigma", 0.5)
         #sku = pm.HalfCauchy("sku",5)
         nu = pm.HalfCauchy("nu",5)
-        D = pm.StudentT("D", mu=mu,nu=nu,sigma=sigma, observed=df.betaCoh)
+        D = pm.StudentT("D", mu=mu,nu=nu,sigma=sigma, observed=df.alphaCoh)
 
     with spline_model:
         idata = pm.sample_prior_predictive()
@@ -106,29 +106,29 @@ if __name__ == "__main__":
     
     wp = idata.posterior["w"].mean(("chain", "draw")).values
 
-    spline_df = (
-        pd.DataFrame(B * wp.T)
-        .assign(lepp=df.lepp.values)
-        .melt("lepp", var_name="spline_i", value_name="value")
-    )
+    # spline_df = (
+    #     pd.DataFrame(B * wp.T)
+    #     .assign(lepp=df.lepp.values)
+    #     .melt("lepp", var_name="spline_i", value_name="value")
+    # )
 
-    spline_df_merged = (
-        pd.DataFrame(np.dot(B, wp.T))
-        .assign(lepp=df.lepp.values)
-        .melt("lepp", var_name="spline_i", value_name="value")
-    )
+    # spline_df_merged = (
+    #     pd.DataFrame(np.dot(B, wp.T))
+    #     .assign(lepp=df.lepp.values)
+    #     .melt("lepp", var_name="spline_i", value_name="value")
+    # )
 
 
-    color = plt.cm.rainbow(np.linspace(0, 1, len(spline_df.spline_i.unique())))
-    fig = plt.figure()
-    for i, c in enumerate(color):
-        subset = spline_df.query(f"spline_i == {i}")
-        subset.plot("lepp", "value", c=c, ax=plt.gca(), label=i)
-    spline_df_merged.plot("lepp", "value", c="black", lw=2, ax=plt.gca())
-    plt.legend(title="Spline Index", loc="lower center", fontsize=8, ncol=6)
+    #color = plt.cm.rainbow(np.linspace(0, 1, len(spline_df.spline_i.unique())))
+    # fig = plt.figure()
+    # for i, c in enumerate(color):
+    #     subset = spline_df.query(f"spline_i == {i}")
+    #     subset.plot("lepp", "value", c=c, ax=plt.gca(), label=i)
+    # spline_df_merged.plot("lepp", "value", c="black", lw=2, ax=plt.gca())
+    # plt.legend(title="Spline Index", loc="lower center", fontsize=8, ncol=6)
 
-    for knot in knot_list:
-        plt.gca().axvline(knot, color="grey", alpha=0.4)
+    # for knot in knot_list:
+    #     plt.gca().axvline(knot, color="grey", alpha=0.4)
     
     def median_sd(x):
         median = np.percentile(x, 50)
@@ -151,15 +151,13 @@ if __name__ == "__main__":
 
     df.plot.scatter(
     "lepp",
-    "betaCoh",
+    "alphaCoh",
     color="cornflowerblue",
     s=10,
     title="lgCoherence data with posterior predictions",
     ylabel="Coherence",
     )
     
-    for knot in knot_list:
-        plt.gca().axvline(knot, color="grey", alpha=0.4)
 
     Band_data_post.plot("lepp", "pred_mean", ax=plt.gca(), lw=3, color="firebrick")
     plt.fill_between(
