@@ -107,44 +107,16 @@ for ck, word in enumerate(dataPath):
         sortedLFPs = SpikeClass.sortByStimCondition(epocedLFPs)
         curFreq = fundFreq
         if curFreq < 500:
-            alphaMean,alphaSD = SpikeClass.getMeanSdEr(SpikeClass.epocedAlpha)
-            betaMean,betaSD = SpikeClass.getMeanSdEr(SpikeClass.epochedBeta)
-            thetaMean,thetaSD = SpikeClass.getMeanSdEr(SpikeClass.epochedTheta)
-            lgMean,lgSD = SpikeClass.getMeanSdEr(SpikeClass.epochedLowGamma)
-            hgMean,hgSD = SpikeClass.getMeanSdEr(SpikeClass.epochedHighGamma)
-            alphaArrayM = SpikeClass.sortMeanByElectrode16(alphaMean)
-            alphaArrayS = SpikeClass.sortMeanByElectrode16(alphaSD)
-            betaArrayM = SpikeClass.sortMeanByElectrode16(betaMean)
-            betaArrayS = SpikeClass.sortMeanByElectrode16(betaSD)
-            thetaArrayM = SpikeClass.sortMeanByElectrode16(thetaMean)
-            thetaArrayS = SpikeClass.sortMeanByElectrode16(thetaSD)
-            lgArrayM = SpikeClass.sortMeanByElectrode16(lgMean)
-            lgArrayS = SpikeClass.sortMeanByElectrode16(lgSD)
-            hgArrayM = SpikeClass.sortMeanByElectrode16(hgMean)
-            hgArrayS = SpikeClass.sortMeanByElectrode16(hgSD)
-            [alphaArrayM,energy] = SpikeClass.convert2Array(alphaArrayM)
-            [alphaArrayS,energy] = SpikeClass.convert2Array(alphaArrayS)
-            [betaArrayM,energy] = SpikeClass.convert2Array(betaArrayM)
-            [betaArrayS,energy] = SpikeClass.convert2Array(betaArrayS)
-            [thetaArrayM,energy] = SpikeClass.convert2Array(thetaArrayM)
-            [thetaArrayS,energy] = SpikeClass.convert2Array(thetaArrayS)
-            [lgArrayM,energy] = SpikeClass.convert2Array(lgArrayM)
-            [lgArrayS,energy] = SpikeClass.convert2Array(lgArrayS)
-            [hgArrayM,energy] = SpikeClass.convert2Array(hgArrayM)
-            [hgArrayS,energy] = SpikeClass.convert2Array(hgArrayS)
-            [ny,nx,nt,ne] = np.shape(betaArrayM)
+            freqDev = np.abs(SpikeClass.freqs-curFreq)
+            freqWhere = np.where(np.min(freqDev))
+            curCWT = SpikeClass.sortByStimCondition(SpikeClass.epochCWT)
+            #LFPPower = np.squeeze(SpikeClass.epochCWT[:,freqWhere,:])
             
-            for ck in range(ny):
-                for bc in range(nx):
-                    for jk in range(ne):
-                        zAlpha = SpikeClass.getZ(alphaArrayM)
-                        zBeta = SpikeClass.getZ(betaArrayM)
-                        zTheta = SpikeClass.getZ(thetaArrayM)
-                        zLG = SpikeClass.getZ(lgArrayM)
-                        zHG = SpikeClass.getZ(hgArrayM)
-                        df.loc[-1] = [dataPath,str(SpikeClass.electrodeConfig[ck,bc]),str(SpikeClass.energyPerPulse[jk]),ISI,NPul,zAlpha,zBeta,zTheta,zLG,zHG]
-                        df.index = df.index + 1  # shifting index
-                        df = df.sort_index()  # sorting by index
+            for bc in range(16):
+                
+                df.loc[-1] = [dataPath,bc,str(SpikeClass.energyPerPulse[jk]),ISI,NPul,zAlpha,zBeta,zTheta,zLG,zHG]
+                df.index = df.index + 1  # shifting index
+                df = df.sort_index()  # sorting by index
         
         df.to_pickle('LFPBands.pkl')
         del SpikeClass             #Just for memory
