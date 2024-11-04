@@ -412,6 +412,8 @@ class Spike_Processed(object):
             self.totSamp = len(self.LFP[0,:])
             self.ts = np.arange(0,self.totSamp/self.fs,1/self.fs)
             #self.waveletDecomposition()
+            fundFreq = 1/float(ISI)
+            self.waveletDecompositionISI(fundFreq)
             
         self.epocs = self.data.epocs.RZ2T.onset
         self.getEpocSamp()
@@ -422,6 +424,7 @@ class Spike_Processed(object):
         # self.thetaTrials = self.epocTrials(self.theta)
         # self.lowGammaTrials = self.epocTrials(self.lowgamma)
         # self.highGammaTrials = self.epocTrials(self.highgamma)
+        self.ISITrials = self.epocTrials(self.ISILock)
         #self.epochCWT = self.epocTrials(self.wavelet)
         #pdb.set_trace()
         self.epocLFP = self.epocTrials(self.LFP)
@@ -432,6 +435,7 @@ class Spike_Processed(object):
         # self.epochedTheta = self.sortByStimCondition(self.thetaTrials)
         # self.epochedLowGamma = self.sortByStimCondition(self.lowGammaTrials)
         # self.epochedHighGamma = self.sortByStimCondition(self.highGammaTrials)
+        self.epochedISI = self.sortByStimCondition(self.ISITrials)
         #if self.GPU == True:
             #self.rawData = cp.asarray(self.raw['data'])            #Get this into a CuPy for GPU processing
         #else:
@@ -580,7 +584,7 @@ class Spike_Processed(object):
             #self.lowgamma[ck,:] = np.squeeze(2*tegral.simpson(wavelet[lowGammaWhere,:],axis=1))
             #self.highgamma[ck,:] = np.squeeze(2*tegral.simpson(wavelet[highGammaWhere,:],axis=1))
             #self.wavelet[ck,:,:] = np.abs(cwt)
-            pdb.set_trace()
+            
         self.freqs = freqs
 
     def epocTrials(self,data):

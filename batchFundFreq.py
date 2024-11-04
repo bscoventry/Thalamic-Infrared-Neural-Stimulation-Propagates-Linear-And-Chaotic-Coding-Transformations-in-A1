@@ -71,7 +71,7 @@ for bc, word1 in enumerate(dataPath):
     else:
         print(str(word1)+' is Missed')
 
-df = pd.DataFrame(columns=['DataID', 'Electrode', 'EnergyPerPulse','ISI','NPulses','zAlpha','zBeta','zTheta','zLowGamma','zHighGamma'])
+df = pd.DataFrame(columns=['DataID', 'Electrode', 'EnergyPerPulse','ISI','NPulses','fundFreq','tMFT'])
 #eng = matlab.engine.start_matlab()          #Use the matlab backend for Info theory and Chaos calcs
 for ck, word in enumerate(dataPath):
     
@@ -101,24 +101,24 @@ for ck, word in enumerate(dataPath):
         SpikeClass = Spike_Processed(precurser+word,NPul,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
 
         #Spikes = SpikeClass.Spikes
-        LFPs = SpikeClass.LFP
-
-        epocedLFPs = SpikeClass.epocTrials(LFPs)
-        sortedLFPs = SpikeClass.sortByStimCondition(epocedLFPs)
-        curFreq = fundFreq
-        if curFreq < 500:
-            freqDev = np.abs(SpikeClass.freqs-curFreq)
-            freqWhere = np.where(np.min(freqDev))
-            curCWT = SpikeClass.sortByStimCondition(SpikeClass.epochCWT)
-            #LFPPower = np.squeeze(SpikeClass.epochCWT[:,freqWhere,:])
-            
-            for bc in range(16):
-                
-                df.loc[-1] = [dataPath,bc,str(SpikeClass.energyPerPulse[jk]),ISI,NPul,zAlpha,zBeta,zTheta,zLG,zHG]
-                df.index = df.index + 1  # shifting index
-                df = df.sort_index()  # sorting by index
         
-        df.to_pickle('LFPBands.pkl')
+        ISIMean,ISISD = SpikeClass.getMeanSdEr(SpikeClass.epocedAlpha)
+        
+        ISIArrayM = SpikeClass.sortMeanByElectrode16(ISIMean)
+        ISIArrayS = SpikeClass.sortMeanByElectrode16(ISISD)
+        [ISIArrayM,energy] = SpikeClass.convert2Array(ISIArrayM)
+        [ISIArrayS,energy] = SpikeClass.convert2Array(ISIArrayS)
+        [ny,nx,nt,ne] = np.shape(ISIArrayM)
+            
+        for cmk in range(ny):
+            for bc in range(nx):
+                for jk in range(ne):
+                    
+                    df.loc[-1] = [dataPath,str(SpikeClass.electrodeConfig[cmk,bc]),str(SpikeClass.energyPerPulse[jk]),ISI,NPul,fundFreq,np.squeeze(ISIArrayM[cmk,bc,:,ne])]
+                    df.index = df.index + 1  # shifting index
+                    df = df.sort_index()  # sorting by index
+    
+        df.to_pickle('LFP_tMTF.pkl')
         del SpikeClass             #Just for memory
     except:
         print('Brandon, Check'+' '+word)
