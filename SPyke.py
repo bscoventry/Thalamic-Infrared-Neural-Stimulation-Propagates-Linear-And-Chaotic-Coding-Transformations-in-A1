@@ -20,10 +20,10 @@ from scipy.io import loadmat
 from scipy.signal import sosfiltfilt
 from scipy.signal import spectrogram
 from scipy.signal import decimate
-import fcwt         #For T-F decomposition https://github.com/fastlib/fCWT
+#import fcwt         #For T-F decomposition https://github.com/fastlib/fCWT
 import pickle as pkl
 import pandas as pd
-import PDEparams as pde
+#import PDEparams as pde
 from scipy.optimize import curve_fit
 class Spike(object):
     """
@@ -411,7 +411,7 @@ class Spike_Processed(object):
             self.fs = self.fs/16
             self.totSamp = len(self.LFP[0,:])
             self.ts = np.arange(0,self.totSamp/self.fs,1/self.fs)
-            self.waveletDecomposition()
+            #self.waveletDecomposition()
             
         self.epocs = self.data.epocs.RZ2T.onset
         self.getEpocSamp()
@@ -422,8 +422,8 @@ class Spike_Processed(object):
         # self.thetaTrials = self.epocTrials(self.theta)
         # self.lowGammaTrials = self.epocTrials(self.lowgamma)
         # self.highGammaTrials = self.epocTrials(self.highgamma)
-        self.epochCWT = self.epocTrials(self.wavelet)
-        pdb.set_trace()
+        #self.epochCWT = self.epocTrials(self.wavelet)
+        #pdb.set_trace()
         self.epocLFP = self.epocTrials(self.LFP)
         
         self.readINSLaserVoltages()
@@ -557,6 +557,29 @@ class Spike_Processed(object):
             #self.lowgamma[ck,:] = np.squeeze(2*tegral.simpson(wavelet[lowGammaWhere,:],axis=1))
             #self.highgamma[ck,:] = np.squeeze(2*tegral.simpson(wavelet[highGammaWhere,:],axis=1))
             self.wavelet[ck,:,:] = np.abs(cwt)
+            pdb.set_trace()
+        self.freqs = freqs
+    
+    def waveletDecompositionISI(self,ISI,flow=3,fhi=200,fn=500):
+        #This helper function computes the CWT using the fCWT method.
+        #This helper function computes the CWT using the fCWT method.
+        
+        import scipy.integrate as tegral
+        self.wavelet = np.zeros((self.numChannel,fn,self.totSamp))
+        self.ISILock = np.zeros((self.numChannel,self.totSamp))
+        
+        for ck in range(16):
+            freqs, cwt = fcwt.cwt(self.LFP[ck,:], int(np.floor(self.fs)), flow, fhi, fn, nthreads=self.numCores)
+            index = (np.abs(freqs - ISI)).argmin()
+            wavelet = np.square(np.abs(cwt))
+            self.ISILock[ck,:] = np.squeeze(wavelet[index,:])
+            #pdb.set_trace()
+            #self.theta[ck,:] = np.squeeze(2*tegral.simpson(wavelet[thetaWhere,:],axis=1))
+            #self.alpha[ck,:] = np.squeeze(2*tegral.simpson(wavelet[alphaWhere,:],axis=1))
+            #self.beta[ck,:] = np.squeeze(2*tegral.simpson(wavelet[betaWhere,:],axis=1))
+            #self.lowgamma[ck,:] = np.squeeze(2*tegral.simpson(wavelet[lowGammaWhere,:],axis=1))
+            #self.highgamma[ck,:] = np.squeeze(2*tegral.simpson(wavelet[highGammaWhere,:],axis=1))
+            #self.wavelet[ck,:,:] = np.abs(cwt)
             pdb.set_trace()
         self.freqs = freqs
 
@@ -999,92 +1022,3 @@ class Spike_Processed(object):
         aSDDV = np.std(mArray)
         ZScore = (data-aMean)/aSDDV
         return ZScore
-    def getZBehind(self,data):
-        mArray = data[1526-305:1526]
-        aMean = np.mean(mArray)
-        aSDDV = np.std(mArray)
-        ZScore = (data-aMean)/aSDDV
-        return ZScore
-    
-    def estimateEntropy_Continuous(R,RS,doQE=True):
-        from entropy_estimators import continuous
-        # compute the entropy using the k-nearest neighbour approach
-        # developed by Kozachenko and Leonenko (1987):
-        HR = continuous.get_h(R, k=5)
-        HRS = continuous.get_h(RS,k=5)
-        MIS = HR-HRS
-        if doQE:
-            #MI_Shuff = np.zeros((useTrials,))
-            fractions = np.array([1, .5, .5, .5, .5, .25, .25, .25, .25, .25, .25, .25, .25])
-            [nRows,nTrials] = np.shape(R)
-            [nRows,nTrialsPerS] = np.shape(RS)
-            useTrials = round(fractions*nTrials)
-            useTrialsPerS = round(fractions*nTrialsPerS)
-            partMIestimates = np.zeros((useTrials,))
-            for ck in range(useTrials):
-                #Rand perm around the rows
-                sR = HR[np.arange(len(HR))[:,None], np.random.randn(*HR.shape).argsort(axis=1)]
-                sRS = HRS[np.arange(len(HRS))[:,None], np.random.randn(*HRS.shape).argsort(axis=1)]
-                RShuff = continuous.get_h(sR,k=5)
-                RSShuff = continuous.get_h(sRS,k=5)
-                partMIestimates[ck] = RShuff-RSShuff
-            [p,S,mu] = np.polyfit(1./useTrialsPerS,partMIestimates,2)
-            MIS = np.polyval(p,0)
-        return MIS
-
-
-
-
-
-
-    
-
-                
-                    
-
-
-        
-
-
-
-
-
-
-
-            
-
-        
-
-                
-
-
-
-
-
-
-
-
-    
-
-
-
-            
-
-        
-        
-
-
-                    
-
-                
-
-
-
-
-
-
-
-
-
-        
-        
