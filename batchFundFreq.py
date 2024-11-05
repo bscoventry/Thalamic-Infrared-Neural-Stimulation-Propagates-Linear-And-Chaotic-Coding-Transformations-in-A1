@@ -112,7 +112,9 @@ for ck, word in enumerate(dataPath):
         [ISIArrayS,energy] = SpikeClass.convert2Array(ISIArrayS)
         [ny,nx,nt,ne] = np.shape(ISIArrayM)
         win = (NPul*(PW*0.001))+((NPul-1)*(ISI*0.001))
+        
         winSamp = np.round((win*1526))+15
+        winSamp = int(winSamp)
         for cmk in range(ny):
             for bc in range(nx):
                 for jk in range(ne):
