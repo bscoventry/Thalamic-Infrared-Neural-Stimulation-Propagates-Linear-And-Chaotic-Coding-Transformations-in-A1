@@ -54,7 +54,9 @@ PWs = [0.5,10,0.2,0.5,0.7,1,5,5,10,10,0.5,10,0.2,0.2,0.5,0.7,1,5,0.2,0.7,10,10,0
 ISIs = [1,5,0.1,0.2,0.5,0.5,5,100,5,100,0.2,50,0.5,1,1,0.5,1,5,0.5,0.5,50,50,1,5,1,5,1,5,1,5,5,5,5,5,5,10,100,10,100,10,100,10,100,5,5,5,100,5,100,5,20,1,1,50,50,100,5,5,1,50,1,5,10,50,5,5,
         1,5,1,5,100,100,100,100,5,10,5,10,5,10,5,10,1,1,1,1,5,50,5,5,20,5,20,5,50,5,5,5,100,1,5,1,5,50,0.3,1,1,25,50,0.25,1,1,50,50,50,1,0.2,0.5,5,50,1,0.5,0.5,0.5,1,1,1,1,1,1,0.5,
         1,5,5,10,1,5,5,25,50,5,5,50,1,1,5,5,5,5,10,25,50,5,5,5,5,5,50,5,50,50,50,50,50,50,50,1,5,1,5,10,5,10,1,1,1,5]
-ISIFreqs = 1/float(ISIs)
+
+tISI = np.array(ISIs)*0.001
+ISIFreqs = 1/np.array(tISI)
 
 AClass = np.zeros((len(PWs),))
 for bc, word1 in enumerate(dataPath):
@@ -71,7 +73,7 @@ for bc, word1 in enumerate(dataPath):
     else:
         print(str(word1)+' is Missed')
 
-df = pd.DataFrame(columns=['DataID', 'Electrode', 'EnergyPerPulse','ISI','NPulses','fundFreq','tMFT'])
+df = pd.DataFrame(columns=['DataID', 'Electrode', 'EnergyPerPulse','ISI','NPulses','PW','fundFreq','tMFT','tMTFS'])
 #eng = matlab.engine.start_matlab()          #Use the matlab backend for Info theory and Chaos calcs
 for ck, word in enumerate(dataPath):
     
@@ -102,19 +104,20 @@ for ck, word in enumerate(dataPath):
 
         #Spikes = SpikeClass.Spikes
         
-        ISIMean,ISISD = SpikeClass.getMeanSdEr(SpikeClass.epocedAlpha)
+        ISIMean,ISISD = SpikeClass.getMeanSdEr(SpikeClass.epochedISI)
         
         ISIArrayM = SpikeClass.sortMeanByElectrode16(ISIMean)
         ISIArrayS = SpikeClass.sortMeanByElectrode16(ISISD)
         [ISIArrayM,energy] = SpikeClass.convert2Array(ISIArrayM)
         [ISIArrayS,energy] = SpikeClass.convert2Array(ISIArrayS)
         [ny,nx,nt,ne] = np.shape(ISIArrayM)
-            
+        win = (NPul*(PW*0.001))+((NPul-1)*(ISI*0.001))
+        winSamp = np.round((win*1526))+15
         for cmk in range(ny):
             for bc in range(nx):
                 for jk in range(ne):
                     
-                    df.loc[-1] = [dataPath,str(SpikeClass.electrodeConfig[cmk,bc]),str(SpikeClass.energyPerPulse[jk]),ISI,NPul,fundFreq,np.squeeze(ISIArrayM[cmk,bc,:,ne])]
+                    df.loc[-1] = [dataPath,str(SpikeClass.electrodeConfig[cmk,bc]),str(SpikeClass.energyPerPulse[jk]),ISI,NPul,PW,fundFreq,np.squeeze(ISIArrayM[cmk,bc,305:305+winSamp,jk]),np.squeeze(ISIArrayS[cmk,bc,305:305+winSamp,jk])]
                     df.index = df.index + 1  # shifting index
                     df = df.sort_index()  # sorting by index
     
