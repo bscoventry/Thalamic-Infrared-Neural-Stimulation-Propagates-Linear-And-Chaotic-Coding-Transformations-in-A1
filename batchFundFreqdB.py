@@ -120,10 +120,11 @@ for ck, word in enumerate(dataPath):
                 for jk in range(ne):
                     mBaseline = np.mean(np.squeeze(ISIArrayM[cmk,bc,0:305,jk]))
                     stimWin = np.squeeze(ISIArrayM[cmk,bc,305:305+winSamp,jk])
-                    maxWhere = np.where(np.abs(stimWin)==np.max(np.abs(stimWin)))
-                    minMaxPower = stimWin[maxWhere]
-                    dbChange = 10*np.log10(minMaxPower/mBaseline)
-                    df.loc[-1] = [dataPath,str(SpikeClass.electrodeConfig[cmk,bc]),str(SpikeClass.energyPerPulse[jk]),ISI,NPul,PW,fundFreq,dbChange]
+                    dbChange = 10*np.log10(stimWin/mBaseline)
+                    maxWhere = np.where(np.abs(dbChange)==np.max(np.abs(dbChange)))
+                    minMaxPower = dbChange[maxWhere]
+                    
+                    df.loc[-1] = [dataPath,str(SpikeClass.electrodeConfig[cmk,bc]),str(SpikeClass.energyPerPulse[jk]),ISI,NPul,PW,fundFreq,minMaxPower]
                     df.index = df.index + 1  # shifting index
                     df = df.sort_index()  # sorting by index
     
