@@ -6,7 +6,8 @@ from SPyke import Spike_Processed
 import pdb
 import matlab.engine
 import pandas as pd
-impoty scipy
+import scipy
+import pdb
 precurser = 'Z://PhDData//INSData//'
 dataPath = ['INS2102//02_15_21//INS_5PU_0_5PW_1ISI','INS2102//02_15_21//INS_5PU_10PW_5ISI','INS2102//02_16_21//INS_5PU_0_2PW_0_1ISI',
             'INS2102//02_16_21//INS_5PU_0_5PW_0_2ISI','INS2102//02_16_21//INS_5PU_0_7PW_0_5ISI','INS2102//02_16_21//INS_5PU_1PW_0_5ISI','INS2102//02_16_21//INS_5PU_5PW_5ISI',
@@ -100,49 +101,49 @@ for ck, word in enumerate(dataPath):
     elif AClass[ck] == 4:
         power = np.array((-1.1,62.1,77.42,87.4,101.2,115.9,130,184.34,257.3,308.8,360.7,374.4))
     try:
-        
-        SpikeClass = Spike_Processed(precurser+word,NPul,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+        if fundFreq <= 762:
+            SpikeClass = Spike_Processed(precurser+word,NPul,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
+            pdb.set_trace()
+            #Spikes = SpikeClass.Spikes
+            epochedLFP = SpikeClass.sortByStimCondition(SpikeClass.epocLFP)
+            ISIMean,ISISD = SpikeClass.getMeanSdEr(epochedLFP)
+            
+            ISIArrayM = SpikeClass.sortMeanByElectrode16(ISIMean)
+            ISIArrayS = SpikeClass.sortMeanByElectrode16(ISISD)
+            [ISIArrayM,energy] = SpikeClass.convert2Array(ISIArrayM)
+            [ISIArrayS,energy] = SpikeClass.convert2Array(ISIArrayS)
+            [ny,nx,nt,ne] = np.shape(ISIArrayM)
+            win = (NPul*(PW*0.001))+((NPul-1)*(ISI*0.001))
+            
+            winSamp = np.round((win*1526))+15
+            winSamp = int(winSamp)
+            for cmk in range(ny):
+                for bc in range(nx):
+                    for jk in range(ne):
+                        mBaseline = ISIArrayM[cmk,bc,0:305,jk]
+                        fourierBaseline = scipy.fft.fft(mBaseline)
+                        n = fourierBaseline.size
+                        timestep = 1/1526
+                        freq = scipy.fft.fftfreq(n, d=timestep)
+                        freqWhere = (np.abs(freq - fundFreq)).argmin()
+                        basePower = np.sqrt(np.power(fourierBaseline[freqWhere],2))
 
-        #Spikes = SpikeClass.Spikes
-        epochedLFP = SpikeClass.sortByStimCondition(SpikeClass.epocLFP)
-        ISIMean,ISISD = SpikeClass.getMeanSdEr(epochedLFP)
+                        stimWin = np.squeeze(ISIArrayM[cmk,bc,305:305+winSamp,jk])
+                        fourierStim = scipy.fft.fft(stimWin)
+                        n = fourierStim.size
+                        timestep = 1/1526
+                        freq = scipy.fft.fftfreq(n, d=timestep)
+                        freqWhere = (np.abs(freq - fundFreq)).argmin()
+                        stimPower = np.sqrt(np.power(fourierStim[freqWhere],2))
+                        dbChange = 10*np.log10(stimPower/basePower)
+                        #maxWhere = np.where(np.abs(dbChange)==np.max(np.abs(dbChange)))
+                        #minMaxPower = dbChange[maxWhere]
+                        
+                        df.loc[-1] = [dataPath,str(SpikeClass.electrodeConfig[cmk,bc]),str(SpikeClass.energyPerPulse[jk]),ISI,NPul,PW,fundFreq,dbChange]
+                        df.index = df.index + 1  # shifting index
+                        df = df.sort_index()  # sorting by index
         
-        ISIArrayM = SpikeClass.sortMeanByElectrode16(ISIMean)
-        ISIArrayS = SpikeClass.sortMeanByElectrode16(ISISD)
-        [ISIArrayM,energy] = SpikeClass.convert2Array(ISIArrayM)
-        [ISIArrayS,energy] = SpikeClass.convert2Array(ISIArrayS)
-        [ny,nx,nt,ne] = np.shape(ISIArrayM)
-        win = (NPul*(PW*0.001))+((NPul-1)*(ISI*0.001))
-        
-        winSamp = np.round((win*1526))+15
-        winSamp = int(winSamp)
-        for cmk in range(ny):
-            for bc in range(nx):
-                for jk in range(ne):
-                    mBaseline = np.mean(np.squeeze(ISIArrayM[cmk,bc,0:305,jk]))
-                    fourierBaseline = scipy.fft.fft(mBaseline)
-                    n = fourierBaseline.size
-                    timestep = 1/1526
-                    freq = scipy.fft.fftfreq(n, d=timestep)
-                    freqWhere = (np.abs(freq - fundFreq)).argmin()
-                    basePower = np.sqrt(np.power(fourierBaseline[freqWhere],2))
-
-                    stimWin = np.squeeze(ISIArrayM[cmk,bc,305:305+winSamp,jk])
-                    fourierStim = scipy.fft.fft(stimWin)
-                    n = fourierBaseline.size
-                    timestep = 1/1526
-                    freq = scipy.fft.fftfreq(n, d=timestep)
-                    freqWhere = (np.abs(freq - fundFreq)).argmin()
-                    stimPower = np.sqrt(np.power(fourierStim[freqWhere],2))
-                    dbChange = 10*np.log10(stimPower/basePower)
-                    #maxWhere = np.where(np.abs(dbChange)==np.max(np.abs(dbChange)))
-                    #minMaxPower = dbChange[maxWhere]
-                    
-                    df.loc[-1] = [dataPath,str(SpikeClass.electrodeConfig[cmk,bc]),str(SpikeClass.energyPerPulse[jk]),ISI,NPul,PW,fundFreq,dbChange]
-                    df.index = df.index + 1  # shifting index
-                    df = df.sort_index()  # sorting by index
-    
-        df.to_pickle('LFP_tMTF_dB.pkl')
-        del SpikeClass             #Just for memory
+            df.to_pickle('LFP_tMTF_dB.pkl')
+            del SpikeClass             #Just for memory
     except:
         print('Brandon, Check'+' '+word)
