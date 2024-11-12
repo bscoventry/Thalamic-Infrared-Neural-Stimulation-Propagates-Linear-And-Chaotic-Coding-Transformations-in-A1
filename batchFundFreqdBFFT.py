@@ -103,7 +103,7 @@ for ck, word in enumerate(dataPath):
     try:
         if fundFreq <= 762:
             SpikeClass = Spike_Processed(precurser+word,NPul,PW,ISI,power,stores,streamStore,debug,stim,SpksOrLFPs=SpksOrLFPs)
-            pdb.set_trace()
+            
             #Spikes = SpikeClass.Spikes
             epochedLFP = SpikeClass.sortByStimCondition(SpikeClass.epocLFP)
             ISIMean,ISISD = SpikeClass.getMeanSdEr(epochedLFP)
@@ -126,7 +126,7 @@ for ck, word in enumerate(dataPath):
                         timestep = 1/1526
                         freq = scipy.fft.fftfreq(n, d=timestep)
                         freqWhere = (np.abs(freq - fundFreq)).argmin()
-                        basePower = np.sqrt(np.power(fourierBaseline[freqWhere],2))
+                        basePower = np.absolute(fourierBaseline[freqWhere])
 
                         stimWin = np.squeeze(ISIArrayM[cmk,bc,305:305+winSamp,jk])
                         fourierStim = scipy.fft.fft(stimWin)
@@ -134,7 +134,7 @@ for ck, word in enumerate(dataPath):
                         timestep = 1/1526
                         freq = scipy.fft.fftfreq(n, d=timestep)
                         freqWhere = (np.abs(freq - fundFreq)).argmin()
-                        stimPower = np.sqrt(np.power(fourierStim[freqWhere],2))
+                        stimPower = np.absolute(fourierStim[freqWhere])
                         dbChange = 10*np.log10(stimPower/basePower)
                         #maxWhere = np.where(np.abs(dbChange)==np.max(np.abs(dbChange)))
                         #minMaxPower = dbChange[maxWhere]
