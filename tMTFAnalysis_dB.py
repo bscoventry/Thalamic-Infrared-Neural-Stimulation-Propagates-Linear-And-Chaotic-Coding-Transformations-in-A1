@@ -8,7 +8,7 @@ df = pd.read_pickle('LFP_tMTF_dB.pkl')
 
 nRows = len(df)
 mTMTFm = np.zeros((nRows,))
-mTMTFs = np.zeros((nRows,))
+#mTMTFs = np.zeros((nRows,))
 #for ck in range(nRows):
     #curtMTF = df.tMFT[ck]
     #curtMTFs = df.tMTFS[ck]
@@ -16,7 +16,7 @@ mTMTFs = np.zeros((nRows,))
 
 #df["mTMTFm"] = mTMTFm
 uniqueFreq = np.unique(df.fundFreq)
-uniqueFreq = np.delete(uniqueFreq,-1)
+#uniqueFreq = np.delete(uniqueFreq,-1)
 histBins = [0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4]
 histBins = np.array(histBins)
 
@@ -46,17 +46,20 @@ for ck in range(len(df.EnergyPerPulse)):
     histLoc[ck] = index
 df["histLoc"] = histLoc
 
-getVals = np.concatenate(df.tMTF.values)
+getVals = df.tMTF.values#np.concatenate(df.tMTF.values)
 ymin = np.min(getVals)
 ymax = np.max(getVals)
-for ck in range(len(uniqueFreq)):
-    curFreq = uniqueFreq[ck]
-    curDF = df.loc[df['fundFreq'] == curFreq]
-    curDF.reset_index(drop=True, inplace = True)
+# for ck in range(len(uniqueFreq)):
+#     curFreq = uniqueFreq[ck]
+#     curDF = df.loc[df['fundFreq'] == curFreq]
+#     curDF.reset_index(drop=True, inplace = True)
     
-    curDF.boxplot(column = 'tMTF',by='histLoc')
-    plt.ylim(ymin, ymax)
-    plt.title(str(curFreq))
-    plt.show()
+#     curDF.boxplot(column = 'tMTF',by='histLoc')
+#     plt.ylim(ymin, ymax)
+#     plt.title(str(curFreq))
+#     plt.show()
     
-
+newDF = df.loc[df['histLoc'] == 3]
+newDF.reset_index(drop=True, inplace = True)
+newDF.boxplot(column = 'tMTF',by='fundFreq')
+plt.show()
