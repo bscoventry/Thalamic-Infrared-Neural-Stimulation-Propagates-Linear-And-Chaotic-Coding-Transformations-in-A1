@@ -4,7 +4,7 @@ import pandas as pd
 import pdb
 import matplotlib.pyplot as plt
 
-df = pd.read_pickle('LFP_tMTF_dB.pkl')
+df = pd.read_pickle('LFP_tMTF_long_dB.pkl')
 
 nRows = len(df)
 mTMTFm = np.zeros((nRows,))
@@ -58,8 +58,49 @@ ymax = np.max(getVals)
 #     plt.ylim(ymin, ymax)
 #     plt.title(str(curFreq))
 #     plt.show()
-    
-newDF = df.loc[df['histLoc'] == 3]
-newDF.reset_index(drop=True, inplace = True)
-newDF.boxplot(column = 'tMTF',by='fundFreq')
+perValues = np.zeros((8,5))
+perValuesNeg = np.zeros((8,5))
+for bc in range(8):
+    newDF = df.loc[df['histLoc'] == bc]
+    newDF.reset_index(drop=True, inplace = True)
+    newDF.boxplot(column = 'tMTF',by='fundFreq')
+    plt.axhline(y = 3, color = 'r', linestyle = '-') 
+    plt.axhline(y = -3, color = 'r', linestyle = '-') 
+    if bc == 0:
+        plt.title('0-0.5 mJPP')
+    if bc == 1:
+        plt.title('0.5-1 mJPP')
+    if bc == 2:
+        plt.title('1-1.5 mJPP')
+    if bc == 3:
+        plt.title('1.5-2 mJPP')
+    if bc == 4:
+        plt.title('2-2.5 mJPP')
+    if bc == 5:
+        plt.title('2.5-3 mJPP')
+    if bc == 6:
+        plt.title('3-3.5 mJPP')
+    if bc == 7:
+        plt.title('>3.5 mJPP')
+    numISIs = np.unique(newDF.fundFreq.values)
+    if len(numISIs) > 5:
+        numISIs = np.delete(numISIs,3)
+    print(numISIs)
+    plt.ylim(ymin, ymax)
+    for jk in range(len(numISIs)):
+        newnewDF = newDF.loc[newDF['fundFreq']==numISIs[jk]]
+        newnewDF.reset_index(drop=True,inplace=True)
+        curV = newnewDF.tMTF.values
+        sigWhere = np.where(curV>=3)
+        sigWhereNeg = np.where(curV<=-3)
+        perSigWhere = (len(sigWhere[0])/len(curV))*100
+        perSigWhereNeg = (len(sigWhereNeg[0])/len(curV))*100
+        perValues[bc,jk] = perSigWhere
+        perValuesNeg[bc,jk] = perSigWhereNeg
+print('Increase')
+for jvk in range(8):
+    print(perValues[jvk,:])
+print('Decrease')
+for jvk in range(8):
+    print(perValuesNeg[jvk,:])
 plt.show()
