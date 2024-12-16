@@ -8,6 +8,7 @@ epp = df['EnergyPerPulse'].values
 ISI = df['ISI'].values
 beta = df['betaDiff'].values
 hg = df['hgDiff']
+lg = df['lgDiff']
 lepp = np.log(epp+0.015)
 lISI = np.log(ISI+0.015)
 
@@ -76,7 +77,7 @@ MAPLG = betaLGInter + (ener*betaLGSlope) + (iList*betaLGISI) + (ener*iList*betaL
 MAPCI_LLG = betaLGInterCI[0] + (ener*betaLGSlopeCI[0]) + (iList*betaLGISICI[0]) + (ener*iList*betaLGInteractionCI[0]) + betaLGErrorCI[0]
 MAPCI_HLG = betaLGInterCI[1] + (ener*betaLGSlopeCI[1]) + (iList*betaLGISICI[1]) + (ener*iList*betaLGInteractionCI[1]) + betaLGErrorCI[1]
 
-plt.scatter(lepp,hg)
+plt.scatter(lepp,lg)
 plt.plot(ener,MAPLG,'g')
 plt.plot(ener,MAPCI_LLG,'r')
 plt.plot(ener,MAPCI_HLG,'r')
