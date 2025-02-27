@@ -48,9 +48,10 @@ def convert2SpikeRate(spikeArray,stopTime):
         #convert from samples to time
         spikeLocs = spikeLocs[0]
         curSpikeTimes = spikeLocs/24415.0
-        evokedTimes = np.where(np.logical_and(np.greater_equal(curSpikeTimes,0.2),np.less_equal(curSpikeTimes,stopTime + 0.01)))
+        evokedTimes = np.where(np.logical_and(np.greater_equal(curSpikeTimes,0.2),np.less_equal(curSpikeTimes,stopTime + 0.05)))
+        evokedTimes = evokedTimes[0]
         spikeCounts = len(evokedTimes)
-        if spikeCounts.size==0:
+        if evokedTimes.size==0:
             spikeCounts = 0
         divis = 0.200+(stopTime-0.200+0.05)
         SR = spikeCounts/divis
@@ -64,37 +65,42 @@ def calcZ(data):
     return Z
 
 def calcN1P2(curMLFP,win):
-    #win = int(np.ceil(1526*(stimWin*0.001)))+77            #Add 50ms for offset responses
+    try:
+        #win = int(np.ceil(1526*(stimWin*0.001)))+77            #Add 50ms for offset responses
+            
+        ZStim = calcZ(curMLFP)
+        Zwhere = np.where(np.abs(ZStim)>2)
+        Zwhere = Zwhere[0]
         
-    ZStim = calcZ(curMLFP)
-    Zwhere = np.where(np.abs(ZStim)>2)
-    Zwhere = Zwhere[0]
-    
-    if len(Zwhere)>= 1:
-        #This is above threshold
-        #curMLFP = mLFP[ck]
-        stimLFP = curMLFP[305:305+win+153]               #Stimulus window plus 100ms
-        N1 = np.where(stimLFP==np.min(stimLFP))
-        N1Win = curMLFP[305+N1[0][0]:-1]
-        P2 = np.where(N1Win==np.max(N1Win))
-        
-        YReg = curMLFP[305+N1[0][0]:305+P2[0][0]+N1[0][0]]
-        XReg = np.arange(0,len(YReg))
-        try:
-            reg = LinearRegression().fit(XReg.reshape(-1,1), YReg)
-            slopeArray=(reg.coef_[0])
-            slopeScore=(reg.score(XReg.reshape(-1,1), YReg))
-        except:
-            pdb.set_trace()
-        P2 = P2[0][0]+N1[0][0]
-        N1Peak = curMLFP[305+N1[0][0]]
-        P2Peak = curMLFP[305+P2]
-        N1P2Peak=(np.abs(N1Peak)+np.abs(P2Peak))
-        P2 = P2+77              #Plus 50 milliseconds
-        integralArray = curMLFP[305:305+P2]
-        #AUC.append(simpson(np.abs(integralArray)))
-        LFPRMS = (RMS(integralArray))
-    return LFPRMS
+        if len(Zwhere)>= 1:
+            #This is above threshold
+            #curMLFP = mLFP[ck]
+            stimLFP = curMLFP[305:305+win+153]               #Stimulus window plus 100ms
+            N1 = np.where(stimLFP==np.min(stimLFP))
+            N1Win = curMLFP[305+N1[0][0]:-1]
+            P2 = np.where(N1Win==np.max(N1Win))
+            
+            YReg = curMLFP[305+N1[0][0]:305+P2[0][0]+N1[0][0]]
+            XReg = np.arange(0,len(YReg))
+            try:
+                reg = LinearRegression().fit(XReg.reshape(-1,1), YReg)
+                slopeArray=(reg.coef_[0])
+                slopeScore=(reg.score(XReg.reshape(-1,1), YReg))
+            except:
+                pdb.set_trace()
+            P2 = P2[0][0]+N1[0][0]
+            N1Peak = curMLFP[305+N1[0][0]]
+            P2Peak = curMLFP[305+P2]
+            N1P2Peak=(np.abs(N1Peak)+np.abs(P2Peak))
+            P2 = P2+77              #Plus 50 milliseconds
+            integralArray = curMLFP[305:305+P2]
+            #AUC.append(simpson(np.abs(integralArray)))
+            LFPRMS = (RMS(integralArray))
+        else:
+            LFPRMS = np.nan
+        return LFPRMS
+    except:
+        pdb.set_trace()
 
 def readINSLaserVoltages():
         curVales = loadmat('INSvoltagevals.mat')
@@ -217,7 +223,7 @@ for ck in range(nRows):
 fs = 1526
 uniqueVals = readINSLaserVoltages()
 
-df = pd.DataFrame(columns=['DataID', 'Electrode', 'EnergyPerPulse','ISI','NPulses','NeuronNumber','N1P2','spkRate','TrialNum'])
+df = pd.DataFrame(columns=['DataID', 'Electrode', 'EnergyPerPulse','ISI','NPulses','NeuronNumber','N1P2','spkRate'])
 curWord = 'start'
 for ck, word in enumerate(dataPath):
     stores = None             #Load all stores
@@ -269,6 +275,7 @@ for ck, word in enumerate(dataPath):
 
                 curSpikes = curRaster[uniqueVals[str(pk)],:]
                 [numIter,dnc] = np.shape(curSpikes)
+                
                 spikeTimes = convert2SpikeRate(curSpikes,endTime)
                 curLFP = curLFPset[energy]
                 if pk == 0:
@@ -278,33 +285,41 @@ for ck, word in enumerate(dataPath):
                 #stavg = elephant.sta.spike_triggered_average(signal, spikeTimes,(-5 * pq.ms, 10 * pq.ms))
                 #To do, SpikeField Coherence, convert each train into a spikeTrain object using neo.SpikeTrain(spiketimes,t_stop=1)
                 spikeTimesList = []
-                freqVec = []
-                sfcVec = []
+                RMSVec = []
+                SRVec = []
                 SRList = []
 
                 for jkt in range(numIter):
                     try:
+                        
                         curSpikeTrial = spikeTimes[jkt]
+                        #pdb.set_trace()
                         testShape = np.shape(curSpikeTrial)
-                        if testShape[0] != 0:
-                            #curcurLFP = signal.T
-                            curLFP = curLFP.T[:,jkt]#neo.AnalogSignal(signal[:,jkt],units='uV',sampling_rate=fs*pq.Hz)
-                            curSR = spikeTimes[jkt]
-                            LFPRMS = calcN1P2(curMLFP,win)
-                            #phases, amps, times = elephant.phase_analysis.spike_triggered_phase(elephant.signal_processing.hilbert(curLFP),curSpikeTrial,interpolate=True)
-                            #sta = elephant.sta.spike_field_coherence(curLFP, curSpikeTrial, (-0.005, 0.010))
-                            df.loc[-1] = [word,aElectrode[ck],energy,ISIs[ck],NPulse[ck],neuron,LFPRMS,curSR,jkt]
-                            df.index = df.index + 1  # shifting index
-                            df = df.sort_index()  # sorting by index
+                        #if testShape[0] >= 0:
+                        #pdb.set_trace()
+                        #curcurLFP = signal.T
+                        curMLFP = curLFP.T[:,jkt]#neo.AnalogSignal(signal[:,jkt],units='uV',sampling_rate=fs*pq.Hz)
+                        curSR = spikeTimes[jkt]
+                        LFPRMS = calcN1P2(curMLFP,win)
+                        SRVec.append(curSR)
+                        RMSVec.append(LFPRMS)
+                        #phases, amps, times = elephant.phase_analysis.spike_triggered_phase(elephant.signal_processing.hilbert(curLFP),curSpikeTrial,interpolate=True)
+                        #sta = elephant.sta.spike_field_coherence(curLFP, curSpikeTrial, (-0.005, 0.010))
+    
                             #phaseList.append(phases)
+                        
+                        
                     except:
                         print('error!')
                         pdb.set_trace()
+                df.loc[-1] = [word,aElectrode[ck],energy,ISIs[ck],NPulse[ck],neuron,RMSVec,SRVec]
+                df.index = df.index + 1  # shifting index
+                df = df.sort_index()  # sorting by index
                 #df.loc[-1] = [word,aElectrode[ck],energy,ISIs[ck],NPulse[ck],neuron,sfcVec,spikeTimes]
                 #df.index = df.index + 1  # shifting index
                 #df = df.sort_index()  # sorting by index
     except:
         print('Problem with '+word)
-df.to_pickle('SFC.pkl')
+df.to_pickle('SpikeN1P2.pkl')
 pdb.set_trace()
 
