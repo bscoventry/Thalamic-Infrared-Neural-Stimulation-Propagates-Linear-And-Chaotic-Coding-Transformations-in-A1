@@ -40,6 +40,7 @@ def convert2SpikeTime(spikeArray):
 def convert2SpikeRate(spikeArray,stopTime):
     [nTrials,ncols] = np.shape(spikeArray)
     spikeTimes = []
+    spontRate = []
     for bc in range(nTrials):
         curTrial = spikeArray[bc,:]
 
@@ -50,13 +51,20 @@ def convert2SpikeRate(spikeArray,stopTime):
         curSpikeTimes = spikeLocs/24415.0
         evokedTimes = np.where(np.logical_and(np.greater_equal(curSpikeTimes,0.2),np.less_equal(curSpikeTimes,stopTime + 0.05)))
         evokedTimes = evokedTimes[0]
+        spontTimes = np.where(np.less_equal(curSpikeTimes,0.2))
+        spontTimes = spontTimes[0]
         spikeCounts = len(evokedTimes)
+        spontCounts = len(spontTimes)
         if evokedTimes.size==0:
             spikeCounts = 0
+        if spontTimes.size==0:
+            spontCounts = 0
         divis = 0.200+(stopTime-0.200+0.05)
         SR = spikeCounts/divis
+        sponts = spontCounts/0.2
         spikeTimes.append(SR)
-    return spikeTimes
+        spontRate.append(sponts)
+    return spikeTimes,spontRate
 
 def calcZ(data):
     m = np.mean(data[0:305])
@@ -223,7 +231,7 @@ for ck in range(nRows):
 fs = 1526
 uniqueVals = readINSLaserVoltages()
 
-df = pd.DataFrame(columns=['DataID', 'Electrode', 'EnergyPerPulse','ISI','NPulses','NeuronNumber','N1P2','spkRate'])
+df = pd.DataFrame(columns=['DataID', 'Electrode', 'EnergyPerPulse','ISI','NPulses','NeuronNumber','N1P2','spkRate','Spont'])
 curWord = 'start'
 for ck, word in enumerate(dataPath):
     stores = None             #Load all stores
@@ -276,7 +284,7 @@ for ck, word in enumerate(dataPath):
                 curSpikes = curRaster[uniqueVals[str(pk)],:]
                 [numIter,dnc] = np.shape(curSpikes)
                 
-                spikeTimes = convert2SpikeRate(curSpikes,endTime)
+                spikeTimes,spontTimes = convert2SpikeRate(curSpikes,endTime)
                 curLFP = curLFPset[energy]
                 if pk == 0:
                     curLFP = curLFP[0:57,:]
@@ -288,7 +296,7 @@ for ck, word in enumerate(dataPath):
                 RMSVec = []
                 SRVec = []
                 SRList = []
-
+                SpontList = []
                 for jkt in range(numIter):
                     try:
                         
@@ -300,9 +308,11 @@ for ck, word in enumerate(dataPath):
                         #curcurLFP = signal.T
                         curMLFP = curLFP.T[:,jkt]#neo.AnalogSignal(signal[:,jkt],units='uV',sampling_rate=fs*pq.Hz)
                         curSR = spikeTimes[jkt]
+                        curSpont = spontTimes[jkt]
                         LFPRMS = calcN1P2(curMLFP,win)
                         SRVec.append(curSR)
                         RMSVec.append(LFPRMS)
+                        SpontList.append(curSpont)
                         #phases, amps, times = elephant.phase_analysis.spike_triggered_phase(elephant.signal_processing.hilbert(curLFP),curSpikeTrial,interpolate=True)
                         #sta = elephant.sta.spike_field_coherence(curLFP, curSpikeTrial, (-0.005, 0.010))
     
@@ -312,7 +322,7 @@ for ck, word in enumerate(dataPath):
                     except:
                         print('error!')
                         pdb.set_trace()
-                df.loc[-1] = [word,aElectrode[ck],energy,ISIs[ck],NPulse[ck],neuron,RMSVec,SRVec]
+                df.loc[-1] = [word,aElectrode[ck],energy,ISIs[ck],NPulse[ck],neuron,RMSVec,SRVec,SpontList]
                 df.index = df.index + 1  # shifting index
                 df = df.sort_index()  # sorting by index
                 #df.loc[-1] = [word,aElectrode[ck],energy,ISIs[ck],NPulse[ck],neuron,sfcVec,spikeTimes]
