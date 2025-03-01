@@ -78,7 +78,9 @@ if __name__ == '__main__':                                            #This stat
 
         curSPK = df.spkRate[ck]
         spkMean = np.mean(curSPK)
-        if spkMean >5:
+        curSpont = df.Spont[ck]
+        sigSpont = 2*np.std(curSpont)
+        if spkMean >sigSpont:
             spikeList.append(spkMean)
             curLFP = df.N1P2[ck]
             N1P2Mean = np.mean(curLFP)*1000000
@@ -87,11 +89,12 @@ if __name__ == '__main__':                                            #This stat
             ISIList.append(float(df.ISI[ck]))
     spikeList = np.log(np.array(spikeList))
     ISIList = np.array(ISIList)
+
     #ISIList = np.log(ISIList)
     plt.scatter(spikeList,N1P2List)
     
     
-    pdb.set_trace()
+
     #ePPList = np.array(ePPList)
     #lepp = np.log(ePPList+0.001)
     eMean = np.nanmean(ISIList)
@@ -103,13 +106,13 @@ if __name__ == '__main__':                                            #This stat
         #Base layer
         nu = pm.HalfCauchy('nu', 5)          #Nu for robust regression
         #kurt = pm.HalfCauchy('kurt',sigma_kurt)
-        a = pm.Normal('a', mu=prMean, sigma=0.1)
+        a = pm.Normal('a', mu=prMean, sigma=1)
         #a = pm.Deterministic("a", mu_a + a_offset * sigma_a)
 
-        b1 = pm.Normal('b1', mu=prMean, sigma=0.1)
+        b1 = pm.Normal('b1', mu=prMean, sigma=1)
         #b1 = pm.Deterministic("b1", mu_b + b1_offset * sigma_b)
 
-        b2 = pm.Normal("b2",mu=prMean, sigma=0.1)
+        b2 = pm.Normal("b2",mu=prMean, sigma=1)
         #b2 = pm.Deterministic("b2", mu_b2 + b2_offset*sigma_b2)
 
         eps = pm.HalfCauchy("eps", 5)
@@ -120,7 +123,7 @@ if __name__ == '__main__':                                            #This stat
     with Heirarchical_Regression:
         if __name__ == '__main__':
                 step = pm.NUTS()
-                rTrace = pm.sample(numSamples, tune=numBurnIn, target_accept=0.90,chains = 2,nuts_sampler="nutpie")
+                rTrace = pm.sample(numSamples, tune=numBurnIn, target_accept=0.90,chains = 2,nuts_sampler="numpyro")
     """
     Now do model analytics
     """
@@ -133,7 +136,7 @@ if __name__ == '__main__':                                            #This stat
 
     fig, ([ax1, ax2, ax3], [ax4, ax5, ax6]) = plt.subplots(2,3, figsize=(12,6))
     for ax, estimate, title, xlabel in zip(fig.axes,
-                                [intercept, EnergySlope, ISISlope, err],
+                                [intercept, SpikeSlope, ISISlope, err],
                                 ['Intercept', 'Energy Slope','ISI Slope','Error Parameter'],
                                 [r'$a$', r'$\beta1$', r'$\beta 2$', r'$err$']):
         pm.plot_posterior(estimate, point_estimate='mode', ax=ax, color=color,hdi_prob=0.95)
