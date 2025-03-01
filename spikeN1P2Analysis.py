@@ -123,7 +123,7 @@ if __name__ == '__main__':                                            #This stat
     with Heirarchical_Regression:
         if __name__ == '__main__':
                 step = pm.NUTS()
-                rTrace = pm.sample(numSamples, tune=numBurnIn, target_accept=0.90,chains = 2,nuts_sampler="numpyro")
+                rTrace = pm.sample(numSamples, tune=numBurnIn, target_accept=0.90,chains = 2,nuts_sampler="numpyro",rTrace_kwargs={"log_likelihood": True})
     """
     Now do model analytics
     """
